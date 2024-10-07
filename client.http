@@ -1,0 +1,435 @@
+@baseURL = http://localhost:3333 
+@authToken = {{authenticate.response.body.access_token}}
+
+# @name create_account
+POST {{baseURL}}/accounts
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "name": "caiopaulista@ecoeletrica.com.br",
+  "email": "caio2@ecoeletrica.com.br",
+  "cpf": "10101010110",
+  "type": "Orçamentista",
+  "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
+  "contractId": "a100663c-5a6d-4198-ad7b-1062afa0c4f4",
+  "password": "testeteste"
+}
+
+###
+
+# @name authenticate
+POST {{baseURL}}/sessions
+Content-Type: application/json
+
+{
+    "email": "rodrigo1@ecoeletrica.com.br",
+    "password": "123456" 
+}
+
+###
+
+# @name create_material
+POST {{baseURL}}/materials
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "code": 12345,
+    "description": "item poste 123",
+    "type": "FERRAGEM",
+    "unit": "CDA"
+}
+
+###
+
+# @name fetch_materials
+GET {{baseURL}}/materials
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name get_user_by_id
+GET {{baseURL}}/accounts/612d36fb-3cde-42de-bae0-ef8e547a9807
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name edit_account
+PUT {{baseURL}}/accounts/627a842b-eeee-42f2-b8aa-9a9fbdee0b83
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "type": "Administrator"
+}
+
+###
+
+# @name delete_user_by_id
+DELETE  {{baseURL}}/accounts/2d8c64e4-0ae3-448e-8fa4-eb4edaaaf963
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+
+###
+
+# @name fetch_account
+GET {{baseURL}}/accounts
+# ?baseId=dbe82710-e5e8-449a-ba49-471b356f808d
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+
+###
+
+# @name register_contract
+POST {{baseURL}}/contracts
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "contractName": "Oeste Pernambuco"
+}
+
+
+###
+
+# @name fetch_contracts
+GET {{baseURL}}/contracts?page=1
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+
+###
+
+# @name register_base
+POST {{baseURL}}/bases
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "baseName": "Petrolina",
+    "contractId": "a100663c-5a6d-4198-ad7b-1062afa0c4f4"
+}
+
+
+###
+
+# @name fetch_bases
+GET {{baseURL}}/bases?page=1
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+
+###
+
+# @name identifier_attribution
+POST {{baseURL}}/physical-documents
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "project_number": "B-123456789",
+    "identifier": 3
+}
+
+
+###
+
+# @name fetch_physical_documents
+GET {{baseURL}}/physical-documents
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+
+
+###
+
+# @name uniteze_physical_documents
+PUT {{baseURL}}/physical-documents/fc13dc69-7493-4644-9667-576cfaf85735
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "unitized": true
+}
+
+
+###
+
+# @name delete_physical_document
+DELETE  {{baseURL}}/physical-documents/88b6a558-046d-47bf-be45-11fccec6d328
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+
+###
+
+# @name transfer_material
+POST  {{baseURL}}/movimentation
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+[
+    {
+        "materialId": "b21ba24a-b752-4415-9fc4-702ec851c5cf",
+        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
+        "observation": "é simplesmente uma simulação de texto",
+        "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
+        "value": 5
+    },
+    {
+        "materialId": "7a7b5a91-e91a-4340-8a5f-5e1acdf502f8",
+        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
+        "observation": "",
+        "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
+        "value": 2
+    },
+    {
+        "materialId": "d5fd168d-1a00-48b6-abe6-1668c9d4e507",
+        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
+        "observation": "",
+        "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
+        "value": -1
+    },
+    {
+        "materialId": "b21ba24a-b752-4415-9fc4-702ec851c5cf",
+        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
+        "observation": "Existem muitas variações disponíveis",
+        "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
+        "value": 2
+    },
+    {
+        "materialId": "7a7b5a91-e91a-4340-8a5f-5e1acdf502f8",
+        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
+        "observation": "",
+        "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
+        "value": -30.21
+    },
+    {
+        "materialId": "d5fd168d-1a00-48b6-abe6-1668c9d4e507",
+        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
+        "observation": "",
+        "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
+        "value": 1.32
+    },
+    {
+        "materialId": "b21ba24a-b752-4415-9fc4-702ec851c5cf",
+        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
+        "observation": "",
+        "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
+        "value": 5
+    },
+    {
+        "materialId": "7a7b5a91-e91a-4340-8a5f-5e1acdf502f8",
+        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
+        "observation": "É um fato conhecido de todos",
+        "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
+        "value": 2
+    },
+    {
+        "materialId": "d5fd168d-1a00-48b6-abe6-1668c9d4e507",
+        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
+        "observation": "",
+        "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
+        "value": -1
+    },
+    {
+        "materialId": "b21ba24a-b752-4415-9fc4-702ec851c5cf",
+        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
+        "observation": "",
+        "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
+        "value": -21
+    },
+    {
+        "materialId": "7a7b5a91-e91a-4340-8a5f-5e1acdf502f8",
+        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
+        "observation": "",
+        "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
+        "value": 2.32
+    },
+    {
+        "materialId": "d5fd168d-1a00-48b6-abe6-1668c9d4e507",
+        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
+        "observation": "",
+        "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
+        "value": 458.2
+    }
+]
+
+
+###
+
+# @name register_project
+POST  {{baseURL}}/projects
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "project_number": "B-8795422",
+    "description": "MP-CASA-DE-JOAO",
+    "type": "obra",
+    "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
+    "city": "Ituí"
+}
+
+
+###
+
+# @name transfer_movimentation_between_projects
+POST  {{baseURL}}/transfer-movimentation
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+[
+    {
+        "materialId": "88b6a558-046d-47bf-be45-11fccec6d328",
+        "projectIdOut": "88b6a558-046d-47bf-be45-11fccec6d328",
+        "projectIdIn": "30d2f9c4-decc-418a-bc5d-0fb16db7af57",
+        "observation": "Num sei das quantas",
+        "baseId": "88b6a558-046d-47bf-be45-11fccec6d328",
+        "value": 5
+    }
+]
+
+###
+
+# @name fetch_movimentations
+GET {{baseURL}}/movimentations
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+
+###
+
+# @name fetch_movimentations_budgets
+GET {{baseURL}}/movimentations-budgets
+?project_number=B-12345678
+&physicalDocument=true
+&projectIn=B-1234567
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+
+###
+
+# @name fetch_budgets
+GET {{baseURL}}/budgets
+?project_number=B-12
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+
+###
+
+# @name get_project_by_project_number
+GET {{baseURL}}/projects
+?project_number=B-12345678
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+
+
+###
+
+# @name register_budget
+POST  {{baseURL}}/budgets
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+[
+    {
+        "materialId": "b21ba24a-b752-4415-9fc4-702ec851c5cf",
+        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
+        "contractId": "e816f105-e022-4560-b32c-d2af40c18351",
+        "value": 5
+    },
+    {
+        "materialId": "7a7b5a91-e91a-4340-8a5f-5e1acdf502f8",
+        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
+        "contractId": "e816f105-e022-4560-b32c-d2af40c18351",
+        "value": 2
+    },
+    {
+        "materialId": "b21ba24a-b752-4415-9fc4-702ec851c5cf",
+        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
+        "contractId": "e816f105-e022-4560-b32c-d2af40c18351",
+        "value": 2
+    },
+    {
+        "materialId": "d5fd168d-1a00-48b6-abe6-1668c9d4e507",
+        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
+        "contractId": "e816f105-e022-4560-b32c-d2af40c18351",
+        "value": 1.32
+    },
+    {
+        "materialId": "b21ba24a-b752-4415-9fc4-702ec851c5cf",
+        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
+        "contractId": "e816f105-e022-4560-b32c-d2af40c18351",
+        "value": 5
+    },
+    {
+        "materialId": "7a7b5a91-e91a-4340-8a5f-5e1acdf502f8",
+        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
+        "contractId": "e816f105-e022-4560-b32c-d2af40c18351",
+        "value": 2
+    },
+    {
+        "materialId": "7a7b5a91-e91a-4340-8a5f-5e1acdf502f8",
+        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
+        "contractId": "e816f105-e022-4560-b32c-d2af40c18351",
+        "value": 2.32
+    },
+    {
+        "materialId": "d5fd168d-1a00-48b6-abe6-1668c9d4e507",
+        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
+        "contractId": "e816f105-e022-4560-b32c-d2af40c18351",
+        "value": 458.2
+    }
+]
+
+
+###
+
+# @name edit_budget
+PUT  {{baseURL}}/budgets/30d2f9c4-decc-418a-bc5d-0fb16db7af57
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "updatedBudgets": [{
+        "budgetId": "245dedfe-2c7c-4e6e-b10f-a6003a53d601",
+        "value": 250
+    }],
+    "newBudgets": [{
+        "materialId": "386dafeb-d232-4857-ab91-746643045bf3",
+        "value": 2
+    }]
+}
+
+###
+
+# @name fetch_budgets_only_projects
+POST {{baseURL}}/budgets-only-projects
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "project_numbers": ["B-12345678", "B-22345678"]
+}
+
+###
+
+# @name fetch_existing_budgets
+POST {{baseURL}}/fetch-existing-budgets
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "projectIds": ["30d2f9c4-decc-418a-bc5d-0fb16db7af57", 
+    "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98"]
+}
+
