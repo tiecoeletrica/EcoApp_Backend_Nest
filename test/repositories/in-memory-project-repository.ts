@@ -13,7 +13,7 @@ export class InMemoryProjectRepository implements ProjectRepository {
   ): Promise<Project | null> {
     const project = this.items.find(
       (item) =>
-        item.project_number.includes(project_number) &&
+        item.project_number === project_number &&
         item.baseId.toString() === baseId
     );
 

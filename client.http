@@ -1,4 +1,5 @@
-@baseURL = http://localhost:3333 
+@baseURL = https://ecoapp-backend-1043095433635.us-central1.run.app
+# http://localhost:3333 
 @authToken = {{authenticate.response.body.access_token}}
 
 # @name create_account

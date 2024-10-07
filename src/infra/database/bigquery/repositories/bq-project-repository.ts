@@ -13,8 +13,7 @@ export class BqProjectRepository implements ProjectRepository {
     baseId: string
   ): Promise<Project | null> {
     const [project] = await this.bigquery.project.select({
-      like: { project_number },
-      where: { baseId },
+      where: { project_number, baseId },
     });
 
     if (!project) return null;
@@ -62,7 +61,7 @@ export class BqProjectRepository implements ProjectRepository {
     project_number: string
   ): Promise<Project | null> {
     const [project] = await this.bigquery.project.select({
-      like: { project_number },
+      where: { project_number },
     });
 
     if (!project) return null;
