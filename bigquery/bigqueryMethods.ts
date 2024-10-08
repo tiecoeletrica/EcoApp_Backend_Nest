@@ -47,6 +47,7 @@ export class BigQueryMethods<T extends Record<string, any>> {
   }
 
   async runQuery(query: string) {
+    console.log(query);
     const options = { query };
     const [rows] = await this.bigquery.query(options);
 
@@ -127,9 +128,13 @@ export class BigQueryMethods<T extends Record<string, any>> {
   }
 
   private formatValue(value: any): string {
-    if (typeof value === "string") return `'${value}'`;
+    if (typeof value === "string") return `'${this.escapeString(value)}'`;
     if (value instanceof Date) return `'${value.toISOString()}'`;
     return value;
+  }
+
+  private escapeString(str: string): string {
+    return str.replace(/'/g, `"`);
   }
 
   private buildSelectQuery(options: SelectOptions<T>): string {
@@ -272,7 +277,7 @@ export class BigQueryMethods<T extends Record<string, any>> {
           return `${columnName} = '${value.toISOString()}'`;
         }
         return `${columnName} = ${
-          typeof value === "string" ? `'${value}'` : value
+          typeof value === "string" ? `'${this.escapeString(value)}'` : value
         }`;
       })
       .join(" AND ");
@@ -318,7 +323,7 @@ export class BigQueryMethods<T extends Record<string, any>> {
           )} ${operator} '${value.toISOString()}'`;
         }
         return `${tableAlias}.${String(key)} ${operator} ${
-          typeof value === "string" ? `'${value}'` : value
+          typeof value === "string" ? `'${this.escapeString(value)}'` : value
         }`;
       })
       .join(" AND ");
@@ -330,7 +335,9 @@ export class BigQueryMethods<T extends Record<string, any>> {
       .map(
         (key) =>
           `${tableAlias}.${String(key)} LIKE ${
-            typeof like[key] === "string" ? `'%${like[key]}%'` : like[key]
+            typeof like[key] === "string"
+              ? `'%${this.escapeString(like[key] as string)}%'`
+              : like[key]
           }`
       )
       .join(" AND ");
@@ -376,7 +383,7 @@ export class BigQueryMethods<T extends Record<string, any>> {
   ): string {
     const includeClauses = Object.entries(include).map(([alias, options]) => {
       const { table, on } = options!.join;
-      const modifiedOn = on.replace(new RegExp(`\\b${table}\\b`, 'g'), alias);
+      const modifiedOn = on.replace(new RegExp(`\\b${table}\\b`, "g"), alias);
       return `LEFT JOIN \`${
         this.datasetId.split(".")[0]
       }.${table}\` AS ${alias} ON ${modifiedOn}`;

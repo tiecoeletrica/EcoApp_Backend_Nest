@@ -33,6 +33,12 @@
 - return physical document and projectIn on movimentations-budgets[x]
 - adjust FetchBudgetByProject to search by contract instead of base [x]
 - adjust findByProjectWithDetails from budget repository to use contract instead of base [x]
+- fetch materials by streaming []
+- fetch movimentation history by streaming []
+- fetch physical documents needs unitized parameter []
+- encode / compress requests []
+- modify data that has ' because crashes bigqueryMethods []
+- on register project modify error message "projeto já criado" [] 
 
 # Test 1 file
 

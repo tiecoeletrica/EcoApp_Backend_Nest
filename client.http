@@ -1,5 +1,5 @@
-@baseURL = https://ecoapp-backend-1043095433635.us-central1.run.app
-# http://localhost:3333 
+# @baseURL = https://ecoapp-backend-1043095433635.us-central1.run.app
+@baseURL = http://localhost:3333 
 @authToken = {{authenticate.response.body.access_token}}
 
 # @name create_account
@@ -270,11 +270,11 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-    "project_number": "B-8795422",
-    "description": "MP-CASA-DE-JOAO",
+    "project_number": "B-1065588",
+    "description": "MP-CCOL-POV. OLHOS D'AGUA-RURAL",
     "type": "obra",
-    "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
-    "city": "Ituí"
+    "baseId": "468c0cdb-b89f-425c-8e8f-0551f5db94b7",
+    "city": "MORRO DO CHAPEU"
 }
 
 
