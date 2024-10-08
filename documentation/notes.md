@@ -39,6 +39,7 @@
 - encode / compress requests []
 - modify data that has ' because crashes bigqueryMethods []
 - on register project modify error message "projeto já criado" [] 
+- fetch accounts use like on name search []
 
 # Test 1 file
 

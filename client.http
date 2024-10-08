@@ -310,7 +310,7 @@ Authorization: Bearer {{authToken}}
 GET {{baseURL}}/movimentations-budgets
 ?project_number=B-12345678
 &physicalDocument=true
-&projectIn=B-1234567
+# &projectIn=B-1234567
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 

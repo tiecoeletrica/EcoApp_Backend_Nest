@@ -75,19 +75,12 @@ export class FetchBudgetMovimentationByProjectController {
       });
 
       if (resultPhysicalDocument.isLeft()) {
-        const error = resultPhysicalDocument.value;
-
-        switch (error.constructor) {
-          case ResourceNotFoundError:
-            throw new NotFoundException(error.message);
-          default:
-            throw new BadRequestException();
-        }
+        physicalDocumentSearch = undefined;
+      } else {
+        physicalDocumentSearch = PhysicalDocumentWithProjectPresenter.toHTTP(
+          resultPhysicalDocument.value.physicalDocuments[0]
+        );
       }
-
-      physicalDocumentSearch = PhysicalDocumentWithProjectPresenter.toHTTP(
-        resultPhysicalDocument.value.physicalDocuments[0]
-      );
     }
 
     if (projectIn) {
