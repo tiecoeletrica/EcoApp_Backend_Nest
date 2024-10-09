@@ -23,4 +23,10 @@ export class FetchPhysicalDocumentsQueryDto {
     required: false,
   })
   identifier!: number;
+  @ApiProperty({
+    example: true,
+    description: "parameter that filter unitized physical documents",
+    required: false,
+  })
+  unitized!: boolean;
 }

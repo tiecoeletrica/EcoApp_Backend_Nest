@@ -24,8 +24,8 @@ POST {{baseURL}}/sessions
 Content-Type: application/json
 
 {
-    "email": "rodrigo1@ecoeletrica.com.br",
-    "password": "123456" 
+    "email": "rafaelsampaio@ecoeletrica.com.br",
+    "password": "ECO@2012" 
 }
 
 ###
@@ -142,6 +142,7 @@ Authorization: Bearer {{authToken}}
 
 # @name fetch_physical_documents
 GET {{baseURL}}/physical-documents
+?unitized=true
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
@@ -319,7 +320,7 @@ Authorization: Bearer {{authToken}}
 
 # @name fetch_budgets
 GET {{baseURL}}/budgets
-?project_number=B-12
+?project_number=2024_8_21210
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 

@@ -10,13 +10,13 @@ import { ZodValidationPipe } from "src/infra/http/pipes/zod-validation.pipe";
 import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
 import { FetchPhysicalDocumentUseCase } from "src/domain/material-movimentation/application/use-cases/physicalDocument/fetch-physical-document";
 import { PhysicalDocumentWithProjectPresenter } from "src/infra/http/presenters/physical-document-with-project-presenter";
-import { ApiProperty, ApiTags } from "@nestjs/swagger";
+import { ApiTags } from "@nestjs/swagger";
 import { FetchPhysicalDocumentsDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/physicalDocument/response decorators/fetch-physical-document.decorator";
 import { FetchPhysicalDocumentsQueryDto } from "src/infra/http/swagger dto and decorators/material-movimentation/physicalDocument/dto classes/fetch-physical-document.dto";
 import { UserPayload } from "src/infra/auth/jwt-strategy.guard";
 import { CurrentUser } from "src/infra/auth/current-user.decorator";
 
-const fetchPhysicalDocumentsBodySchema = z.object({
+const fetchPhysicalDocumentsQuerySchema = z.object({
   page: z
     .string()
     .optional()
@@ -29,6 +29,13 @@ const fetchPhysicalDocumentsBodySchema = z.object({
     .transform(Number)
     .pipe(z.number().min(1).max(1000))
     .optional(),
+  unitized: z
+    .enum(["false", "true"])
+    .optional()
+    .transform((val) => {
+      if (val === "true") return true;
+      else return false;
+    }),
 });
 
 @ApiTags("physical document")
@@ -41,16 +48,19 @@ export class FetchPhysicalDocumentsController {
   @FetchPhysicalDocumentsDecorator()
   async handle(
     @CurrentUser() user: UserPayload,
-    @Query(new ZodValidationPipe(fetchPhysicalDocumentsBodySchema))
+    @Query(new ZodValidationPipe(fetchPhysicalDocumentsQuerySchema))
     query: FetchPhysicalDocumentsQueryDto
   ) {
-    const { page, identifier, project_number } = query;
+    const { page, identifier, project_number, unitized } = query;
+
+    console.log(unitized);
 
     const result = await this.fetchPhysicalDocument.execute({
       page,
       baseId: user.baseId,
       identifier,
       project_number,
+      unitized,
     });
 
     if (result.isLeft()) {

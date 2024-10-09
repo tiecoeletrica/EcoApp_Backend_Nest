@@ -40,6 +40,7 @@
 - modify data that has ' because crashes bigqueryMethods []
 - on register project modify error message "projeto já criado" [] 
 - fetch accounts use like on name search []
+- on register movimentations and budgets, put createdAt on optional parameter [] 
 
 # Test 1 file
 

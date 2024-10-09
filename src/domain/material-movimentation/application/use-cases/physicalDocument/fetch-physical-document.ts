@@ -12,6 +12,7 @@ interface FetchPhysicalDocumentUseCaseRequest {
   baseId: string;
   project_number?: string;
   identifier?: number;
+  unitized?: boolean;
 }
 
 type FetchPhysicalDocumentUseCaseResponse = Eihter<
@@ -34,6 +35,7 @@ export class FetchPhysicalDocumentUseCase {
     baseId,
     identifier,
     project_number,
+    unitized
   }: FetchPhysicalDocumentUseCaseRequest): Promise<FetchPhysicalDocumentUseCaseResponse> {
     let project: Project | null = null;
 
@@ -53,7 +55,8 @@ export class FetchPhysicalDocumentUseCase {
         },
         baseId,
         identifier,
-        project === null ? undefined : project?.id.toString()
+        project === null ? undefined : project?.id.toString(),
+        unitized
       );
 
     if (!physicalDocuments.length)

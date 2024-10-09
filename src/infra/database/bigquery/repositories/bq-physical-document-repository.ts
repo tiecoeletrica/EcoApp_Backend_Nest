@@ -71,7 +71,8 @@ export class BqPhysicalDocumentRepository
     { page }: PaginationParams,
     baseId,
     identifier?: number,
-    projectId?: string
+    projectId?: string,
+    unitized?: boolean
   ): Promise<{
     physicalDocuments: PhysicalDocumentWithProject[];
     pagination: PaginationParamsResponse;
@@ -80,7 +81,7 @@ export class BqPhysicalDocumentRepository
 
     const { results: physicalDocuments, total_count } =
       await this.bigquery.physicalDocument.select({
-        where: { projectId, identifier },
+        where: { projectId, identifier, unitized },
         limit: pageCount,
         offset: pageCount * (page - 1),
         count_results: true,

@@ -215,4 +215,42 @@ describe("Fetch PhysicalDocuments History", () => {
     if (result.isRight())
       expect(result.value.physicalDocuments).toHaveLength(2);
   });
+
+  it("should be able to fetch physicalDocuments history by unitized", async () => {
+    const base = makeBase();
+    await inMemoryBaseRepository.create(base);
+
+    const project = makeProject({ baseId: base.id });
+    await inMemoryProjectRepository.create(project);
+
+    const newPhysicalDocument1 = makePhysicalDocument({
+      unitized: false,
+      identifier: 10,
+      projectId: project.id,
+    });
+    const newPhysicalDocument2 = makePhysicalDocument({
+      unitized: false,
+      identifier: 5,
+      projectId: project.id,
+    });
+    const newPhysicalDocument3 = makePhysicalDocument({
+      unitized: true,
+      identifier: 10,
+      projectId: project.id,
+    });
+
+    await inMemoryPhysicalDocumentRepository.create(newPhysicalDocument1);
+    await inMemoryPhysicalDocumentRepository.create(newPhysicalDocument2);
+    await inMemoryPhysicalDocumentRepository.create(newPhysicalDocument3);
+
+    const result = await sut.execute({
+      baseId: base.id.toString(),
+      page: 1,
+      unitized: true,
+    });
+
+    expect(result.isRight()).toBeTruthy();
+    if (result.isRight())
+      expect(result.value.physicalDocuments).toHaveLength(1);
+  });
 });

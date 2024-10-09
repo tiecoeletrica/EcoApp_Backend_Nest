@@ -22,7 +22,8 @@ export abstract class PhysicalDocumentRepository {
     params: PaginationParams,
     baseId: string,
     identifier?: number,
-    projectId?: string
+    projectId?: string,
+    unitized?: boolean
   ): Promise<{
     physicalDocuments: PhysicalDocumentWithProject[];
     pagination: PaginationParamsResponse;

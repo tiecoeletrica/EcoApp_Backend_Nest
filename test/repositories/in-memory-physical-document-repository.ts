@@ -73,7 +73,8 @@ export class InMemoryPhysicalDocumentRepository
     { page }: PaginationParams,
     baseId,
     identifier?: number,
-    projectId?: string
+    projectId?: string,
+    unitized?: boolean
   ): Promise<{
     physicalDocuments: PhysicalDocumentWithProject[];
     pagination: PaginationParamsResponse;
@@ -88,6 +89,10 @@ export class InMemoryPhysicalDocumentRepository
       .filter(
         (physicaldocument) =>
           !projectId || physicaldocument.projectId.toString() === projectId
+      )
+      .filter(
+        (physicaldocument) =>
+          !unitized || physicaldocument.unitized === unitized
       )
       .filter((physicaldocument) => {
         const projects = this.projectRepository.items
