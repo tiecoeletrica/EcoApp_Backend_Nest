@@ -28,7 +28,7 @@ export class BqPhysicalDocumentRepository
     baseId: string
   ): Promise<PhysicalDocument[]> {
     const physicalDocuments = await this.bigquery.physicalDocument.select({
-      where: { OR: [{ identifier }, { projectId }], baseId },
+      where: { OR: [{ identifier }, { projectId }], AND: { baseId } },
     });
 
     return physicalDocuments.map(BqPhysicalDocumentMapper.toDomain);
@@ -91,8 +91,7 @@ export class BqPhysicalDocumentRepository
           project: {
             join: {
               table: "project",
-              on:
-                "physical_document.projectId = project.id",
+              on: "physical_document.projectId = project.id",
             },
             relationType: "one-to-one",
           },

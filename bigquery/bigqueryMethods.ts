@@ -9,7 +9,7 @@ export interface UpdateProps<T> {
 }
 
 export interface SelectOptions<T> {
-  where?: Partial<T> | { OR: Partial<T>[] };
+  where?: Partial<T> | { OR: Partial<T>[]; AND?: Partial<T> };
   whereIn?: { [K in keyof T]?: any[] };
   greaterOrEqualThan?: Partial<T>;
   lessOrEqualThan?: Partial<T>;
@@ -47,6 +47,7 @@ export class BigQueryMethods<T extends Record<string, any>> {
   }
 
   async runQuery(query: string) {
+    console.log(query);
     const options = { query };
     const [rows] = await this.bigquery.query(options);
 
@@ -215,7 +216,7 @@ export class BigQueryMethods<T extends Record<string, any>> {
 
   private buildWhereClauses(
     tableAlias: string,
-    where?: Partial<T> | { OR: Partial<T>[] },
+    where?: Partial<T> | { OR: Partial<T>[]; AND?: Partial<T> },
     whereIn?: { [K in keyof T]?: any[] },
     greaterOrEqualThan?: Partial<T>,
     lessOrEqualThan?: Partial<T>,
@@ -225,7 +226,15 @@ export class BigQueryMethods<T extends Record<string, any>> {
 
     if (where) {
       if (this.isOrCondition(where)) {
-        whereClauses.push(this.buildOrWhereClause(tableAlias, where.OR));
+        const orClause = this.buildOrWhereClause(tableAlias, where.OR);
+        const andClause = where.AND
+          ? this.buildWhereClause(tableAlias, where.AND)
+          : "";
+        if (andClause) {
+          whereClauses.push(`(${orClause}) AND (${andClause})`);
+        } else {
+          whereClauses.push(orClause);
+        }
       } else {
         whereClauses.push(this.buildWhereClause(tableAlias, where));
       }

@@ -40,11 +40,13 @@
 - encode / compress requests [x]
 - modify data that has ' because crashes bigqueryMethods [x]
 - on register project modify error message "projeto já criado" [x] 
-- fetch accounts use like on name search []
+- fetch accounts use like on name search [x]
 - on register movimentations and budgets, put createdAt on optional parameter [] 
 - on movimentation and transfer movimentation of equipment materials needs CIA and SERIE []
 - don't allow inactive users to login []
-- on fetch users use like on name search []
+- on fetch users use like on name search [x]
+- bug on creating same identifier on diferente bases [x]
+- fetch movimentations history needs to filter by base []
 
 # Test 1 file
 

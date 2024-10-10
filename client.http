@@ -24,8 +24,8 @@ POST {{baseURL}}/sessions
 Content-Type: application/json
 
 {
-    "email": "rodrigo@ecoeletrica.com.br",
-    "password": "ECO@2012" 
+    "email": "joaovittor@ecoeletrica.com.br",
+    "password": "123456" 
 }
 
 ###
@@ -133,8 +133,8 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-    "project_number": "B-123456789",
-    "identifier": 3
+    "project_number": "B-12345678",
+    "identifier": 1
 }
 
 
