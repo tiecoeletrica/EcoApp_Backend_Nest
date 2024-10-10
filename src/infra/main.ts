@@ -3,6 +3,7 @@ import { AppModule } from "./app.module";
 import { ConfigService } from "@nestjs/config";
 import { Env } from "./env";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import * as compression from 'compression'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -17,6 +18,7 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("api", app, document);
+  app.use(compression())
 
   const configService: ConfigService<Env, true> = app.get(ConfigService);
   const port = configService.get("PORT", { infer: true });

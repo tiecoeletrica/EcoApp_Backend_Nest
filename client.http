@@ -24,7 +24,7 @@ POST {{baseURL}}/sessions
 Content-Type: application/json
 
 {
-    "email": "rafaelsampaio@ecoeletrica.com.br",
+    "email": "rodrigo@ecoeletrica.com.br",
     "password": "ECO@2012" 
 }
 
