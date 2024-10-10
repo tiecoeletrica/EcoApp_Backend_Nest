@@ -31,7 +31,7 @@ export class AuthenticateUserUseCase {
   }: AuthenticateUserUseCaseRequest): Promise<AuthenticateUserResponse> {
     const user = await this.userRepository.findByEmail(email);
 
-    if (!user) return left(new WrogCredentialsError());
+    if (!user || user.status === "inativo") return left(new WrogCredentialsError());
 
     const isPasswordValid = await this.hashComprarer.compare(
       password,
