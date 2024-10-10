@@ -10,9 +10,11 @@ import { ZodValidationPipe } from "src/infra/http/pipes/zod-validation.pipe";
 import { FetchMovimentationHistoryUseCase } from "src/domain/material-movimentation/application/use-cases/project-movimentation-budget/fetch-movimentations-history";
 import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
 import { MovimentationWithDetailsPresenter } from "src/infra/http/presenters/movimentation-with-details-presenter";
-import { ApiProperty, ApiTags } from "@nestjs/swagger";
+import { ApiTags } from "@nestjs/swagger";
 import { FetchMovimentationHistoryDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/project-movimentation-budget/response decorators/fetch-movimentations-history.decorator";
 import { FetchMovimentationHistoryQueryDto } from "src/infra/http/swagger dto and decorators/material-movimentation/project-movimentation-budget/dto classes/fetch-movimentations-history.dto";
+import { UserPayload } from "src/infra/auth/jwt-strategy.guard";
+import { CurrentUser } from "src/infra/auth/current-user.decorator";
 
 const fetchMovimentationHistoryBodySchema = z.object({
   page: z
@@ -21,7 +23,6 @@ const fetchMovimentationHistoryBodySchema = z.object({
     .default("1")
     .transform(Number)
     .pipe(z.number().min(1)),
-  baseId: z.string().uuid().optional(),
   email: z.string().email().optional(),
   project_number: z.string().optional(),
   material_code: z
@@ -50,18 +51,12 @@ export class FetchMovimentationHistoryController {
   @HttpCode(200)
   @FetchMovimentationHistoryDecorator()
   async handle(
+    @CurrentUser() user: UserPayload,
     @Query(new ZodValidationPipe(fetchMovimentationHistoryBodySchema))
     query: FetchMovimentationHistoryQueryDto
   ) {
-    const {
-      baseId,
-      page,
-      project_number,
-      email,
-      endDate,
-      material_code,
-      startDate,
-    } = query;
+    const { page, project_number, email, endDate, material_code, startDate } =
+      query;
 
     let endDateAjusted;
 
@@ -75,7 +70,7 @@ export class FetchMovimentationHistoryController {
 
     const result = await this.fetchMovimentationHistoryUseCase.execute({
       page,
-      baseId,
+      baseId: user.baseId,
       email,
       project_number,
       material_code,

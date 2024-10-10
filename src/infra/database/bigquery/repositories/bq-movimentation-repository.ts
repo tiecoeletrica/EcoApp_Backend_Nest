@@ -100,7 +100,7 @@ export class BqMovimentationRepository implements MovimentationRepository {
 
   async findManyHistoryWithDetails(
     { page }: PaginationParams,
-    baseId?: string,
+    baseId: string,
     storekeeperId?: string,
     projectId?: string,
     materialId?: string,

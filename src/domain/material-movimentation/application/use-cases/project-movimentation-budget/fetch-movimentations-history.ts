@@ -6,12 +6,11 @@ import { MovimentationWithDetails } from "src/domain/material-movimentation/ente
 import { ProjectRepository } from "../../repositories/project-repository";
 import { UserRepository } from "../../repositories/user-repository";
 import { MaterialRepository } from "../../repositories/material-repository";
-import { BaseRepository } from "../../repositories/base-repository";
 import { PaginationParamsResponse } from "src/core/repositories/pagination-params";
 
 interface FetchMovimentationHistoryUseCaseRequest {
   page: number;
-  baseId?: string;
+  baseId: string;
   email?: string;
   project_number?: string;
   material_code?: number;
@@ -34,7 +33,6 @@ export class FetchMovimentationHistoryUseCase {
     private projectRepository: ProjectRepository,
     private userRepository: UserRepository,
     private materialRepository: MaterialRepository,
-    private baseRepository: BaseRepository
   ) {}
 
   async execute({
@@ -49,13 +47,6 @@ export class FetchMovimentationHistoryUseCase {
     let storekeeperId;
     let projectId;
     let materialId;
-    let base;
-
-    if (baseId) {
-      base = await this.baseRepository.findById(baseId);
-      if (!base)
-        return left(new ResourceNotFoundError("baseId não encontrado"));
-    }
 
     if (email) {
       const storekeeper = await this.userRepository.findByEmail(email);

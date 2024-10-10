@@ -18,12 +18,6 @@ export class FetchMovimentationHistoryQueryDto {
   })
   email!: string;
   @ApiProperty({
-    example: "id-da-base-para-pesquisar",
-    description: "base's id that the movimentation was made",
-    required: false,
-  })
-  baseId!: string;
-  @ApiProperty({
     example: "B-1234567",
     description: "project's number that was movimetated",
     required: false,

@@ -47,7 +47,6 @@ export class BigQueryMethods<T extends Record<string, any>> {
   }
 
   async runQuery(query: string) {
-    console.log(query);
     const options = { query };
     const [rows] = await this.bigquery.query(options);
 

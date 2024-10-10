@@ -47,7 +47,6 @@ describe("Fetch Movimentations History", () => {
       inMemoryProjectRepository,
       inMemoryUserRepository,
       inMemoryMaterialRepository,
-      inMemoryBaseRepository
     );
   });
 
