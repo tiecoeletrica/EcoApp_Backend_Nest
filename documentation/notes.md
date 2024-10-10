@@ -1,6 +1,5 @@
 # Technical debt
 
-- Create a away to migrate the schemas of "/src/infra/database/bigquery/schemas" from files to tables on bigquery []
 - Verify if DDD errors are communicating to nest exception errors [x]
 - budget fetch use cases needs contractId on search [X]
 - transfer-material needs verification if parameters exists [x]
@@ -16,7 +15,6 @@
 - create update budget (this use case will create lines new budgets for that project) [x]
 - create fetch budgets (by list of projects and returning just found projects) [x]
 - create fetch budgets without streaming [x]
-- create fetch budgets by streaming for all budgets []
 - create register estimator [x]
 - create update estimator [x]
 - create delete estimator [x]
@@ -33,20 +31,22 @@
 - return physical document and projectIn on movimentations-budgets[x]
 - adjust FetchBudgetByProject to search by contract instead of base [x]
 - adjust findByProjectWithDetails from budget repository to use contract instead of base [x]
-- fetch materials by streaming []
-- fetch movimentation history by streaming []
 - fetch physical documents needs unitized parameter [x]
 - physical documents entity and use cases needs baseId [x]
 - encode / compress requests [x]
 - modify data that has ' because crashes bigqueryMethods [x]
 - on register project modify error message "projeto já criado" [x] 
 - fetch accounts use like on name search [x]
-- on register movimentations and budgets, put createdAt on optional parameter [] 
-- on movimentation and transfer movimentation of equipment materials needs CIA and SERIE []
-- don't allow inactive users to login []
 - on fetch users use like on name search [x]
 - bug on creating same identifier on diferente bases [x]
-- fetch movimentations history needs to filter by base []
+- fetch movimentations history needs to filter by base [x]
+- on register movimentations and budgets, put createdAt on optional parameter [x]
+- Create a away to migrate the schemas of "/src/infra/database/bigquery/schemas" from files to tables on bigquery []
+- create fetch budgets by streaming for all budgets []
+- fetch materials by streaming []
+- fetch movimentation history by streaming []
+- on movimentation and transfer movimentation of equipment materials needs CIA and SERIE []
+- don't allow inactive users to login []
 
 # Test 1 file
 

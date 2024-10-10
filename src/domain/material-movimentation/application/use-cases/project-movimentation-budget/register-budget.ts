@@ -20,6 +20,7 @@ interface RegisterBudgetUseCaseRequest {
   projectId: string;
   contractId: string;
   value: number;
+  createdAt?: Date;
 }
 
 type RegisterBudgetResponse = Eihter<
@@ -55,6 +56,7 @@ export class RegisterBudgetUseCase {
         estimatorId: new UniqueEntityID(budget.estimatorId),
         contractId: new UniqueEntityID(budget.contractId),
         value: budget.value,
+        createdAt: budget.createdAt,
       });
     });
 

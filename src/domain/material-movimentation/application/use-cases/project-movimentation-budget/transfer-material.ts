@@ -21,6 +21,7 @@ interface TransferMaterialUseCaseRequest {
   observation: string;
   baseId: string;
   value: number;
+  createdAt?: Date;
 }
 
 type TransferMaterialResponse = Eihter<
@@ -58,6 +59,7 @@ export class TransferMaterialUseCase {
           observation: movimentation.observation,
           baseId: new UniqueEntityID(movimentation.baseId),
           value: movimentation.value,
+          createdAt: movimentation.createdAt,
         });
       }
     );

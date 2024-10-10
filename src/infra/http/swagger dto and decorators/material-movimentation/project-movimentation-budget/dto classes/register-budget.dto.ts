@@ -18,4 +18,10 @@ export class RegisterBudgetBodyDto {
     description: "value to be registered",
   })
   value!: number;
+  @ApiProperty({
+    example: new Date(),
+    description: "optional date when the budget has been registered",
+    required: false,
+  })
+  createdAt!: Date;
 }

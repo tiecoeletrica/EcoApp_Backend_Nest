@@ -16,6 +16,10 @@ const registerBudgetBodySchema = z.array(
       materialId: z.string().uuid(),
       projectId: z.string().uuid(),
       value: z.number(),
+      createdAt: z
+        .string()
+        .optional()
+        .transform((value) => (value ? new Date(value) : undefined)),
     })
     .required()
 );
@@ -47,6 +51,7 @@ export class RegisterBudgetController {
           projectId: item.projectId,
           contractId: user.contractId,
           value: item.value,
+          createdAt: item.createdAt,
         };
       })
     );

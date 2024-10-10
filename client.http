@@ -24,8 +24,8 @@ POST {{baseURL}}/sessions
 Content-Type: application/json
 
 {
-    "email": "rodrigo@ecoeletrica.com.br",
-    "password": "ECO@2012" 
+    "email": "joaovittor@ecoeletrica.com.br",
+    "password": "123456" 
 }
 
 ###
@@ -180,85 +180,14 @@ Authorization: Bearer {{authToken}}
         "materialId": "b21ba24a-b752-4415-9fc4-702ec851c5cf",
         "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
         "observation": "é simplesmente uma simulação de texto",
-        "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
-        "value": 5
+        "value": 5,
+        "createdAt": "2025-10-10T18:49:36.121Z"
     },
     {
         "materialId": "7a7b5a91-e91a-4340-8a5f-5e1acdf502f8",
         "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
         "observation": "",
-        "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
         "value": 2
-    },
-    {
-        "materialId": "d5fd168d-1a00-48b6-abe6-1668c9d4e507",
-        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
-        "observation": "",
-        "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
-        "value": -1
-    },
-    {
-        "materialId": "b21ba24a-b752-4415-9fc4-702ec851c5cf",
-        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
-        "observation": "Existem muitas variações disponíveis",
-        "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
-        "value": 2
-    },
-    {
-        "materialId": "7a7b5a91-e91a-4340-8a5f-5e1acdf502f8",
-        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
-        "observation": "",
-        "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
-        "value": -30.21
-    },
-    {
-        "materialId": "d5fd168d-1a00-48b6-abe6-1668c9d4e507",
-        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
-        "observation": "",
-        "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
-        "value": 1.32
-    },
-    {
-        "materialId": "b21ba24a-b752-4415-9fc4-702ec851c5cf",
-        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
-        "observation": "",
-        "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
-        "value": 5
-    },
-    {
-        "materialId": "7a7b5a91-e91a-4340-8a5f-5e1acdf502f8",
-        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
-        "observation": "É um fato conhecido de todos",
-        "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
-        "value": 2
-    },
-    {
-        "materialId": "d5fd168d-1a00-48b6-abe6-1668c9d4e507",
-        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
-        "observation": "",
-        "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
-        "value": -1
-    },
-    {
-        "materialId": "b21ba24a-b752-4415-9fc4-702ec851c5cf",
-        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
-        "observation": "",
-        "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
-        "value": -21
-    },
-    {
-        "materialId": "7a7b5a91-e91a-4340-8a5f-5e1acdf502f8",
-        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
-        "observation": "",
-        "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
-        "value": 2.32
-    },
-    {
-        "materialId": "d5fd168d-1a00-48b6-abe6-1668c9d4e507",
-        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
-        "observation": "",
-        "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
-        "value": 458.2
     }
 ]
 
@@ -301,6 +230,8 @@ Authorization: Bearer {{authToken}}
 
 # @name fetch_movimentations
 GET {{baseURL}}/movimentations
+# ?project_number=B-12345678
+# &material_code=110014
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
@@ -310,7 +241,7 @@ Authorization: Bearer {{authToken}}
 # @name fetch_movimentations_budgets
 GET {{baseURL}}/movimentations-budgets
 ?project_number=B-12345678
-&physicalDocument=true
+# &physicalDocument=true
 # &projectIn=B-1234567
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
@@ -320,7 +251,7 @@ Authorization: Bearer {{authToken}}
 
 # @name fetch_budgets
 GET {{baseURL}}/budgets
-?project_number=2024_8_21210
+?project_number=B-22345678
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
@@ -346,50 +277,13 @@ Authorization: Bearer {{authToken}}
     {
         "materialId": "b21ba24a-b752-4415-9fc4-702ec851c5cf",
         "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
-        "contractId": "e816f105-e022-4560-b32c-d2af40c18351",
-        "value": 5
+        "value": 5,
+        "createdAt": "2025-10-10T18:49:36.121Z"
     },
     {
         "materialId": "7a7b5a91-e91a-4340-8a5f-5e1acdf502f8",
         "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
-        "contractId": "e816f105-e022-4560-b32c-d2af40c18351",
         "value": 2
-    },
-    {
-        "materialId": "b21ba24a-b752-4415-9fc4-702ec851c5cf",
-        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
-        "contractId": "e816f105-e022-4560-b32c-d2af40c18351",
-        "value": 2
-    },
-    {
-        "materialId": "d5fd168d-1a00-48b6-abe6-1668c9d4e507",
-        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
-        "contractId": "e816f105-e022-4560-b32c-d2af40c18351",
-        "value": 1.32
-    },
-    {
-        "materialId": "b21ba24a-b752-4415-9fc4-702ec851c5cf",
-        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
-        "contractId": "e816f105-e022-4560-b32c-d2af40c18351",
-        "value": 5
-    },
-    {
-        "materialId": "7a7b5a91-e91a-4340-8a5f-5e1acdf502f8",
-        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
-        "contractId": "e816f105-e022-4560-b32c-d2af40c18351",
-        "value": 2
-    },
-    {
-        "materialId": "7a7b5a91-e91a-4340-8a5f-5e1acdf502f8",
-        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
-        "contractId": "e816f105-e022-4560-b32c-d2af40c18351",
-        "value": 2.32
-    },
-    {
-        "materialId": "d5fd168d-1a00-48b6-abe6-1668c9d4e507",
-        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
-        "contractId": "e816f105-e022-4560-b32c-d2af40c18351",
-        "value": 458.2
     }
 ]
 
