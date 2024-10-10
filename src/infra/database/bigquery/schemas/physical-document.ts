@@ -9,6 +9,7 @@ export interface BqPhysicalDocumentProps {
   projectId: string;
   identifier: number;
   unitized: boolean;
+  baseId: string;
 
   project?: BqProjectProps;
 }

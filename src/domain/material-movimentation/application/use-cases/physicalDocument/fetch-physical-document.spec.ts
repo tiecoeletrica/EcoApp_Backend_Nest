@@ -42,14 +42,17 @@ describe("Fetch PhysicalDocuments History", () => {
     const newPhysicalDocument1 = makePhysicalDocument({
       identifier: 3,
       projectId: project.id,
+      baseId: base.id,
     });
     const newPhysicalDocument2 = makePhysicalDocument({
       identifier: 10,
       projectId: project.id,
+      baseId: base.id,
     });
     const newPhysicalDocument3 = makePhysicalDocument({
       identifier: 1,
       projectId: project.id,
+      baseId: base.id,
     });
 
     await inMemoryPhysicalDocumentRepository.create(newPhysicalDocument1);
@@ -85,7 +88,7 @@ describe("Fetch PhysicalDocuments History", () => {
 
     for (let i = 1; i <= 45; i++) {
       await inMemoryPhysicalDocumentRepository.create(
-        makePhysicalDocument({ projectId: project.id })
+        makePhysicalDocument({ projectId: project.id, baseId: base.id })
       );
     }
 
@@ -118,9 +121,11 @@ describe("Fetch PhysicalDocuments History", () => {
 
     const newPhysicalDocument1 = makePhysicalDocument({
       projectId: project1.id,
+      baseId: base.id,
     });
     const newPhysicalDocument2 = makePhysicalDocument({
       projectId: project1.id,
+      baseId: base.id,
     });
     const newPhysicalDocument3 = makePhysicalDocument({
       projectId: project2.id,
@@ -156,6 +161,7 @@ describe("Fetch PhysicalDocuments History", () => {
 
     const newPhysicalDocument1 = makePhysicalDocument({
       projectId: project1.id,
+      baseId: base.id,
     });
     const newPhysicalDocument2 = makePhysicalDocument({
       projectId: project1.id,
@@ -175,7 +181,7 @@ describe("Fetch PhysicalDocuments History", () => {
 
     expect(result.isRight()).toBeTruthy();
     if (result.isRight())
-      expect(result.value.physicalDocuments).toHaveLength(2);
+      expect(result.value.physicalDocuments).toHaveLength(1);
   });
 
   it("should be able to fetch physicalDocuments history by identifier", async () => {
@@ -189,16 +195,19 @@ describe("Fetch PhysicalDocuments History", () => {
       unitized: false,
       identifier: 10,
       projectId: project.id,
+      baseId: base.id,
     });
     const newPhysicalDocument2 = makePhysicalDocument({
       unitized: false,
       identifier: 5,
       projectId: project.id,
+      baseId: base.id,
     });
     const newPhysicalDocument3 = makePhysicalDocument({
       unitized: true,
       identifier: 10,
       projectId: project.id,
+      baseId: base.id,
     });
 
     await inMemoryPhysicalDocumentRepository.create(newPhysicalDocument1);
@@ -227,16 +236,19 @@ describe("Fetch PhysicalDocuments History", () => {
       unitized: false,
       identifier: 10,
       projectId: project.id,
+      baseId: base.id,
     });
     const newPhysicalDocument2 = makePhysicalDocument({
       unitized: false,
       identifier: 5,
       projectId: project.id,
+      baseId: base.id,
     });
     const newPhysicalDocument3 = makePhysicalDocument({
       unitized: true,
       identifier: 10,
       projectId: project.id,
+      baseId: base.id,
     });
 
     await inMemoryPhysicalDocumentRepository.create(newPhysicalDocument1);

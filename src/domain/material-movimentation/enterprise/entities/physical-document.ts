@@ -6,6 +6,7 @@ export interface PhysicalDocumentProps {
   projectId: UniqueEntityID;
   identifier: number;
   unitized: boolean;
+  baseId: UniqueEntityID;
 }
 
 export class PhysicalDocument extends Entity<PhysicalDocumentProps> {
@@ -23,6 +24,14 @@ export class PhysicalDocument extends Entity<PhysicalDocumentProps> {
 
   set projectId(projectId: UniqueEntityID) {
     this.props.projectId = projectId;
+  }
+
+  get baseId() {
+    return this.props.baseId;
+  }
+
+  set baseId(baseId: UniqueEntityID) {
+    this.props.baseId = baseId;
   }
 
   set identifier(identifier: number) {

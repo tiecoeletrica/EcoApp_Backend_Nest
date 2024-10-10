@@ -34,9 +34,18 @@ describe("Fetch Physical Documents (E2E)", () => {
   test("[GET] /physical-documents", async () => {
     const user = await userFactory.makeBqUser({});
 
-    await physicalDocumentFactory.makeBqPhysicalDocument({ identifier: 2 });
-    await physicalDocumentFactory.makeBqPhysicalDocument({ identifier: 2 });
-    await physicalDocumentFactory.makeBqPhysicalDocument({ identifier: 2 });
+    await physicalDocumentFactory.makeBqPhysicalDocument({
+      identifier: 2,
+      baseId: user.baseId,
+    });
+    await physicalDocumentFactory.makeBqPhysicalDocument({
+      identifier: 2,
+      baseId: user.baseId,
+    });
+    await physicalDocumentFactory.makeBqPhysicalDocument({
+      identifier: 2,
+      baseId: user.baseId,
+    });
 
     const accessToken = jwt.sign({
       sub: user.id.toString(),

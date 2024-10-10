@@ -7,6 +7,7 @@ export class BqPhysicalDocumentWithProjectMapper {
   static toDomain(raw: BqPhysicalDocumentProps): PhysicalDocumentWithProject {
     return PhysicalDocumentWithProject.create({
       physicalDocumentId: new UniqueEntityID(raw.id),
+      baseId: new UniqueEntityID(raw.baseId),
       identifier: raw.identifier,
       unitized: raw.unitized,
       project: Project.create(

@@ -7,9 +7,10 @@ import { PhysicalDocumentWithProject } from "../../enterprise/entities/value-obj
 
 export abstract class PhysicalDocumentRepository {
   abstract create(physicalDocument: PhysicalDocument): Promise<void>;
-  abstract findByIdentifierProjectId(
+  abstract findByIdentifierOrProjectId(
     identifier: number,
-    projectId: string
+    projectId: string,
+    baseId: string
   ): Promise<PhysicalDocument[]>;
   abstract findByID(id: string): Promise<PhysicalDocument | null>;
   abstract save(physicalDocument: PhysicalDocument): Promise<void>;

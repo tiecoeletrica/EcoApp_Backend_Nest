@@ -22,12 +22,13 @@ export class BqPhysicalDocumentRepository
     await this.bigquery.physicalDocument.create([data]);
   }
 
-  async findByIdentifierProjectId(
+  async findByIdentifierOrProjectId(
     identifier: number,
-    projectId: string
+    projectId: string,
+    baseId: string
   ): Promise<PhysicalDocument[]> {
     const physicalDocuments = await this.bigquery.physicalDocument.select({
-      where: { OR: [{ identifier }, { projectId }] },
+      where: { OR: [{ identifier }, { projectId }], baseId },
     });
 
     return physicalDocuments.map(BqPhysicalDocumentMapper.toDomain);
@@ -69,7 +70,7 @@ export class BqPhysicalDocumentRepository
 
   async findManyWithProject(
     { page }: PaginationParams,
-    baseId,
+    baseId: string,
     identifier?: number,
     projectId?: string,
     unitized?: boolean
@@ -81,7 +82,7 @@ export class BqPhysicalDocumentRepository
 
     const { results: physicalDocuments, total_count } =
       await this.bigquery.physicalDocument.select({
-        where: { projectId, identifier, unitized },
+        where: { projectId, identifier, unitized, baseId },
         limit: pageCount,
         offset: pageCount * (page - 1),
         count_results: true,
@@ -91,9 +92,7 @@ export class BqPhysicalDocumentRepository
             join: {
               table: "project",
               on:
-                "physical_document.projectId = project.id AND project.baseId = '" +
-                baseId +
-                "'",
+                "physical_document.projectId = project.id",
             },
             relationType: "one-to-one",
           },

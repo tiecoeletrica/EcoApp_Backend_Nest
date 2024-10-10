@@ -17,6 +17,7 @@ export function makePhysicalDocument(
       projectId: new UniqueEntityID(),
       identifier: faker.number.int({ min: 1, max: 420 }),
       unitized: faker.datatype.boolean(),
+      baseId: new UniqueEntityID(),
       ...override,
     },
     id

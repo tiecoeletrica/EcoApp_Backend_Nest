@@ -34,7 +34,8 @@ const fetchPhysicalDocumentsQuerySchema = z.object({
     .optional()
     .transform((val) => {
       if (val === "true") return true;
-      else return false;
+      if (val === "false") return false;
+      else return undefined;
     }),
 });
 
@@ -52,8 +53,6 @@ export class FetchPhysicalDocumentsController {
     query: FetchPhysicalDocumentsQueryDto
   ) {
     const { page, identifier, project_number, unitized } = query;
-
-    console.log(unitized);
 
     const result = await this.fetchPhysicalDocument.execute({
       page,

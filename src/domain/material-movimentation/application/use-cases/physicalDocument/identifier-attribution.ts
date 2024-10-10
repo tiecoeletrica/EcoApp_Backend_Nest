@@ -5,6 +5,7 @@ import { PhysicalDocumentRepository } from "../../repositories/physical-document
 import { ResourceAlreadyRegisteredError } from "../errors/resource-already-registered-error";
 import { ProjectRepository } from "../../repositories/project-repository";
 import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 
 interface IdentifierAttributionUseCaseRequest {
   project_number: string;
@@ -31,17 +32,17 @@ export class IdentifierAttributionUseCase {
     identifier,
     baseId,
   }: IdentifierAttributionUseCaseRequest): Promise<IdentifierAttributionResponse> {
-    const project = await this.projectRepository.findByProjectNumber(
-      project_number,
-      baseId
+    const project = await this.projectRepository.findByProjectNumberWithoutBase(
+      project_number
     );
     if (!project)
       return left(new ResourceNotFoundError("O projeto não foi encontrado"));
 
     const physicaldocumentSearch =
-      await this.physicaldocumentRepository.findByIdentifierProjectId(
+      await this.physicaldocumentRepository.findByIdentifierOrProjectId(
         identifier,
-        project.id.toString()
+        project.id.toString(),
+        baseId
       );
 
     const isIdentifierUsed = physicaldocumentSearch.find(
@@ -61,6 +62,7 @@ export class IdentifierAttributionUseCase {
     const physicalDocument = PhysicalDocument.create({
       projectId: project.id,
       identifier,
+      baseId: new UniqueEntityID(baseId),
     });
 
     await this.physicaldocumentRepository.create(physicalDocument);

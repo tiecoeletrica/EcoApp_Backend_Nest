@@ -35,14 +35,13 @@ export class FetchPhysicalDocumentUseCase {
     baseId,
     identifier,
     project_number,
-    unitized
+    unitized,
   }: FetchPhysicalDocumentUseCaseRequest): Promise<FetchPhysicalDocumentUseCaseResponse> {
     let project: Project | null = null;
 
     if (project_number) {
-      project = await this.projectRepository.findByProjectNumber(
-        project_number,
-        baseId
+      project = await this.projectRepository.findByProjectNumberWithoutBase(
+        project_number
       );
       if (!project)
         return left(new ResourceNotFoundError("Projeto não encontrado"));

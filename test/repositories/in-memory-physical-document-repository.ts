@@ -14,14 +14,16 @@ export class InMemoryPhysicalDocumentRepository
 
   constructor(private projectRepository: InMemoryProjectRepository) {}
 
-  async findByIdentifierProjectId(
+  async findByIdentifierOrProjectId(
     identifier: number,
-    projectId: string
+    projectId: string,
+    baseId: string
   ): Promise<PhysicalDocument[]> {
     const physicaldocument = this.items.filter(
       (item) =>
-        item.identifier === identifier ||
-        item.projectId.toString() === projectId
+        (item.identifier === identifier ||
+          item.projectId.toString() === projectId) &&
+        item.baseId.toString() === baseId
     );
 
     return physicaldocument;
@@ -71,7 +73,7 @@ export class InMemoryPhysicalDocumentRepository
 
   async findManyWithProject(
     { page }: PaginationParams,
-    baseId,
+    baseId: string,
     identifier?: number,
     projectId?: string,
     unitized?: boolean
@@ -82,6 +84,9 @@ export class InMemoryPhysicalDocumentRepository
     const pageCount = 40;
 
     const physicalDocuments = this.items
+      .filter(
+        (physicaldocument) => physicaldocument.baseId.toString() === baseId
+      )
       .filter(
         (physicaldocument) =>
           !identifier || physicaldocument.identifier === identifier
@@ -95,9 +100,9 @@ export class InMemoryPhysicalDocumentRepository
           !unitized || physicaldocument.unitized === unitized
       )
       .filter((physicaldocument) => {
-        const projects = this.projectRepository.items
-          .filter((project) => project.baseId.toString() === baseId)
-          .map((project) => project.id.toString());
+        const projects = this.projectRepository.items.map((project) =>
+          project.id.toString()
+        );
 
         return projects.includes(physicaldocument.projectId.toString());
       })
@@ -116,6 +121,7 @@ export class InMemoryPhysicalDocumentRepository
           identifier: physicalDocument.identifier,
           unitized: physicalDocument.unitized,
           project,
+          baseId: physicalDocument.baseId,
         });
       })
       .sort((a, b) => a.identifier - b.identifier)

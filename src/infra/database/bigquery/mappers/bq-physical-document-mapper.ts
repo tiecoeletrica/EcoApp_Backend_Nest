@@ -9,6 +9,7 @@ export class BqPhysicalDocumentMapper {
         projectId: new UniqueEntityID(raw.projectId),
         identifier: raw.identifier,
         unitized: raw.unitized,
+        baseId: new UniqueEntityID(raw.baseId),
       },
       new UniqueEntityID(raw.id)
     );
@@ -22,6 +23,7 @@ export class BqPhysicalDocumentMapper {
       projectId: physicalDocument.projectId.toString(),
       identifier: physicalDocument.identifier,
       unitized: physicalDocument.unitized,
+      baseId: physicalDocument.baseId.toString(),
     };
   }
 }

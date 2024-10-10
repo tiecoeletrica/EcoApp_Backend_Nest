@@ -7,11 +7,15 @@ export interface PhysicalDocumentWithProjectProps {
   identifier: number;
   unitized: boolean;
   project: Project;
+  baseId: UniqueEntityID;
 }
 
 export class PhysicalDocumentWithProject extends ValueObject<PhysicalDocumentWithProjectProps> {
   get physicalDocumentId() {
     return this.props.physicalDocumentId;
+  }
+  get baseId() {
+    return this.props.baseId;
   }
   get identifier() {
     return this.props.identifier;

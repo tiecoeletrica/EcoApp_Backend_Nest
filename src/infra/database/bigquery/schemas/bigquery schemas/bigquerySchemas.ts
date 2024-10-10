@@ -94,6 +94,7 @@ const allSchemas = {
       { name: "projectId", type: "STRING", mode: "REQUIRED" },
       { name: "unitized", type: "BOOLEAN", mode: "NULLABLE" },
       { name: "identifier", type: "INTEGER", mode: "REQUIRED" },
+      { name: "baseId", type: "STRING", mode: "NULLABLE" },
     ],
   },
   project: {
