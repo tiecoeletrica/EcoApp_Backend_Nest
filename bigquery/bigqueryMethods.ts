@@ -333,11 +333,11 @@ export class BigQueryMethods<T extends Record<string, any>> {
       .filter((key) => like[key] !== undefined)
       .map(
         (key) =>
-          `${tableAlias}.${String(key)} LIKE ${
+          `LOWER(${tableAlias}.${String(key)}) LIKE LOWER(${
             typeof like[key] === "string"
               ? `'%${this.escapeString(like[key] as string)}%'`
               : like[key]
-          }`
+          })`
       )
       .join(" AND ");
   }

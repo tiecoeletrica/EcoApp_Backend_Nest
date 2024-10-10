@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, test } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import { RegisterProjectUseCase } from "./register-project";
 import { InMemoryProjectRepository } from "../../../../../../test/repositories/in-memory-project-repository";
 import { ResourceAlreadyRegisteredError } from "../errors/resource-already-registered-error";

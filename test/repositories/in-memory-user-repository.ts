@@ -72,7 +72,9 @@ export class InMemoryUserRepository implements UserRepository {
       .filter(
         (user) => !contractId || user.contractId.toString() === contractId
       )
-      .filter((user) => !name || user.name.includes(name))
+      .filter(
+        (user) => !name || user.name.toLowerCase().includes(name.toLowerCase())
+      )
       .sort((a, b) => a.name.localeCompare(b.name))
       .slice((page - 1) * pageCount, page * pageCount)
       .map((user) => {

@@ -44,7 +44,7 @@ export class RegisterProjectUseCase {
       baseId
     );
 
-    if (projectSearch) return left(new ResourceAlreadyRegisteredError());
+    if (projectSearch) return left(new ResourceAlreadyRegisteredError("Projeto já registrado"));
 
     const project = Project.create({
       project_number,

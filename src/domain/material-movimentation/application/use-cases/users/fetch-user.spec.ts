@@ -227,4 +227,48 @@ describe("Fetch Users History", () => {
         }),
       ]);
   });
+
+  it("should be able to fetch user by part of name and not case sensitive", async () => {
+    const contract = makeContract({ contractName: "Centro-Oeste" });
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase({ baseName: "Itaberaba", contractId: contract.id });
+    await inMemoryBaseRepository.create(base);
+
+    const newUser1 = makeUser({
+      name: "Bruno Carlos",
+      baseId: base.id,
+      contractId: contract.id,
+    });
+    const newUser2 = makeUser({
+      name: "Bruno José",
+      baseId: base.id,
+      contractId: contract.id,
+    });
+    const newUser3 = makeUser({
+      name: "Carlos",
+      baseId: base.id,
+      contractId: contract.id,
+    });
+
+    await inMemoryUserRepository.create(newUser1);
+    await inMemoryUserRepository.create(newUser2);
+    await inMemoryUserRepository.create(newUser3);
+
+    const result = await sut.execute({
+      page: 1,
+      name: "bru",
+    });
+
+    expect(result.isRight()).toBeTruthy();
+    if (result.isRight())
+      expect(result.value.users).toEqual([
+        expect.objectContaining({
+          props: expect.objectContaining({ name: "Bruno Carlos" }),
+        }),
+        expect.objectContaining({
+          props: expect.objectContaining({ name: "Bruno José" }),
+        }),
+      ]);
+  });
 });
