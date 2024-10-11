@@ -12,6 +12,7 @@ import { makeUser } from "test/factories/make-user";
 import { makeMaterial } from "test/factories/make-material";
 import { makeBase } from "test/factories/make-base";
 import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { NotValidError } from "../errors/not-valid-error";
 
 let inMemoryContractRepository: InMemoryContractRepository;
 let inMemoryBaseRepository: InMemoryBaseRepository;
@@ -60,10 +61,7 @@ describe("Transfer Material", () => {
     const base = makeBase({}, new UniqueEntityID("ID-BASE-VCA"));
     await inMemoryBaseRepository.create(base);
 
-    const storekeeper = makeUser(
-      { baseId: base.id },
-      new UniqueEntityID("5")
-    );
+    const storekeeper = makeUser({ baseId: base.id }, new UniqueEntityID("5"));
     await inMemoryUserRepository.create(storekeeper);
 
     const result = await sut.execute([
@@ -101,5 +99,36 @@ describe("Transfer Material", () => {
 
     expect(result.isLeft()).toBe(true);
     expect(result.value).toBeInstanceOf(ResourceNotFoundError);
+  });
+
+  it("should not be able to transfer a material there is no informed CIAs on observation", async () => {
+    const project = makeProject({}, new UniqueEntityID("1"));
+    await inMemoryProjectRepository.create(project);
+
+    const material = makeMaterial(
+      { type: "EQUIPAMENTO" },
+      new UniqueEntityID("4")
+    );
+    await inMemoryMaterialRepository.create(material);
+
+    const base = makeBase({}, new UniqueEntityID("ID-BASE-VCA"));
+    await inMemoryBaseRepository.create(base);
+
+    const storekeeper = makeUser({ baseId: base.id }, new UniqueEntityID("5"));
+    await inMemoryUserRepository.create(storekeeper);
+
+    const result = await sut.execute([
+      {
+        projectId: "1",
+        materialId: "4",
+        storekeeperId: "5",
+        observation: "CIA: 32918392192",
+        baseId: "ID-BASE-VCA",
+        value: 2,
+      },
+    ]);
+
+    expect(result.isLeft()).toBe(true);
+    expect(result.value).toBeInstanceOf(NotValidError);
   });
 });

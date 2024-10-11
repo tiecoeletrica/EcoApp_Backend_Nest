@@ -177,11 +177,10 @@ Authorization: Bearer {{authToken}}
 
 [
     {
-        "materialId": "b21ba24a-b752-4415-9fc4-702ec851c5cf",
+        "materialId": "18c41419-c993-4b62-8672-ded49ee06d3d",
         "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
-        "observation": "é simplesmente uma simulação de texto",
-        "value": 5,
-        "createdAt": "2025-10-10T18:49:36.121Z"
+        "observation": "cia CIA cia Cia cia",
+        "value": 5
     },
     {
         "materialId": "7a7b5a91-e91a-4340-8a5f-5e1acdf502f8",

@@ -42,6 +42,7 @@
 - fetch movimentations history needs to filter by base [x]
 - on register movimentations and budgets, put createdAt on optional parameter [x]
 - don't allow inactive users to login [x]
+- show correct error on transfer movimentation [x]
 - Create a away to migrate the schemas of "/src/infra/database/bigquery/schemas" from files to tables on bigquery []
 - create fetch budgets by streaming for all budgets []
 - fetch materials by streaming []
@@ -49,7 +50,6 @@
 - on movimentation and transfer movimentation of equipment materials needs CIA and SERIE []
 - create register project by array []
 - create register material by array []
-- show correct error on transfer movimentation []
 
 # Test 1 file
 

@@ -9,6 +9,7 @@ import { ApiBody, ApiTags } from "@nestjs/swagger";
 import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
 import { TransferMaterialDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/project-movimentation-budget/response decorators/transfer-material.decorator";
 import { TransferMaterialBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/project-movimentation-budget/dto classes/transfer-material.dto";
+import { NotValidError } from "src/domain/material-movimentation/application/use-cases/errors/not-valid-error";
 
 const transferMaterialBodySchema = z.array(
   z
@@ -62,6 +63,8 @@ export class TransferMaterialController {
       const error = result.value;
 
       switch (error.constructor) {
+        case NotValidError:
+          throw new ConflictException(error.message);
         case ResourceNotFoundError:
           throw new ConflictException(error.message);
         default:

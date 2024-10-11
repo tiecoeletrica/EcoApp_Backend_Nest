@@ -39,6 +39,7 @@ describe("authenticate storekeeper", () => {
       email: "rodrigo@ecoeletrica.com",
       password: await fakeHasher.hash("123456"),
       type: "Almoxarife",
+      status: "ativo",
     });
 
     await inMemoryUserRepository.create(user);
@@ -59,6 +60,7 @@ describe("authenticate storekeeper", () => {
       email: "rodrigo@ecoeletrica.com",
       password: await fakeHasher.hash("123456"),
       type: "Orçamentista",
+      status: "ativo",
     });
 
     await inMemoryUserRepository.create(user);
@@ -78,6 +80,7 @@ describe("authenticate storekeeper", () => {
     const user = makeUser({
       email: "rodrigo@ecoeletrica.com",
       password: await fakeHasher.hash("123456"),
+      status: "ativo",
     });
 
     await inMemoryUserRepository.create(user);
@@ -85,6 +88,24 @@ describe("authenticate storekeeper", () => {
     const result = await sut.execute({
       email: "rodrigo@ecoeletrica.com",
       password: "12345",
+    });
+
+    expect(result.isLeft()).toBe(true);
+    expect(result.value).toBeInstanceOf(WrogCredentialsError);
+  });
+
+  it("should not be able to authenticate a storekeeper if the he is inactive", async () => {
+    const user = makeUser({
+      email: "rodrigo@ecoeletrica.com",
+      password: await fakeHasher.hash("123456"),
+      status: "inativo",
+    });
+
+    await inMemoryUserRepository.create(user);
+
+    const result = await sut.execute({
+      email: "rodrigo@ecoeletrica.com",
+      password: "123456",
     });
 
     expect(result.isLeft()).toBe(true);

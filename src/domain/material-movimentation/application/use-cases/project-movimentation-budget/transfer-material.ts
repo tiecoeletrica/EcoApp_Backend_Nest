@@ -13,6 +13,7 @@ import { Project } from "src/domain/material-movimentation/enterprise/entities/p
 import { BaseRepository } from "../../repositories/base-repository";
 import { Base } from "src/domain/material-movimentation/enterprise/entities/base";
 import { Estimator } from "src/domain/material-movimentation/enterprise/entities/estimator";
+import { NotValidError } from "../errors/not-valid-error";
 
 interface TransferMaterialUseCaseRequest {
   storekeeperId: string;
@@ -25,7 +26,7 @@ interface TransferMaterialUseCaseRequest {
 }
 
 type TransferMaterialResponse = Eihter<
-  ResourceNotFoundError,
+  ResourceNotFoundError | NotValidError,
   {
     movimentations: Movimentation[];
   }
@@ -41,6 +42,8 @@ export class TransferMaterialUseCase {
     private baseRepository: BaseRepository
   ) {}
 
+  private materials: Material[] = [];
+
   async execute(
     transferMaterialUseCaseRequest: TransferMaterialUseCaseRequest[]
   ): Promise<TransferMaterialResponse> {
@@ -49,6 +52,12 @@ export class TransferMaterialUseCase {
     );
 
     if (containsIdError) return left(new ResourceNotFoundError(message));
+
+    const { containsEquipmentWithoutDetails, messageEquipment } =
+      this.verifyEquipmentDetails(transferMaterialUseCaseRequest);
+
+    if (containsEquipmentWithoutDetails)
+      return left(new NotValidError(messageEquipment));
 
     const movimentations = transferMaterialUseCaseRequest.map(
       (movimentation) => {
@@ -136,6 +145,7 @@ export class TransferMaterialUseCase {
         break;
       case "materialId":
         result = await this.materialRepository.findByIds(uniqueValuesArray);
+        this.materials = result;
         break;
       case "projectId":
         result = await this.projectRepository.findByIds(uniqueValuesArray);
@@ -162,5 +172,29 @@ export class TransferMaterialUseCase {
         )
       ),
     ];
+  }
+
+  private verifyEquipmentDetails(
+    transferMaterialUseCaseRequest: TransferMaterialUseCaseRequest[]
+  ) {
+    let containsEquipmentWithoutDetails = false;
+    let messageEquipment = "";
+
+    transferMaterialUseCaseRequest.map((request) => {
+      const material = this.materials.find(
+        (material) => material.id.toString() === request.materialId
+      );
+
+      if (material && material.type === "EQUIPAMENTO") {
+        const ciaCount = (request.observation.match(/CIA/gi) || []).length;
+
+        if (ciaCount !== request.value) {
+          containsEquipmentWithoutDetails = true;
+          messageEquipment += `O material ${material.code} é um equipamento e requer ${request.value} número(s) de CIA na observação. Foram encontrados ${ciaCount}.`;
+        }
+      }
+    });
+
+    return { containsEquipmentWithoutDetails, messageEquipment };
   }
 }
