@@ -43,13 +43,14 @@
 - on register movimentations and budgets, put createdAt on optional parameter [x]
 - don't allow inactive users to login [x]
 - show correct error on transfer movimentation [x]
+- on movimentation and transfer movimentation of equipment materials needs CIA and SERIE [x]
 - Create a away to migrate the schemas of "/src/infra/database/bigquery/schemas" from files to tables on bigquery []
 - create fetch budgets by streaming for all budgets []
 - fetch materials by streaming []
 - fetch movimentation history by streaming []
-- on movimentation and transfer movimentation of equipment materials needs CIA and SERIE []
 - create register project by array []
 - create register material by array []
+- on edit user set all his tokens invalid []
 
 # Test 1 file
 
