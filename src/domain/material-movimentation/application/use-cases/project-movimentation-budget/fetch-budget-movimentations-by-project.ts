@@ -36,7 +36,7 @@ export class FetchBudgetMovimentationByProjectUseCase {
   }: FetchBudgetMovimentationByProjectUseCaseRequest): Promise<FetchBudgetMovimentationByProjectUseCaseResponse> {
     const base = await this.baseRepository.findById(baseId);
 
-    if (!base) return left(new ResourceNotFoundError("Base não encontrado"));
+    if (!base) return left(new ResourceNotFoundError("Base não encontrada"));
 
     const project = await this.projectRepository.findByProjectNumber(
       project_number,
@@ -44,7 +44,7 @@ export class FetchBudgetMovimentationByProjectUseCase {
     );
 
     if (!project)
-      return left(new ResourceNotFoundError("Projeto não encontrado"));
+      return left(new ResourceNotFoundError("Projeto a movimentar não encontrado"));
 
     const movimentations =
       await this.movimentationRepository.findByProjectWithDetails(
