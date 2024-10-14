@@ -57,6 +57,7 @@ import { FetchOnlyProjectsOfBudgetController } from "./controllers/material-movi
 import { FetchExistingBudgetByProjectsUseCase } from "src/domain/material-movimentation/application/use-cases/project-movimentation-budget/fetch-existing-budgets-by-projects";
 import { FetchExistingBudgetByProjectsController } from "./controllers/material-movimentation/project-movimentation-budget/fetch-existing-budgets-by-projects.controller";
 import { RegisterListOfProjectsUseCase } from "src/domain/material-movimentation/application/use-cases/project-movimentation-budget/register-list-of-projects";
+import { RegisterListOfMaterialsUseCase } from "src/domain/material-movimentation/application/use-cases/material/register-list-of-materials";
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, DtoModule],
@@ -91,6 +92,7 @@ import { RegisterListOfProjectsUseCase } from "src/domain/material-movimentation
   ],
   providers: [
     CreateMaterialUseCase,
+    RegisterListOfMaterialsUseCase,
     FetchMaterialUseCase,
     AuthenticateUserUseCase,
     RegisterUserUseCase,

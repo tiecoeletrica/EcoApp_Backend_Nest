@@ -32,7 +32,7 @@ describe("Create Material (E2E)", () => {
     await app.init();
   });
 
-  test("[POST] /materials", async () => {
+  test("[POST] /materials - unique material", async () => {
     const contract = await contractFactory.makeBqContract({});
     const user = await userFactory.makeBqUser({ contractId: contract.id });
 
@@ -59,5 +59,42 @@ describe("Create Material (E2E)", () => {
 
     expect(response.statusCode).toBe(201);
     expect(MaterialDataBase.description).toEqual("MATERIAL DE TESTE");
+  });
+
+  test("[POST] /materials - array of materials", async () => {
+    const contract = await contractFactory.makeBqContract({});
+    const user = await userFactory.makeBqUser({ contractId: contract.id });
+
+    const accessToken = jwt.sign({
+      sub: user.id.toString(),
+      type: user.type,
+      baseId: user.baseId.toString(),
+      contractId: user.contractId.toString(),
+    });
+
+    const response = await request(app.getHttpServer())
+      .post("/materials")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .send([
+        {
+          code: 123131,
+          description: "material de teste",
+          type: "concreto",
+          unit: "CDA",
+        },
+        {
+          code: 123133,
+          description: "material de teste",
+          type: "equipamento",
+          unit: "CDA",
+        },
+      ]);
+
+    const MaterialDataBase = await bigquery.material.select({
+      whereIn: { code: [123133, 123131] },
+    });
+
+    expect(response.statusCode).toBe(201);
+    expect(MaterialDataBase).toHaveLength(2);
   });
 });

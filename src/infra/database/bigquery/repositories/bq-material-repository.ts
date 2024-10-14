@@ -12,10 +12,16 @@ import { BqMaterialMapper } from "../mappers/bq-material-mapper";
 export class BqMaterialRepository implements MaterialRepository {
   constructor(private bigquery: BigQueryService) {}
 
-  async create(material: Material): Promise<void> {
-    const data = BqMaterialMapper.toBigquery(material);
+  async create(material: Material | Material[]): Promise<void> {
+    if (material instanceof Material) {
+      const data = BqMaterialMapper.toBigquery(material);
 
-    await this.bigquery.material.create([data]);
+      await this.bigquery.material.create([data]);
+    } else {
+      const data = material.map(BqMaterialMapper.toBigquery);
+
+      await this.bigquery.material.create(data);
+    }
   }
 
   async findByCode(code: number, contractId: string): Promise<Material | null> {
@@ -26,6 +32,19 @@ export class BqMaterialRepository implements MaterialRepository {
     if (!material) return null;
 
     return BqMaterialMapper.toDomain(material);
+  }
+
+  async findByCodes(
+    codesAndContracts: { code: number; contractId: string }[]
+  ): Promise<Material[]> {
+    let code = codesAndContracts.map((item) => item.code);
+    let contractId = codesAndContracts.map((item) => item.contractId);
+
+    const materials = await this.bigquery.material.select({
+      whereIn: { code, contractId },
+    });
+
+    return materials.map(BqMaterialMapper.toDomain);
   }
 
   async findByCodeWithoutContract(code: number): Promise<Material | null> {

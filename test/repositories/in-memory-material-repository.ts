@@ -18,6 +18,20 @@ export class InMemoryMaterialRepository implements MaterialRepository {
     return material;
   }
 
+  async findByCodes(
+    codesAndContracts: { code: number; contractId: string }[]
+  ): Promise<Material[]> {
+    const materials = codesAndContracts.map((codeContract) =>
+      this.items.find(
+        (item) =>
+          item.code === codeContract.code &&
+          item.contractId.toString() === codeContract.contractId
+      )
+    );
+
+    return materials.filter((material) => material !== undefined);
+  }
+
   async findByCodeWithoutContract(code: number): Promise<Material | null> {
     const material = this.items.find((item) => item.code === code);
 
@@ -34,8 +48,9 @@ export class InMemoryMaterialRepository implements MaterialRepository {
     return material;
   }
 
-  async create(material: Material) {
-    this.items.push(material);
+  async create(material: Material | Material[]) {
+    if (material instanceof Material) this.items.push(material);
+    else material.map((item) => this.items.push(item));
   }
 
   async findMany(

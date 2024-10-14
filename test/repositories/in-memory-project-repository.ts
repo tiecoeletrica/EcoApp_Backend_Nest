@@ -33,8 +33,6 @@ export class InMemoryProjectRepository implements ProjectRepository {
       )
     );
 
-    console.log(projects);
-
     return projects.filter((project) => project !== undefined);
   }
 

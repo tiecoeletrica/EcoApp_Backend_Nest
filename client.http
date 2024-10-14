@@ -35,12 +35,20 @@ POST {{baseURL}}/materials
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
-{
-    "code": 12345,
-    "description": "item poste 123",
-    "type": "FERRAGEM",
-    "unit": "CDA"
-}
+[
+    {
+        "code": 11111113,
+        "description": "item poste 123",
+        "type": "FERRAGEM",
+        "unit": "CDA"
+    },
+    {
+        "code": 11111112,
+        "description": "item poste 123",
+        "type": "FERRAGEM",
+        "unit": "CDA"
+    }
+]
 
 ###
 
