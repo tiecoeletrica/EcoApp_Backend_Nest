@@ -59,6 +59,14 @@ Authorization: Bearer {{authToken}}
 
 ###
 
+# @name fetch_all_materials
+GET {{baseURL}}/materials-streaming
+?type=FERRAGEM
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
 # @name get_user_by_id
 GET {{baseURL}}/accounts/612d36fb-3cde-42de-bae0-ef8e547a9807
 Content-Type: application/json

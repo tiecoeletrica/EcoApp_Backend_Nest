@@ -58,6 +58,8 @@ import { FetchExistingBudgetByProjectsUseCase } from "src/domain/material-movime
 import { FetchExistingBudgetByProjectsController } from "./controllers/material-movimentation/project-movimentation-budget/fetch-existing-budgets-by-projects.controller";
 import { RegisterListOfProjectsUseCase } from "src/domain/material-movimentation/application/use-cases/project-movimentation-budget/register-list-of-projects";
 import { RegisterListOfMaterialsUseCase } from "src/domain/material-movimentation/application/use-cases/material/register-list-of-materials";
+import { FetchAllMaterialController } from "./controllers/material-movimentation/material/fetch-all-materials.controller";
+import { FetchAllMaterialUseCase } from "src/domain/material-movimentation/application/use-cases/material/fetch-all-material";
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, DtoModule],
@@ -66,6 +68,7 @@ import { RegisterListOfMaterialsUseCase } from "src/domain/material-movimentatio
     AuthenticateController,
     CreateMaterialController,
     FetchMaterialController,
+    FetchAllMaterialController,
     GetAccountByidController,
     EditAccountController,
     DeleteAccountController,
@@ -94,6 +97,7 @@ import { RegisterListOfMaterialsUseCase } from "src/domain/material-movimentatio
     CreateMaterialUseCase,
     RegisterListOfMaterialsUseCase,
     FetchMaterialUseCase,
+    FetchAllMaterialUseCase,
     AuthenticateUserUseCase,
     RegisterUserUseCase,
     GetUserByIdUseCase,

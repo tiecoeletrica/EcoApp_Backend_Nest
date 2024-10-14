@@ -20,4 +20,5 @@ export abstract class MaterialRepository {
     contractId: string,
     type?: string
   ): Promise<{ materials: Material[]; pagination: PaginationParamsResponse }>;
+  abstract findManyAll(contractId: string, type?: string): Promise<Material[]>;
 }

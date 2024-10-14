@@ -1,0 +1,91 @@
+import {
+  BadRequestException,
+  Get,
+  NotFoundException,
+  Query,
+  Res,
+} from "@nestjs/common";
+import { Controller, HttpCode } from "@nestjs/common";
+import { z } from "zod";
+import { ZodValidationPipe } from "src/infra/http/pipes/zod-validation.pipe";
+import { FetchAllMaterialUseCase } from "src/domain/material-movimentation/application/use-cases/material/fetch-all-material";
+import { MaterialPresenter } from "../../../presenters/material-presenter";
+import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
+import { ApiTags } from "@nestjs/swagger";
+import { UserPayload } from "src/infra/auth/jwt-strategy.guard";
+import { CurrentUser } from "src/infra/auth/current-user.decorator";
+import { FetchAllMaterialQueryDto } from "src/infra/http/swagger dto and decorators/material-movimentation/material/dto classes/fetch-all-materials.dto";
+import { FetchAllMaterialDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/material/response decorators/fetch-all-materials.decorator";
+import type { Response } from "express";
+import { Readable } from "stream";
+
+const fetchMaterialQuerySchema = z.object({
+  type: z.string().optional(),
+});
+
+@ApiTags("material")
+@Controller("/materials-streaming")
+export class FetchAllMaterialController {
+  constructor(private fetchAllMaterialUseCase: FetchAllMaterialUseCase) {}
+
+  @Get()
+  @HttpCode(200)
+  @FetchAllMaterialDecorator()
+  async handle(
+    @CurrentUser() user: UserPayload,
+    @Query(new ZodValidationPipe(fetchMaterialQuerySchema))
+    query: FetchAllMaterialQueryDto,
+    @Res() response: Response
+  ) {
+    const { type } = query;
+
+    response.setHeader("Content-Type", "application/json");
+    response.setHeader("Transfer-Encoding", "chunked");
+
+    const materialtream = new Readable({
+      read() {},
+    });
+
+    materialtream.pipe(response);
+
+    try {
+      const result = await this.fetchAllMaterialUseCase.execute({
+        contractId: user.contractId,
+        type,
+      });
+
+      if (result.isLeft()) {
+        const error = result.value;
+        materialtream.push(JSON.stringify({ error: error.message }));
+        materialtream.push(null);
+
+        switch (error.constructor) {
+          case ResourceNotFoundError:
+            throw new NotFoundException(error.message);
+          default:
+            throw new BadRequestException(error.message);
+        }
+      }
+
+      materialtream.push('{"materials":[');
+
+      const materials = result.value.materials;
+      materials.forEach((material, index) => {
+        const materialJson = JSON.stringify(MaterialPresenter.toHTTP(material));
+        materialtream.push(materialJson);
+        if (index < materials.length - 1) {
+          materialtream.push(",");
+        }
+      });
+
+      materialtream.push("]}");
+      materialtream.push(null);
+    } catch (error) {
+      //   materialtream.push(
+      //     JSON.stringify({ error: "An unexpected error occurred" })
+      //   );
+    //   materialtream.push(null);
+      throw new BadRequestException(error);
+    }
+  }
+}

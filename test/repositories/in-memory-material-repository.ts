@@ -79,4 +79,13 @@ export class InMemoryMaterialRepository implements MaterialRepository {
 
     return { materials, pagination };
   }
+
+  async findManyAll(contractId: string, type?: string): Promise<Material[]> {
+    const materials = this.items
+      .filter((material) => material.contractId.toString() === contractId)
+      .filter((material) => !type || material.type === type)
+      .sort((a, b) => a.code - b.code);
+
+    return materials;
+  }
 }
