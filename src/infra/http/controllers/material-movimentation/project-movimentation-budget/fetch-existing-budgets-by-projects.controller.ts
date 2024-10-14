@@ -1,15 +1,8 @@
-import {
-  BadRequestException,
-  Body,
-  NotFoundException,
-  Post,
-  Res,
-} from "@nestjs/common";
+import { BadRequestException, Body, Post, Res } from "@nestjs/common";
 import { Controller, HttpCode } from "@nestjs/common";
 import { z } from "zod";
 import { ZodValidationPipe } from "src/infra/http/pipes/zod-validation.pipe";
 import { FetchExistingBudgetByProjectsUseCase } from "src/domain/material-movimentation/application/use-cases/project-movimentation-budget/fetch-existing-budgets-by-projects";
-import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
 import { ApiTags } from "@nestjs/swagger";
 import { UserPayload } from "src/infra/auth/jwt-strategy.guard";
 import { CurrentUser } from "src/infra/auth/current-user.decorator";
@@ -85,6 +78,7 @@ export class FetchExistingBudgetByProjectsController {
         JSON.stringify({ error: "An unexpected error occurred" })
       );
       budgetStream.push(null);
+      throw new BadRequestException(error);
     }
   }
 }

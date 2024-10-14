@@ -188,7 +188,7 @@ export class TransferMaterialUseCase {
       if (material && material.type === "EQUIPAMENTO") {
         const ciaCount = (request.observation.match(/CIA/gi) || []).length;
 
-        if (ciaCount !== request.value) {
+        if (ciaCount !== Math.abs(request.value)) {
           containsEquipmentWithoutDetails = true;
           messageEquipment += `O material ${material.code} é um equipamento e requer ${request.value} número(s) de CIA na observação. Foram encontrados ${ciaCount}.`;
         }
