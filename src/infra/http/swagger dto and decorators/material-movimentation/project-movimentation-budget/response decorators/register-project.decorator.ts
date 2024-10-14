@@ -5,9 +5,9 @@ export const RegisterProjectDecorator = () => {
   return applyDecorators(
     ApiResponse({
       status: 201,
-      description: "Project registered successfully",
+      description: "Project(s) registered successfully",
       schema: {
-        example: { message: "criação realizada" },
+        example: { message: "projeto(s) registrados" },
       },
     }),
     ApiResponse({

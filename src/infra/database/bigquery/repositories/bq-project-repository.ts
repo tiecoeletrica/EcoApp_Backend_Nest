@@ -21,6 +21,19 @@ export class BqProjectRepository implements ProjectRepository {
     return BqProjectMapper.toDomain(project);
   }
 
+  async findByProjectNumbers(
+    projectsAndBases: { project_number: string; baseId: string }[]
+  ): Promise<Project[]> {
+    let project_number = projectsAndBases.map((item) => item.project_number);
+    let baseId = projectsAndBases.map((item) => item.baseId);
+
+    const projects = await this.bigquery.project.select({
+      whereIn: { project_number, baseId },
+    });
+
+    return projects.map(BqProjectMapper.toDomain);
+  }
+
   async findByProjectNumberAndContractId(
     project_number: string,
     contractId: string
@@ -87,9 +100,15 @@ export class BqProjectRepository implements ProjectRepository {
     return projects.map(BqProjectMapper.toDomain);
   }
 
-  async create(project: Project): Promise<void> {
-    const data = BqProjectMapper.toBigquery(project);
+  async create(project: Project | Project[]): Promise<void> {
+    if (project instanceof Project) {
+      const data = BqProjectMapper.toBigquery(project);
 
-    await this.bigquery.project.create([data]);
+      await this.bigquery.project.create([data]);
+    } else {
+      const data = project.map(BqProjectMapper.toBigquery);
+
+      await this.bigquery.project.create(data);
+    }
   }
 }

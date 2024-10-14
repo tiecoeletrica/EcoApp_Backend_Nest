@@ -52,9 +52,12 @@ describe("Fetch Movimentation History (E2E)", () => {
   });
 
   test("[GET] /movimentations", async () => {
-    const user = await userFactory.makeBqUser({});
     const contract = await contractFactory.makeBqContract();
     const base = await baseFactory.makeBqBase({ contractId: contract.id });
+    const user = await userFactory.makeBqUser({
+      baseId: base.id,
+      contractId: contract.id,
+    });
 
     const accessToken = jwt.sign({
       sub: user.id.toString(),

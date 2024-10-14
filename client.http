@@ -198,14 +198,22 @@ POST  {{baseURL}}/projects
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
-{
-    "project_number": "B-1065588",
-    "description": "MP-CCOL-POV. OLHOS D'AGUA-RURAL",
-    "type": "obra",
-    "baseId": "468c0cdb-b89f-425c-8e8f-0551f5db94b7",
-    "city": "MORRO DO CHAPEU"
-}
-
+[
+    {
+        "project_number": "B-teste3",
+        "description": "MP-CCOL-POV. OLHOS D'AGUA-RURAL",
+        "type": "obra",
+        "baseId": "468c0cdb-b89f-425c-8e8f-0551f5db94b7",
+        "city": "MORRO DO CHAPEU"
+    },
+    {
+        "project_number": "B-teste2",
+        "description": "MP-CCOL-POV. OLHOS D'AGUA-RURAL",
+        "type": "obra",
+        "baseId": "468c0cdb-b89f-425c-8e8f-0551f5db94b7",
+        "city": "MORRO DO CHAPEU"
+    }
+]
 
 ###
 
@@ -259,7 +267,7 @@ Authorization: Bearer {{authToken}}
 
 # @name get_project_by_project_number
 GET {{baseURL}}/projects
-?project_number=B-12345678
+?project_number=B-teste2
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 

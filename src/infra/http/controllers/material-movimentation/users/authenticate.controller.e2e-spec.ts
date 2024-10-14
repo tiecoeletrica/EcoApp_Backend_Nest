@@ -30,6 +30,7 @@ describe("Authenticate (E2E)", () => {
     await userFactory.makeBqUser({
       email: "joaopilotinha@ecoeletrica.com.br",
       password: await hash("123456", 8),
+      status: "ativo",
     });
 
     const response = await request(app.getHttpServer()).post("/sessions").send({

@@ -9,7 +9,7 @@ import { CurrentUser } from "src/infra/auth/current-user.decorator";
 import { FetchExistingBudgetByProjectsDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/project-movimentation-budget/response decorators/fetch-existing-budgets-by-projects.decorator";
 import { FetchExistingBudgetByProjectsBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/project-movimentation-budget/dto classes/fetch-existing-budgets-by-projects.dto";
 import { BudgetWithDetailsPresenter } from "src/infra/http/presenters/budget-with-details";
-import { Response } from "express";
+import type { Response } from 'express';
 import { Readable } from "stream";
 
 const fetchExistingBudgetByProjectsBodySchema = z

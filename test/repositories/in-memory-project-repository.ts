@@ -22,6 +22,22 @@ export class InMemoryProjectRepository implements ProjectRepository {
     return project;
   }
 
+  async findByProjectNumbers(
+    projectsAndBases: { project_number: string; baseId: string }[]
+  ): Promise<Project[]> {
+    const projects = projectsAndBases.map((projectBase) =>
+      this.items.find(
+        (item) =>
+          item.project_number === projectBase.project_number &&
+          item.baseId.toString() === projectBase.baseId
+      )
+    );
+
+    console.log(projects);
+
+    return projects.filter((project) => project !== undefined);
+  }
+
   async findByProjectNumberAndContractId(
     project_number: string,
     contractId: string
@@ -86,7 +102,8 @@ export class InMemoryProjectRepository implements ProjectRepository {
     return project;
   }
 
-  async create(project: Project) {
-    this.items.push(project);
+  async create(project: Project | Project[]) {
+    if (project instanceof Project) this.items.push(project);
+    else project.map((item) => this.items.push(item));
   }
 }
