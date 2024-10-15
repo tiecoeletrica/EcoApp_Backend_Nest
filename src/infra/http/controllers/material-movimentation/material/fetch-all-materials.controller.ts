@@ -42,11 +42,11 @@ export class FetchAllMaterialController {
     response.setHeader("Content-Type", "application/json");
     response.setHeader("Transfer-Encoding", "chunked");
 
-    const materialtream = new Readable({
+    const materialStream = new Readable({
       read() {},
     });
 
-    materialtream.pipe(response);
+    materialStream.pipe(response);
 
     try {
       const result = await this.fetchAllMaterialUseCase.execute({
@@ -56,8 +56,8 @@ export class FetchAllMaterialController {
 
       if (result.isLeft()) {
         const error = result.value;
-        materialtream.push(JSON.stringify({ error: error.message }));
-        materialtream.push(null);
+        materialStream.push(JSON.stringify({ error: error.message }));
+        materialStream.push(null);
 
         switch (error.constructor) {
           case ResourceNotFoundError:
@@ -67,24 +67,24 @@ export class FetchAllMaterialController {
         }
       }
 
-      materialtream.push('{"materials":[');
+      materialStream.push('{"materials":[');
 
       const materials = result.value.materials;
       materials.forEach((material, index) => {
         const materialJson = JSON.stringify(MaterialPresenter.toHTTP(material));
-        materialtream.push(materialJson);
+        materialStream.push(materialJson);
         if (index < materials.length - 1) {
-          materialtream.push(",");
+          materialStream.push(",");
         }
       });
 
-      materialtream.push("]}");
-      materialtream.push(null);
+      materialStream.push("]}");
+      materialStream.push(null);
     } catch (error) {
-      //   materialtream.push(
+      //   materialStream.push(
       //     JSON.stringify({ error: "An unexpected error occurred" })
       //   );
-    //   materialtream.push(null);
+    //   materialStream.push(null);
       throw new BadRequestException(error);
     }
   }

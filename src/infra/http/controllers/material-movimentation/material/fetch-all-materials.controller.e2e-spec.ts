@@ -34,7 +34,7 @@ describe("Fetch All Materials (E2E)", () => {
     await app.init();
   });
 
-  test("[GET] /materials-steaming", async () => {
+  test("[GET] /materials-streaming", async () => {
     const contract = await contractFactory.makeBqContract({});
     const user = await userFactory.makeBqUser({
       contractId: contract.id,

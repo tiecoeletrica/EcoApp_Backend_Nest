@@ -220,6 +220,79 @@ export class InMemoryMovimentationRepository
     return { movimentations, pagination };
   }
 
+  async findManyAllHistoryWithDetails(
+    baseId: string,
+    storekeeperId?: string,
+    projectId?: string,
+    materialId?: string,
+    startDate?: Date,
+    endDate?: Date
+  ): Promise<MovimentationWithDetails[]> {
+    const movimentations = this.items
+      .filter((movimentation) => movimentation.baseId.toString() === baseId)
+      .filter(
+        (movimentation) =>
+          !materialId || movimentation.materialId.toString() === materialId
+      )
+      .filter(
+        (movimentation) =>
+          !storekeeperId ||
+          movimentation.storekeeperId.toString() === storekeeperId
+      )
+      .filter(
+        (movimentation) =>
+          !projectId || movimentation.projectId.toString() === projectId
+      )
+      .filter(
+        (movimentation) => !startDate || movimentation.createdAt >= startDate
+      )
+      .filter((movimentation) => !endDate || movimentation.createdAt <= endDate)
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .map((movimentation) => {
+        const storekeeper = this.userRepository.items.find(
+          (storekeeper) => storekeeper.id === movimentation.storekeeperId
+        );
+        if (!storekeeper) {
+          throw new Error(
+            `storekeeper ${movimentation.storekeeperId} does not exist.`
+          );
+        }
+        const project = this.projectRepository.items.find(
+          (project) => project.id === movimentation.projectId
+        );
+        if (!project) {
+          throw new Error(`project ${movimentation.projectId} does not exist.`);
+        }
+        const base = this.baseRepository.items.find(
+          (base) => base.id === movimentation.baseId
+        );
+        if (!base) {
+          throw new Error(`base ${movimentation.baseId} does not exist.`);
+        }
+        const material = this.materialRepository.items.find(
+          (material) => material.id === movimentation.materialId
+        );
+        if (!material) {
+          throw new Error(
+            `material ${movimentation.materialId} does not exist.`
+          );
+        }
+
+        return MovimentationWithDetails.create({
+          movimentationId: movimentation.id,
+          value: movimentation.value,
+          createdAt: movimentation.createdAt,
+          observation: movimentation.observation,
+          storekeeper,
+          material,
+          project,
+          base,
+        });
+      });
+
+    return movimentations;
+  }
+
   async create(movimentations: Movimentation[]) {
     movimentations.map((movimentation) => this.items.push(movimentation));
   }

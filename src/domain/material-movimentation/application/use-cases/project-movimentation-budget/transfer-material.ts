@@ -190,7 +190,11 @@ export class TransferMaterialUseCase {
 
         if (ciaCount !== Math.abs(request.value)) {
           containsEquipmentWithoutDetails = true;
-          messageEquipment += `O material ${material.code} é um equipamento e requer ${request.value} número(s) de CIA na observação. Foram encontrados ${ciaCount}.`;
+          messageEquipment += `O material ${
+            material.code
+          } é um equipamento e requer ${Math.abs(
+            request.value
+          )} número(s) de CIA na observação. Foram encontrados ${ciaCount}.`;
         }
       }
     });

@@ -166,6 +166,54 @@ export class BqMovimentationRepository implements MovimentationRepository {
       pagination,
     };
   }
+  
+  async findManyAllHistoryWithDetails(
+    baseId: string,
+    storekeeperId?: string,
+    projectId?: string,
+    materialId?: string,
+    startDate?: Date,
+    endDate?: Date
+  ): Promise<MovimentationWithDetails[]> {
+    const movimentations = await this.bigquery.movimentation.select({
+      where: { baseId, userId: storekeeperId, projectId, materialId },
+      greaterOrEqualThan: { createdAt: startDate },
+      lessOrEqualThan: { createdAt: endDate },
+      orderBy: { column: "createdAt", direction: "DESC" },
+      include: {
+        project: {
+          join: {
+            table: "project",
+            on: "movimentation.projectId = project.id",
+          },
+          relationType: "one-to-one",
+        },
+        base: {
+          join: {
+            table: "base",
+            on: "movimentation.baseId = base.id",
+          },
+          relationType: "one-to-one",
+        },
+        user: {
+          join: {
+            table: "user",
+            on: "movimentation.userId = user.id",
+          },
+          relationType: "one-to-one",
+        },
+        material: {
+          join: {
+            table: "material",
+            on: "movimentation.materialId = material.id",
+          },
+          relationType: "one-to-one",
+        },
+      },
+    });
+
+    return movimentations.map(BqMovimentationWithDetailsMapper.toDomain);
+  }
 
   async create(movimentations: Movimentation[]): Promise<void> {
     const data = movimentations.map(BqMovimentationMapper.toBigquery);

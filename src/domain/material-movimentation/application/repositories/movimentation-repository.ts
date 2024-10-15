@@ -36,5 +36,13 @@ export abstract class MovimentationRepository {
     movimentations: MovimentationWithDetails[];
     pagination: PaginationParamsResponse;
   }>;
+  abstract findManyAllHistoryWithDetails(
+    baseId: string,
+    storekeeperId?: string,
+    projectId?: string,
+    materialId?: string,
+    startDate?: Date,
+    endDate?: Date
+  ): Promise<MovimentationWithDetails[]>;
   abstract create(movimentations: Movimentation[]): Promise<void>;
 }

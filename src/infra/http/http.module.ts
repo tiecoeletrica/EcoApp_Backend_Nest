@@ -60,6 +60,8 @@ import { RegisterListOfProjectsUseCase } from "src/domain/material-movimentation
 import { RegisterListOfMaterialsUseCase } from "src/domain/material-movimentation/application/use-cases/material/register-list-of-materials";
 import { FetchAllMaterialController } from "./controllers/material-movimentation/material/fetch-all-materials.controller";
 import { FetchAllMaterialUseCase } from "src/domain/material-movimentation/application/use-cases/material/fetch-all-material";
+import { FetchAllMovimentationHistoryController } from "./controllers/material-movimentation/project-movimentation-budget/fetch-all-movimentations-history.controller";
+import { FetchAllMovimentationHistoryUseCase } from "src/domain/material-movimentation/application/use-cases/project-movimentation-budget/fetch-all-movimentations-history";
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, DtoModule],
@@ -92,6 +94,7 @@ import { FetchAllMaterialUseCase } from "src/domain/material-movimentation/appli
     EditBudgetController,
     FetchOnlyProjectsOfBudgetController,
     FetchExistingBudgetByProjectsController,
+    FetchAllMovimentationHistoryController,
   ],
   providers: [
     CreateMaterialUseCase,
@@ -124,6 +127,7 @@ import { FetchAllMaterialUseCase } from "src/domain/material-movimentation/appli
     EditBudgetUseCase,
     FetchOnlyProjectsOfBudgetsUseCase,
     FetchExistingBudgetByProjectsUseCase,
+    FetchAllMovimentationHistoryUseCase,
   ],
 })
 export class HttpModule {}
