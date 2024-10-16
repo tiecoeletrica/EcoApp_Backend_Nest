@@ -263,8 +263,8 @@ Authorization: Bearer {{authToken}}
 
 # @name fetch_all_movimentations
 GET {{baseURL}}/movimentations-streaming
-# ?project_number=B-1081710
-?material_code=3310013
+?project_number=B-1081710
+# ?material_code=3310013
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
