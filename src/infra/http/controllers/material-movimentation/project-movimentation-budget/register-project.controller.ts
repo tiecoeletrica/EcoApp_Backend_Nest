@@ -16,16 +16,16 @@ import { RegisterListOfProjectsUseCase } from "src/domain/material-movimentation
 
 const registerProjectBodySchema = z.union([
   z.object({
-    project_number: z.string().min(6).max(30).toUpperCase(),
-    description: z.string(),
+    project_number: z.string().min(6).max(30).toUpperCase().trim(),
+    description: z.string().trim(),
     type: z.string(),
     baseId: z.string().uuid(),
     city: z.string(),
   }),
   z.array(
     z.object({
-      project_number: z.string().min(6).max(30).toUpperCase(),
-      description: z.string(),
+      project_number: z.string().min(6).max(30).toUpperCase().trim(),
+      description: z.string().trim(),
       type: z.string(),
       baseId: z.string().uuid(),
       city: z.string(),

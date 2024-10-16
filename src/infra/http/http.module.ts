@@ -62,6 +62,8 @@ import { FetchAllMaterialController } from "./controllers/material-movimentation
 import { FetchAllMaterialUseCase } from "src/domain/material-movimentation/application/use-cases/material/fetch-all-material";
 import { FetchAllMovimentationHistoryController } from "./controllers/material-movimentation/project-movimentation-budget/fetch-all-movimentations-history.controller";
 import { FetchAllMovimentationHistoryUseCase } from "src/domain/material-movimentation/application/use-cases/project-movimentation-budget/fetch-all-movimentations-history";
+import { JwtService } from "@nestjs/jwt";
+import { TokenInvalidationService } from "../auth/token-invalidation.service";
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, DtoModule],
@@ -97,6 +99,8 @@ import { FetchAllMovimentationHistoryUseCase } from "src/domain/material-movimen
     FetchAllMovimentationHistoryController,
   ],
   providers: [
+    TokenInvalidationService,
+    JwtService,
     CreateMaterialUseCase,
     RegisterListOfMaterialsUseCase,
     FetchMaterialUseCase,

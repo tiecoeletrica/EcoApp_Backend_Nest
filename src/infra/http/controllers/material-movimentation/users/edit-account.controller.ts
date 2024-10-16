@@ -18,6 +18,8 @@ import { EditAccountDecorator } from "src/infra/http/swagger dto and decorators/
 import { EditAccountBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/users/dto classes/edit-account.dto";
 import { EditUserUseCase } from "src/domain/material-movimentation/application/use-cases/users/edit-user";
 import { NotValidError } from "src/domain/material-movimentation/application/use-cases/errors/not-valid-error";
+import { TokenInvalidationService } from "src/infra/auth/token-invalidation.service";
+import { JwtService } from "@nestjs/jwt";
 
 const editAccountBodyDto = z.object({
   status: z.string().optional(),
@@ -30,7 +32,11 @@ const editAccountBodyDto = z.object({
 @ApiTags("user")
 @Controller("/accounts/:id")
 export class EditAccountController {
-  constructor(private editUserUseCase: EditUserUseCase) {}
+  constructor(
+    private editUserUseCase: EditUserUseCase,
+    private tokenInvalidationService: TokenInvalidationService,
+    private jwtService: JwtService
+  ) {}
 
   @Put()
   @HttpCode(201)
@@ -66,6 +72,10 @@ export class EditAccountController {
         default:
           throw new BadRequestException(error.message);
       }
+    }
+
+    if (result.isRight()) {
+      await this.tokenInvalidationService.invalidateUserTokens(userId);
     }
 
     return { message: "edição realizada" };

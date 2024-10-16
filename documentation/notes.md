@@ -50,8 +50,9 @@
 - fetch materials by streaming [x]
 - fetch movimentation history by streaming [x]
 - fix bug devolução negative [x]
+- user's id appear on console.log of requests [x]
+- on edit user set all his tokens invalid [x]
 - Create a away to migrate the schemas of "/src/infra/database/bigquery/schemas" from files to tables on bigquery []
-- on edit user set all his tokens invalid []
 - improve errors messages []
   
 # Test 1 file
@@ -92,3 +93,9 @@
   - Criei o DTO (Data Transfer Object) do recebimento de dados daquele controller [aqui](../src/infra/http/swagger%20dto%20and%20decorators/), se houver
   - Crie o Decorator de Response daquele controller [aqui](../src/infra/http/swagger%20dto%20and%20decorators/)
 - Crie o teste e2e automatizado daquele controller e já foi.
+
+# Version commands
+`pnpm version patch`
+`pnpm version minor`
+`pnpm version major`
+`npm version patch --no-git-tag-version`

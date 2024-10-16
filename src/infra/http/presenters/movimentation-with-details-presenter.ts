@@ -19,6 +19,8 @@ export class MovimentationWithDetailsPresenter {
       project: {
         id: movimentation.project.id.toString(),
         project_number: movimentation.project.project_number,
+        description: movimentation.project.description,
+        city: movimentation.project.city,
       },
       material: {
         id: movimentation.material.id.toString(),

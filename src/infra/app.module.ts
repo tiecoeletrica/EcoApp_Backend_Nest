@@ -4,9 +4,15 @@ import { ConfigModule } from "@nestjs/config";
 import { envSchema } from "./env";
 import { HttpModule } from "./http/http.module";
 import { RequestLoggerMiddleware } from "./request-logger.middleware";
+import { CacheModule } from "@nestjs/cache-manager";
 
 @Module({
   imports: [
+    CacheModule.register({
+      // host: "localhost",
+      // port: 6379,
+      isGlobal: true,
+    }),
     HttpModule,
     AuthModule,
     ConfigModule.forRoot({

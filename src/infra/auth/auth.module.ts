@@ -6,6 +6,7 @@ import { Env } from "src/infra/env";
 import { JwtStrategy } from "./jwt-strategy.guard";
 import { APP_GUARD } from "@nestjs/core";
 import { JwtAuthGuard } from "./jwt-auth.guard";
+import { TokenInvalidationService } from "./token-invalidation.service";
 
 @Module({
   imports: [
@@ -19,11 +20,15 @@ import { JwtAuthGuard } from "./jwt-auth.guard";
         return {
           privateKey: Buffer.from(privateKey, "base64"),
           publicKey: Buffer.from(publicKey, "base64"),
-          signOptions: { algorithm: "RS256", expiresIn: "5h" },
+          signOptions: { algorithm: "RS256", expiresIn: "5h" }, // if modify expiresIn, modify expirationTime in src\infra\auth\token-invalidation.service.ts
         };
       },
     }),
   ],
-  providers: [JwtStrategy, { provide: APP_GUARD, useClass: JwtAuthGuard }],
+  providers: [
+    JwtStrategy,
+    { provide: APP_GUARD, useClass: JwtAuthGuard },
+    TokenInvalidationService,
+  ],
 })
 export class AuthModule {}

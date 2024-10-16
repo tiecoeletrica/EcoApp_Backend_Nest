@@ -11,6 +11,8 @@ import { WrogCredentialsError } from "src/domain/material-movimentation/applicat
 import { Public } from "../../../../auth/public.guard";
 import { ApiTags } from "@nestjs/swagger";
 import { AuthenticateBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/users/dto classes/authenticate.dto";
+import { TokenInvalidationService } from "src/infra/auth/token-invalidation.service";
+import { JwtService } from "@nestjs/jwt";
 
 const authenticateBodySchema = z
   .object({
@@ -23,7 +25,11 @@ const authenticateBodySchema = z
 @Controller("/sessions")
 @Public()
 export class AuthenticateController {
-  constructor(private authenticateStorkeeper: AuthenticateUserUseCase) {}
+  constructor(
+    private jwtService: JwtService,
+    private tokenInvalidationService: TokenInvalidationService,
+    private authenticateStorkeeper: AuthenticateUserUseCase
+  ) {}
 
   @Post()
   @HttpCode(201)
@@ -48,6 +54,9 @@ export class AuthenticateController {
     }
 
     const { accessToken } = result.value;
+
+    const decodedToken = this.jwtService.decode(accessToken)
+    await this.tokenInvalidationService.invalidateUserTokens(decodedToken.sub);
 
     return { access_token: accessToken };
   }

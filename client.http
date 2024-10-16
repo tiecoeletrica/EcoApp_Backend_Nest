@@ -68,19 +68,19 @@ Authorization: Bearer {{authToken}}
 ###
 
 # @name get_user_by_id
-GET {{baseURL}}/accounts/612d36fb-3cde-42de-bae0-ef8e547a9807
+GET {{baseURL}}/accounts/e673e72b-431c-4212-bbfd-a78c5e06c200
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 ###
 
 # @name edit_account
-PUT {{baseURL}}/accounts/627a842b-eeee-42f2-b8aa-9a9fbdee0b83
+PUT {{baseURL}}/accounts/e673e72b-431c-4212-bbfd-a78c5e06c200
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-    "type": "Administrator"
+    "baseId": "468c0cdb-b89f-425c-8e8f-0551f5db94b7"
 }
 
 ###
