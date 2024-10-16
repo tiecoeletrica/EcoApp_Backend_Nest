@@ -30,6 +30,8 @@ export class RegisterListOfMaterialsUseCase {
     private contractRepository: ContractRepository
   ) {}
 
+  private codes: string = "";
+
   async execute(
     resquestUseCase: RegisterListOfMaterialsUseCaseRequest[]
   ): Promise<RegisterListOfMaterialsResponse> {
@@ -38,7 +40,7 @@ export class RegisterListOfMaterialsUseCase {
     );
 
     if (containsIdError) {
-      if (!message.includes("materiais"))
+      if (!message.includes("Código(s)"))
         return left(new ResourceNotFoundError(message));
       else return left(new ResourceAlreadyRegisteredError(message));
     }
@@ -66,7 +68,7 @@ export class RegisterListOfMaterialsUseCase {
 
     if (!(await this.verifyIfIdsExist(resquestUseCase, "code"))) {
       containsIdError = true;
-      message = "pelo menos um dos materiais já foi inserido";
+      message = `Código(s) ${this.codes} já cadastrados`;
     }
 
     if (!(await this.verifyIfIdsExist(resquestUseCase, "contractId"))) {
@@ -99,6 +101,10 @@ export class RegisterListOfMaterialsUseCase {
         });
 
         result = await this.materialRepository.findByCodes(uniqueMaterials);
+        result.map((material, index) => {
+          this.codes += `${material.code.toString()}`;
+          if (index + 1 !== result.length) this.codes += ", ";
+        });
         break;
       case "contractId":
         result = await this.contractRepository.findByIds(uniqueValuesArray);

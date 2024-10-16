@@ -38,7 +38,9 @@ export class RegisterBaseUseCase {
 
     if (baseSearch)
       return left(
-        new ResourceAlreadyRegisteredError("Já existe uma base com esse nome")
+        new ResourceAlreadyRegisteredError(
+          `Já existe uma base com o nome ${baseName}`
+        )
       );
 
     const base = Base.create({

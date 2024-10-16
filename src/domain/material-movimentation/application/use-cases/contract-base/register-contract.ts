@@ -28,7 +28,7 @@ export class RegisterContractUseCase {
     if (contractSearch)
       return left(
         new ResourceAlreadyRegisteredError(
-          "Já existe um contrato com esse nome"
+          `Já existe um contrato com o nome ${contractName}`
         )
       );
 
