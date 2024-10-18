@@ -284,7 +284,7 @@ Authorization: Bearer {{authToken}}
 
 # @name fetch_budgets
 GET {{baseURL}}/budgets
-?project_number=B-22345678
+?project_number=B-12345678
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
@@ -450,3 +450,11 @@ Authorization: Bearer {{authToken}}
         "1bc833d9-9b78-471f-90f3-a010e640d5f2"
     ]
 }
+
+###
+
+# @name fetch_budgets_materials
+GET {{baseURL}}/budgets-materials
+?material_codes=210444,210422,132456
+Content-Type: application/json
+Authorization: Bearer {{authToken}}

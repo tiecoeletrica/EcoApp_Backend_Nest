@@ -103,6 +103,19 @@ export class InMemoryBudgetRepository implements BudgetRepository {
     return budgets;
   }
 
+  async findByMaterialIds(
+    materialids: string[],
+    contractId: string
+  ): Promise<Budget[]> {
+    const budgets = this.items.filter(
+      (budget) =>
+        materialids.includes(budget.materialId.toString()) &&
+        budget.contractId.toString() === contractId
+    );
+
+    return budgets;
+  }
+
   async findByProjectIdsWithDetails(
     projectids: string[],
     contractId: string

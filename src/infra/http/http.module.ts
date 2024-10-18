@@ -64,6 +64,8 @@ import { FetchAllMovimentationHistoryController } from "./controllers/material-m
 import { FetchAllMovimentationHistoryUseCase } from "src/domain/material-movimentation/application/use-cases/movimentation/fetch-all-movimentations-history";
 import { JwtService } from "@nestjs/jwt";
 import { TokenInvalidationService } from "../auth/token-invalidation.service";
+import { FetchProjectsBudgetsByMaterialsController } from "./controllers/material-movimentation/budget/fetch-projects-of-budgets-by-meterials.controller";
+import { FetchProjectsBudgetsByMaterialsUseCase } from "src/domain/material-movimentation/application/use-cases/budget/fetch-projects-of-budgets-by-meterials";
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, DtoModule],
@@ -97,6 +99,7 @@ import { TokenInvalidationService } from "../auth/token-invalidation.service";
     FetchOnlyProjectsOfBudgetController,
     FetchExistingBudgetByProjectsController,
     FetchAllMovimentationHistoryController,
+    FetchProjectsBudgetsByMaterialsController,
   ],
   providers: [
     TokenInvalidationService,
@@ -132,6 +135,7 @@ import { TokenInvalidationService } from "../auth/token-invalidation.service";
     FetchOnlyProjectsOfBudgetsUseCase,
     FetchExistingBudgetByProjectsUseCase,
     FetchAllMovimentationHistoryUseCase,
+    FetchProjectsBudgetsByMaterialsUseCase,
   ],
 })
 export class HttpModule {}
