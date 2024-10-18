@@ -48,7 +48,7 @@ export class CreateMaterialUseCase {
     if (materialSearch)
       return left(
         new ResourceAlreadyRegisteredError(
-          `Código "${code}" já cadastrado nesse contrato`
+          `Código ${code} já cadastrado nesse contrato`
         )
       );
 

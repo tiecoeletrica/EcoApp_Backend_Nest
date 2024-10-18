@@ -94,7 +94,7 @@ export class FetchBudgetMovimentationByProjectController {
 
         switch (error.constructor) {
           case ResourceNotFoundError:
-            throw new NotFoundException("Projeto de destino não encontrado");
+            throw new NotFoundException(error.message);
           default:
             throw new BadRequestException();
         }

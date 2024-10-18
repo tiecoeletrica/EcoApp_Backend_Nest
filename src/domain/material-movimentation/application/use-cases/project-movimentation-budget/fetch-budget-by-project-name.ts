@@ -35,7 +35,9 @@ export class FetchBudgetByProjectNameUseCase {
       );
 
     if (!project)
-      return left(new ResourceNotFoundError("Projeto não encontrado"));
+      return left(
+        new ResourceNotFoundError(`Projeto ${project_number} não cadastrado`)
+      );
 
     const budgets = await this.budgetRepository.findByProjectWithDetails(
       project.id.toString(),

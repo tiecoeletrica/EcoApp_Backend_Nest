@@ -36,7 +36,11 @@ export class IdentifierAttributionUseCase {
       project_number
     );
     if (!project)
-      return left(new ResourceNotFoundError("O projeto não foi encontrado"));
+      return left(
+        new ResourceNotFoundError(
+          `O projeto ${project_number} não foi encontrado`
+        )
+      );
 
     const physicaldocumentSearch =
       await this.physicaldocumentRepository.findByIdentifierOrProjectId(
@@ -50,14 +54,22 @@ export class IdentifierAttributionUseCase {
     );
 
     if (isIdentifierUsed)
-      return left(new ResourceAlreadyRegisteredError("O ID já utilizado"));
+      return left(
+        new ResourceAlreadyRegisteredError(
+          `O ID ${identifier} já está sendo utilizado`
+        )
+      );
 
     const isProjectIdUsed = physicaldocumentSearch.find(
       (item) => item.projectId.toString() === project.id.toString()
     );
 
     if (isProjectIdUsed)
-      return left(new ResourceAlreadyRegisteredError("O Projeto já tem ID"));
+      return left(
+        new ResourceAlreadyRegisteredError(
+          `O Projeto ${project_number} está cadastrado no ID ${isProjectIdUsed.identifier}`
+        )
+      );
 
     const physicalDocument = PhysicalDocument.create({
       projectId: project.id,

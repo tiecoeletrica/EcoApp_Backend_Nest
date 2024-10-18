@@ -62,7 +62,9 @@ export class RegisterUserUseCase {
 
     if (base.contractId.toString() !== contractId)
       return left(
-        new NotValidError("A base informada não pertence ao contrato informado")
+        new NotValidError(
+          `A base ${base.baseName} não pertence ao contrato ${contract.contractName}`
+        )
       );
 
     if (!this.isUserType(type)) return left(new WrongTypeError());

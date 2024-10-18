@@ -33,6 +33,8 @@ export class RegisterListOfProjectsUseCase {
     private baseRepository: BaseRepository
   ) {}
 
+  private project_numbers: string = "";
+
   async execute(
     resquestUseCase: RegisterListOfProjectsUseCaseRequest[]
   ): Promise<RegisterListOfProjectsResponse> {
@@ -41,7 +43,7 @@ export class RegisterListOfProjectsUseCase {
     );
 
     if (containsIdError) {
-      if (!message.includes("projeto"))
+      if (!message.includes("Projetos"))
         return left(new ResourceNotFoundError(message));
       else return left(new ResourceAlreadyRegisteredError(message));
     }
@@ -69,7 +71,7 @@ export class RegisterListOfProjectsUseCase {
 
     if (!(await this.verifyIfIdsExist(resquestUseCase, "project_number"))) {
       containsIdError = true;
-      message = "pelo menos um dos projetos já foi inserido";
+      message = `Projetos ${this.project_numbers} já cadastrados`;
     }
 
     if (!(await this.verifyIfIdsExist(resquestUseCase, "baseId"))) {
@@ -108,6 +110,10 @@ export class RegisterListOfProjectsUseCase {
         result = await this.projectRepository.findByProjectNumbers(
           uniqueProjects
         );
+        result.map((project, index) => {
+          this.project_numbers += `${project.project_number}`;
+          if (index + 1 !== result.length) this.project_numbers += ", ";
+        });
         break;
       case "baseId":
         result = await this.baseRepository.findByIds(uniqueValuesArray);

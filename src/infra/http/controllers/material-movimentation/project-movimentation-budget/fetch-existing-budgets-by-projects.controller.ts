@@ -1,4 +1,10 @@
-import { BadRequestException, Body, Post, Res } from "@nestjs/common";
+import {
+  BadRequestException,
+  Body,
+  NotFoundException,
+  Post,
+  Res,
+} from "@nestjs/common";
 import { Controller, HttpCode } from "@nestjs/common";
 import { z } from "zod";
 import { ZodValidationPipe } from "src/infra/http/pipes/zod-validation.pipe";
@@ -9,8 +15,9 @@ import { CurrentUser } from "src/infra/auth/current-user.decorator";
 import { FetchExistingBudgetByProjectsDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/project-movimentation-budget/response decorators/fetch-existing-budgets-by-projects.decorator";
 import { FetchExistingBudgetByProjectsBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/project-movimentation-budget/dto classes/fetch-existing-budgets-by-projects.dto";
 import { BudgetWithDetailsPresenter } from "src/infra/http/presenters/budget-with-details";
-import type { Response } from 'express';
+import type { Response } from "express";
 import { Readable } from "stream";
+import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
 
 const fetchExistingBudgetByProjectsBodySchema = z
   .object({
@@ -36,6 +43,22 @@ export class FetchExistingBudgetByProjectsController {
   ) {
     const { projectIds } = body;
 
+    const result = await this.fetchExistingBudgetByProjectssUseCase.execute({
+      projectIds,
+      contractId: user.contractId,
+    });
+
+    if (result.isLeft()) {
+      const error = result.value;
+
+      switch (error.constructor) {
+        case ResourceNotFoundError:
+          throw new NotFoundException(error.message);
+        default:
+          throw new BadRequestException();
+      }
+    }
+
     response.setHeader("Content-Type", "application/json");
     response.setHeader("Transfer-Encoding", "chunked");
 
@@ -46,18 +69,6 @@ export class FetchExistingBudgetByProjectsController {
     budgetStream.pipe(response);
 
     try {
-      const result = await this.fetchExistingBudgetByProjectssUseCase.execute({
-        projectIds,
-        contractId: user.contractId,
-      });
-
-      if (result.isLeft()) {
-        const error = result.value;
-        budgetStream.push(JSON.stringify({ error: error.message }));
-        budgetStream.push(null);
-        return;
-      }
-
       budgetStream.push('{"budgets":[');
 
       const budgets = result.value.budgets;
@@ -74,10 +85,6 @@ export class FetchExistingBudgetByProjectsController {
       budgetStream.push("]}");
       budgetStream.push(null);
     } catch (error) {
-      budgetStream.push(
-        JSON.stringify({ error: "An unexpected error occurred" })
-      );
-      budgetStream.push(null);
       throw new BadRequestException(error);
     }
   }

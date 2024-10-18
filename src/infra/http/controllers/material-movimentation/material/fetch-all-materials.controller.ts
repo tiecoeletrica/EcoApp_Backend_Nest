@@ -39,6 +39,21 @@ export class FetchAllMaterialController {
   ) {
     const { type } = query;
 
+    const result = await this.fetchAllMaterialUseCase.execute({
+      contractId: user.contractId,
+      type,
+    });
+    if (result.isLeft()) {
+      const error = result.value;
+
+      switch (error.constructor) {
+        case ResourceNotFoundError:
+          throw new NotFoundException(error.message);
+        default:
+          throw new BadRequestException(error.message);
+      }
+    }
+
     response.setHeader("Content-Type", "application/json");
     response.setHeader("Transfer-Encoding", "chunked");
 
@@ -49,24 +64,6 @@ export class FetchAllMaterialController {
     materialStream.pipe(response);
 
     try {
-      const result = await this.fetchAllMaterialUseCase.execute({
-        contractId: user.contractId,
-        type,
-      });
-
-      if (result.isLeft()) {
-        const error = result.value;
-        materialStream.push(JSON.stringify({ error: error.message }));
-        materialStream.push(null);
-
-        switch (error.constructor) {
-          case ResourceNotFoundError:
-            throw new NotFoundException(error.message);
-          default:
-            throw new BadRequestException(error.message);
-        }
-      }
-
       materialStream.push('{"materials":[');
 
       const materials = result.value.materials;
@@ -81,10 +78,6 @@ export class FetchAllMaterialController {
       materialStream.push("]}");
       materialStream.push(null);
     } catch (error) {
-      //   materialStream.push(
-      //     JSON.stringify({ error: "An unexpected error occurred" })
-      //   );
-    //   materialStream.push(null);
       throw new BadRequestException(error);
     }
   }

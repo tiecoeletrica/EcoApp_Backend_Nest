@@ -32,7 +32,7 @@ export class FetchMovimentationHistoryUseCase {
     private movimentationRepository: MovimentationRepository,
     private projectRepository: ProjectRepository,
     private userRepository: UserRepository,
-    private materialRepository: MaterialRepository,
+    private materialRepository: MaterialRepository
   ) {}
 
   async execute({
@@ -51,7 +51,7 @@ export class FetchMovimentationHistoryUseCase {
     if (email) {
       const storekeeper = await this.userRepository.findByEmail(email);
       if (!storekeeper)
-        return left(new ResourceNotFoundError("email  não encontrado"));
+        return left(new ResourceNotFoundError(`email ${email} não cadastrado`));
       storekeeperId = storekeeper.id.toString();
     }
 
@@ -61,7 +61,9 @@ export class FetchMovimentationHistoryUseCase {
           project_number
         );
       if (!project)
-        return left(new ResourceNotFoundError("project_number não encontrado"));
+        return left(
+          new ResourceNotFoundError(`Projeto ${project_number} não cadastrado`)
+        );
       projectId = project.id.toString();
     }
 
@@ -70,7 +72,9 @@ export class FetchMovimentationHistoryUseCase {
         material_code
       );
       if (!material)
-        return left(new ResourceNotFoundError("material_code não encontrado"));
+        return left(
+          new ResourceNotFoundError(`Material ${material_code} não cadastrado`)
+        );
       materialId = material.id.toString();
     }
 
@@ -87,7 +91,12 @@ export class FetchMovimentationHistoryUseCase {
         endDate
       );
 
-    if (!movimentations.length) return left(new ResourceNotFoundError());
+    if (!movimentations.length)
+      return left(
+        new ResourceNotFoundError(
+          "Nenhuma movimentação encontrada com esses parâmetros"
+        )
+      );
 
     return right({ movimentations, pagination });
   }

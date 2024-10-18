@@ -38,13 +38,16 @@ export class FetchBudgetMovimentationByProjectUseCase {
 
     if (!base) return left(new ResourceNotFoundError("Base não encontrada"));
 
-    const project = await this.projectRepository.findByProjectNumber(
-      project_number,
-      baseId
-    );
+    const project =
+      await this.projectRepository.findByProjectNumberAndContractId(
+        project_number,
+        base.contractId.toString()
+      );
 
     if (!project)
-      return left(new ResourceNotFoundError("Projeto a movimentar não encontrado"));
+      return left(
+        new ResourceNotFoundError(`Projeto ${project_number} não cadastrado`)
+      );
 
     const movimentations =
       await this.movimentationRepository.findByProjectWithDetails(

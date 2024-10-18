@@ -31,7 +31,7 @@ export class GetProjectByProjectNumberUseCase {
       );
 
     if (!project)
-      return left(new ResourceNotFoundError("Projeto não encontrado"));
+      return left(new ResourceNotFoundError(`Projeto ${project_number} não cadastrado`));
 
     return right({ project });
   }

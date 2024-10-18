@@ -48,9 +48,15 @@ export class TransferMovimentationBetweenProjectsUseCase {
     private baseRepository: BaseRepository
   ) {}
 
+  private codesWithWrongQtd: string = "";
+  private materials: Material[] = [];
+
   async execute(
     transferMovimentationUseCaseRequest: TransferMovimentationBetweenProjectsUseCaseRequest[]
   ): Promise<TransferMovimentationBetweenProjectsResponse> {
+    this.codesWithWrongQtd = "";
+    this.materials = [];
+
     const { containsIdError, message } = await this.verifyResourcesId(
       transferMovimentationUseCaseRequest
     );
@@ -64,7 +70,7 @@ export class TransferMovimentationBetweenProjectsUseCase {
     if (containsQtdError)
       return left(
         new ResourceNotFoundError(
-          "Há items cuja quantidade movimentada é inferior à quantidade já transferida"
+          `O(s) material(is) ${this.codesWithWrongQtd} possue(m) valor inferior à quantidade enviada do projeto de origem`
         )
       );
 
@@ -110,8 +116,20 @@ export class TransferMovimentationBetweenProjectsUseCase {
         .reduce((a, b) => a + b.value, 0);
 
       // counter of cases that there're enough materials in the origin project
-      if (valueSumRepository < request.value) countErrors += 1;
+      if (valueSumRepository < request.value) {
+        countErrors += 1;
+        const material = this.materials.find(
+          (item) => item.id.toString() === request.materialId
+        );
+        this.codesWithWrongQtd += `${material?.code} ,`;
+      }
     });
+
+    if (this.codesWithWrongQtd.length > 1)
+      this.codesWithWrongQtd = this.codesWithWrongQtd.substring(
+        0,
+        this.codesWithWrongQtd.length - 2
+      );
 
     return countErrors > 0 ? true : false;
   }
@@ -227,6 +245,7 @@ export class TransferMovimentationBetweenProjectsUseCase {
         break;
       case "materialId":
         result = await this.materialRepository.findByIds(uniqueValuesArray);
+        this.materials = result;
         break;
       case "projectIdIn":
         result = await this.projectRepository.findByIds(uniqueValuesArray);

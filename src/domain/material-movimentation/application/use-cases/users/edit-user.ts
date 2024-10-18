@@ -80,7 +80,7 @@ export class EditUserUseCase {
       if (base.contractId.toString() !== contractId)
         return left(
           new NotValidError(
-            "A base informada não pertence ao contrato informado"
+            `A base ${base.baseName} não pertence ao contrato ${contract.contractName}`
           )
         );
 
@@ -101,7 +101,7 @@ export class EditUserUseCase {
       if (base.contractId.toString() !== user.contractId.toString())
         return left(
           new NotValidError(
-            "A base informada não pertence ao contrato do usuário"
+            `A base ${base.baseName} não pertence ao contrato do usuário`
           )
         );
 

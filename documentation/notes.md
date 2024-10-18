@@ -35,7 +35,7 @@
 - physical documents entity and use cases needs baseId [x]
 - encode / compress requests [x]
 - modify data that has ' because crashes bigqueryMethods [x]
-- on register project modify error message "projeto já criado" [x] 
+- on register project modify error message "projeto já criado" [x]
 - fetch accounts use like on name search [x]
 - on fetch users use like on name search [x]
 - bug on creating same identifier on diferente bases [x]
@@ -54,7 +54,10 @@
 - on edit user set all his tokens invalid [x]
 - Create a away to migrate the schemas of "/src/infra/database/bigquery/schemas" from files to tables on bigquery []
 - improve errors messages []
-  
+- create search by material on budgets use cases []
+- create mass replacement of materials on budgets []
+- create supervisor entity to search data []
+
 # Test 1 file
 
 - pnpm vitest run .\src\infra\http\controllers\get-account-by-id.controller.e2e-spec.ts --config ./vitest.config.e2e.ts
@@ -95,6 +98,7 @@
 - Crie o teste e2e automatizado daquele controller e já foi.
 
 # Version commands
+
 `pnpm version patch`
 `pnpm version minor`
 `pnpm version major`

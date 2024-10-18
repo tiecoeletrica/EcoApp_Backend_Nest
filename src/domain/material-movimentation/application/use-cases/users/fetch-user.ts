@@ -40,7 +40,8 @@ export class FetchUserUseCase {
         name
       );
 
-    if (!users.length) return left(new ResourceNotFoundError());
+    if (!users.length)
+      return left(new ResourceNotFoundError("Nenhum usuário encontrado"));
 
     return right({ users, pagination });
   }

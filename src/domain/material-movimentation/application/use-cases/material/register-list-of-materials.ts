@@ -68,7 +68,7 @@ export class RegisterListOfMaterialsUseCase {
 
     if (!(await this.verifyIfIdsExist(resquestUseCase, "code"))) {
       containsIdError = true;
-      message = `Código(s) ${this.codes} já cadastrados`;
+      message = `Código(s) ${this.codes} já cadastrado(s)`;
     }
 
     if (!(await this.verifyIfIdsExist(resquestUseCase, "contractId"))) {

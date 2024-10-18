@@ -65,6 +65,26 @@ export class FetchAllMovimentationHistoryController {
       );
     }
 
+    const result = await this.fetchAllMovimentationHistoryUseCase.execute({
+      baseId: user.baseId,
+      email,
+      project_number,
+      material_code,
+      startDate,
+      endDate: endDateAjusted,
+    });
+
+    if (result.isLeft()) {
+      const error = result.value;
+
+      switch (error.constructor) {
+        case ResourceNotFoundError:
+          throw new NotFoundException(error.message);
+        default:
+          throw new BadRequestException();
+      }
+    }
+
     response.setHeader("Content-Type", "application/json");
     response.setHeader("Transfer-Encoding", "chunked");
 
@@ -75,26 +95,6 @@ export class FetchAllMovimentationHistoryController {
     movimentationStream.pipe(response);
 
     try {
-      const result = await this.fetchAllMovimentationHistoryUseCase.execute({
-        baseId: user.baseId,
-        email,
-        project_number,
-        material_code,
-        startDate,
-        endDate: endDateAjusted,
-      });
-
-      if (result.isLeft()) {
-        const error = result.value;
-
-        switch (error.constructor) {
-          case ResourceNotFoundError:
-            throw new NotFoundException(error.message);
-          default:
-            throw new BadRequestException();
-        }
-      }
-
       movimentationStream.push('{"movimentations":[');
       const movimentations = result.value.movimentations;
       movimentations.forEach((movimentation, index) => {
