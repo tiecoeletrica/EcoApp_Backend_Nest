@@ -7,14 +7,14 @@ import {
 import { Controller, HttpCode } from "@nestjs/common";
 import { z } from "zod";
 import { ZodValidationPipe } from "src/infra/http/pipes/zod-validation.pipe";
-import { FetchBudgetByProjectNameUseCase } from "src/domain/material-movimentation/application/use-cases/project-movimentation-budget/fetch-budget-by-project-name";
+import { FetchBudgetByProjectNameUseCase } from "src/domain/material-movimentation/application/use-cases/budget/fetch-budget-by-project-name";
 import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
 import { BudgetWithDetailsPresenter } from "src/infra/http/presenters/budget-with-details";
 import { ApiTags } from "@nestjs/swagger";
 import { UserPayload } from "src/infra/auth/jwt-strategy.guard";
 import { CurrentUser } from "src/infra/auth/current-user.decorator";
-import { FetchBudgetByProjectNameDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/project-movimentation-budget/response decorators/fetch-budget-by-project-name.decorator";
-import { FetchBudgetByProjectNameQueryDto } from "src/infra/http/swagger dto and decorators/material-movimentation/project-movimentation-budget/dto classes/fetch-budget-by-project-name.dto";
+import { FetchBudgetByProjectNameDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/response decorators/fetch-budget-by-project-name.decorator";
+import { FetchBudgetByProjectNameQueryDto } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/dto classes/fetch-budget-by-project-name.dto";
 
 const fetchBudgetByProjectNameBodySchema = z
   .object({

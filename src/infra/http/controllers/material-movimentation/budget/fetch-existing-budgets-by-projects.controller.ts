@@ -8,12 +8,12 @@ import {
 import { Controller, HttpCode } from "@nestjs/common";
 import { z } from "zod";
 import { ZodValidationPipe } from "src/infra/http/pipes/zod-validation.pipe";
-import { FetchExistingBudgetByProjectsUseCase } from "src/domain/material-movimentation/application/use-cases/project-movimentation-budget/fetch-existing-budgets-by-projects";
+import { FetchExistingBudgetByProjectsUseCase } from "src/domain/material-movimentation/application/use-cases/budget/fetch-existing-budgets-by-projects";
 import { ApiTags } from "@nestjs/swagger";
 import { UserPayload } from "src/infra/auth/jwt-strategy.guard";
 import { CurrentUser } from "src/infra/auth/current-user.decorator";
-import { FetchExistingBudgetByProjectsDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/project-movimentation-budget/response decorators/fetch-existing-budgets-by-projects.decorator";
-import { FetchExistingBudgetByProjectsBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/project-movimentation-budget/dto classes/fetch-existing-budgets-by-projects.dto";
+import { FetchExistingBudgetByProjectsDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/response decorators/fetch-existing-budgets-by-projects.decorator";
+import { FetchExistingBudgetByProjectsBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/dto classes/fetch-existing-budgets-by-projects.dto";
 import { BudgetWithDetailsPresenter } from "src/infra/http/presenters/budget-with-details";
 import type { Response } from "express";
 import { Readable } from "stream";

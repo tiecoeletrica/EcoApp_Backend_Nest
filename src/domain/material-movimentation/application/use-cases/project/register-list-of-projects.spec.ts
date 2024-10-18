@@ -7,6 +7,7 @@ import { InMemoryContractRepository } from "test/repositories/in-memory-contract
 import { makeBase } from "test/factories/make-base";
 import { makeProject } from "test/factories/make-project";
 import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { makeContract } from "test/factories/make-contract";
 
 let inMemoryContractRepository: InMemoryContractRepository;
 let inMemoryBaseRepository: InMemoryBaseRepository;
@@ -110,5 +111,43 @@ describe("Register list of projects", () => {
 
     expect(result.isLeft()).toBeTruthy();
     expect(result.value).toBeInstanceOf(ResourceNotFoundError);
+  });
+
+  it("should not be able to create a project if the project was already registered in another base of the same contract", async () => {
+    const contract = makeContract();
+    await inMemoryContractRepository.create(contract);
+
+    const base1 = makeBase({ contractId: contract.id });
+    await inMemoryBaseRepository.create(base1);
+
+    const base2 = makeBase({ contractId: contract.id });
+    await inMemoryBaseRepository.create(base2);
+
+    const project = makeProject({
+      project_number: "B-10101010",
+      baseId: base1.id,
+    });
+    await inMemoryProjectRepository.create(project);
+
+    const result = await sut.execute([
+      {
+        project_number: "B-10101010",
+        description:
+          "fazenda-num-sei-das-quantas-POV-onde-judas-perdeu-as-botas",
+        type: "obra",
+        baseId: base2.id.toString(),
+        city: "Lagedo do Tabocal",
+      },
+      {
+        project_number: "B-10101005",
+        description: "fazenda-num-sei-das-quantas",
+        type: "obra",
+        baseId: base2.id.toString(),
+        city: "Lagedo do Tabocal",
+      },
+    ]);
+
+    expect(result.isLeft()).toBeTruthy();
+    expect(result.value).toBeInstanceOf(ResourceAlreadyRegisteredError);
   });
 });

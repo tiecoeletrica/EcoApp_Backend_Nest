@@ -12,7 +12,7 @@ import { UnitizePhysicalDocumentUseCase } from "src/domain/material-movimentatio
 import { NotAllowedError } from "src/domain/material-movimentation/application/use-cases/errors/not-allowed-error";
 import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
 import { ApiTags } from "@nestjs/swagger";
-import { FetchBudgetByProjectNameDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/project-movimentation-budget/response decorators/fetch-budget-by-project-name.decorator";
+import { FetchBudgetByProjectNameDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/response decorators/fetch-budget-by-project-name.decorator";
 import { UnitizePhysicalDocumentBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/physicalDocument/dto classes/unitize-physical-document.dto";
 
 const unitizePhysicalDocumentBodySchema = z.object({

@@ -4,11 +4,11 @@ import { z } from "zod";
 import { ZodValidationPipe } from "src/infra/http/pipes/zod-validation.pipe";
 import { CurrentUser } from "src/infra/auth/current-user.decorator";
 import { UserPayload } from "src/infra/auth/jwt-strategy.guard";
-import { TransferMovimentationBetweenProjectsUseCase } from "src/domain/material-movimentation/application/use-cases/project-movimentation-budget/transfer-movimentation-between-projects";
+import { TransferMovimentationBetweenProjectsUseCase } from "src/domain/material-movimentation/application/use-cases/movimentation/transfer-movimentation-between-projects";
 import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
 import { ApiBody, ApiProperty, ApiTags } from "@nestjs/swagger";
-import { TransferMovimentationBetweenProjectsDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/project-movimentation-budget/response decorators/transfer-movimentation-between-projects.decorator";
-import { TransferMovimentationBetweenProjectsBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/project-movimentation-budget/dto classes/transfer-movimentation-between-projects.dto";
+import { TransferMovimentationBetweenProjectsDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/movimentation/response decorators/transfer-movimentation-between-projects.decorator";
+import { TransferMovimentationBetweenProjectsBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/movimentation/dto classes/transfer-movimentation-between-projects.dto";
 
 const transferMovimentationBetweenProjectsBodySchema = z.array(
   z

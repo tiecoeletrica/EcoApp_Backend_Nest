@@ -6,13 +6,13 @@ import {
 import { Body, Controller, HttpCode, Post } from "@nestjs/common";
 import { z } from "zod";
 import { ZodValidationPipe } from "src/infra/http/pipes/zod-validation.pipe";
-import { RegisterProjectUseCase } from "src/domain/material-movimentation/application/use-cases/project-movimentation-budget/register-project";
+import { RegisterProjectUseCase } from "src/domain/material-movimentation/application/use-cases/project/register-project";
 import { ResourceAlreadyRegisteredError } from "src/domain/material-movimentation/application/use-cases/errors/resource-already-registered-error";
 import { ApiBody, ApiTags } from "@nestjs/swagger";
 import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
-import { RegisterProjectDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/project-movimentation-budget/response decorators/register-project.decorator";
-import { RegisterProjectBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/project-movimentation-budget/dto classes/register-project.dto";
-import { RegisterListOfProjectsUseCase } from "src/domain/material-movimentation/application/use-cases/project-movimentation-budget/register-list-of-projects";
+import { RegisterProjectDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/project/response decorators/register-project.decorator";
+import { RegisterProjectBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/project/dto classes/register-project.dto";
+import { RegisterListOfProjectsUseCase } from "src/domain/material-movimentation/application/use-cases/project/register-list-of-projects";
 
 const registerProjectBodySchema = z.union([
   z.object({

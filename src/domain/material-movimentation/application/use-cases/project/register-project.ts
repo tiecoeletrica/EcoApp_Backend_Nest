@@ -39,10 +39,11 @@ export class RegisterProjectUseCase {
     const base = await this.baseRepository.findById(baseId);
     if (!base) return left(new ResourceNotFoundError("baseId não encontrado"));
 
-    const projectSearch = await this.projectRepository.findByProjectNumber(
-      project_number,
-      baseId
-    );
+    const projectSearch =
+      await this.projectRepository.findByProjectNumberAndContractId(
+        project_number,
+        base.contractId.toString()
+      );
 
     if (projectSearch)
       return left(

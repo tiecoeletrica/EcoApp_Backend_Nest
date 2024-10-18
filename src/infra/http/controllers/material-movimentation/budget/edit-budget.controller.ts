@@ -9,11 +9,11 @@ import { z } from "zod";
 import { ZodValidationPipe } from "src/infra/http/pipes/zod-validation.pipe";
 import { CurrentUser } from "src/infra/auth/current-user.decorator";
 import { UserPayload } from "src/infra/auth/jwt-strategy.guard";
-import { EditBudgetUseCase } from "src/domain/material-movimentation/application/use-cases/project-movimentation-budget/edit-budget";
+import { EditBudgetUseCase } from "src/domain/material-movimentation/application/use-cases/budget/edit-budget";
 import { ApiTags } from "@nestjs/swagger";
 import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
-import { EditBudgetDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/project-movimentation-budget/response decorators/edit-budget.decorator";
-import { EditBudgetBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/project-movimentation-budget/dto classes/edit-budget.dto";
+import { EditBudgetDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/response decorators/edit-budget.decorator";
+import { EditBudgetBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/dto classes/edit-budget.dto";
 
 const editBudgetBodySchema = z
   .object({

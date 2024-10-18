@@ -7,18 +7,18 @@ import {
 import { Controller, HttpCode } from "@nestjs/common";
 import { z } from "zod";
 import { ZodValidationPipe } from "src/infra/http/pipes/zod-validation.pipe";
-import { FetchBudgetMovimentationByProjectUseCase } from "src/domain/material-movimentation/application/use-cases/project-movimentation-budget/fetch-budget-movimentations-by-project";
+import { FetchBudgetMovimentationByProjectUseCase } from "src/domain/material-movimentation/application/use-cases/movimentation/fetch-budget-movimentations-by-project";
 import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
 import { MovimentationWithDetailsPresenter } from "src/infra/http/presenters/movimentation-with-details-presenter";
 import { BudgetWithDetailsPresenter } from "src/infra/http/presenters/budget-with-details";
 import { ApiTags } from "@nestjs/swagger";
 import { UserPayload } from "src/infra/auth/jwt-strategy.guard";
 import { CurrentUser } from "src/infra/auth/current-user.decorator";
-import { FetchBudgetMovimentationByProjectDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/project-movimentation-budget/response decorators/fetch-budget-movimentations-by-project.decorator";
-import { FetchBudgetMovimentationByProjectQueryDto } from "src/infra/http/swagger dto and decorators/material-movimentation/project-movimentation-budget/dto classes/fetch-budget-movimentations-by-project.dto";
+import { FetchBudgetMovimentationByProjectDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/movimentation/response decorators/fetch-budget-movimentations-by-project.decorator";
+import { FetchBudgetMovimentationByProjectQueryDto } from "src/infra/http/swagger dto and decorators/material-movimentation/movimentation/dto classes/fetch-budget-movimentations-by-project.dto";
 import { FetchPhysicalDocumentUseCase } from "src/domain/material-movimentation/application/use-cases/physicalDocument/fetch-physical-document";
 import { PhysicalDocumentWithProjectPresenter } from "src/infra/http/presenters/physical-document-with-project-presenter";
-import { GetProjectByProjectNumberUseCase } from "src/domain/material-movimentation/application/use-cases/project-movimentation-budget/get-project-by-project_number";
+import { GetProjectByProjectNumberUseCase } from "src/domain/material-movimentation/application/use-cases/project/get-project-by-project_number";
 import { ProjectPresenter } from "src/infra/http/presenters/preject-presenter";
 
 const fetchBudgetMovimentationByProjectQuerySchema = z.object({

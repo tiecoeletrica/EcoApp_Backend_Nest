@@ -34,10 +34,14 @@ export class RegisterListOfProjectsUseCase {
   ) {}
 
   private project_numbers: string = "";
+  private contractId: string = "";
 
   async execute(
     resquestUseCase: RegisterListOfProjectsUseCaseRequest[]
   ): Promise<RegisterListOfProjectsResponse> {
+    this.project_numbers = "";
+    this.contractId = "";
+
     const { containsIdError, message } = await this.verifyResourcesId(
       resquestUseCase
     );
@@ -69,14 +73,14 @@ export class RegisterListOfProjectsUseCase {
     let containsIdError = false;
     let message;
 
-    if (!(await this.verifyIfIdsExist(resquestUseCase, "project_number"))) {
-      containsIdError = true;
-      message = `Projetos ${this.project_numbers} já cadastrados`;
-    }
-
     if (!(await this.verifyIfIdsExist(resquestUseCase, "baseId"))) {
       containsIdError = true;
       message = "pelo menos um dos baseIds não encontrado";
+    }
+
+    if (!(await this.verifyIfIdsExist(resquestUseCase, "project_number"))) {
+      containsIdError = true;
+      message = `Projetos ${this.project_numbers} já cadastrados`;
     }
 
     return { containsIdError, message };
@@ -94,21 +98,11 @@ export class RegisterListOfProjectsUseCase {
       | Project[]
       | Base[] = [];
 
-    let uniqueProjects: { project_number: string; baseId: string }[] = [];
-
     switch (key) {
       case "project_number":
-        uniqueProjects = uniqueValuesArray.map((unique) => {
-          return {
-            project_number: unique,
-            baseId: resquestUseCase.find(
-              (request) => request.project_number === unique
-            )!.baseId,
-          };
-        });
-
-        result = await this.projectRepository.findByProjectNumbers(
-          uniqueProjects
+        result = await this.projectRepository.findByProjectNumberAndContractIds(
+          uniqueValuesArray,
+          this.contractId
         );
         result.map((project, index) => {
           this.project_numbers += `${project.project_number}`;
@@ -117,6 +111,7 @@ export class RegisterListOfProjectsUseCase {
         break;
       case "baseId":
         result = await this.baseRepository.findByIds(uniqueValuesArray);
+        this.contractId = result[0].contractId.toString() ?? "";
         break;
       default:
         result = [];
