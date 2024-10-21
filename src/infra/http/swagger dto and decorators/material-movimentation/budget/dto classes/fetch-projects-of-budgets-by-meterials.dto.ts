@@ -5,7 +5,7 @@ import { ApiProperty } from "@nestjs/swagger";
 export class FetchProjectsBudgetsByMaterialsQueryDto {
   @ApiProperty({
     example: "123456,654321,2200020",
-    description: "project identification numbers",
+    description: "material codes split by ','",
     isArray: true,
   })
   material_codes!: number[];

@@ -8,4 +8,10 @@ export class FetchBudgetByProjectNameQueryDto {
     description: "project identification number",
   })
   project_number!: string;
+  @ApiProperty({
+    example: "false/true",
+    description: "send 'true' to recive the project's projectId",
+    required: false,
+  })
+  sendProjectId!: boolean;
 }

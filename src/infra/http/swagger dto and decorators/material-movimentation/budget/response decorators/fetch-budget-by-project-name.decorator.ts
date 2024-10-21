@@ -64,6 +64,7 @@ export const FetchBudgetByProjectNameDecorator = () => {
               },
             },
           ],
+          projectId: "b21ba24a-b752-4415-9fc4-702ec851c5cf",
         },
       },
     }),

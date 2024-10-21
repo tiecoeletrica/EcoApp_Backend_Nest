@@ -285,6 +285,7 @@ Authorization: Bearer {{authToken}}
 # @name fetch_budgets
 GET {{baseURL}}/budgets
 ?project_number=B-12345678
+&sendProjectId=true
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
