@@ -53,11 +53,13 @@
 - user's id appear on console.log of requests [x]
 - on edit user set all his tokens invalid [x]
 - improve errors messages [x]
+- create search by material on budgets use cases [x]
+- adjust response to fetch budgets by project number [x]
 - Create a away to migrate the schemas of "/src/infra/database/bigquery/schemas" from files to tables on bigquery []
-- create search by material on budgets use cases []
 - create mass replacement of materials on budgets []
 - create supervisor entity to search data []
-- adjust response to fetch budgets by project number []
+- fix initialization with empty values on classes that has global private variables []
+- fix repeted budgetId on the first two budgets on budget-movimentations []
 
 # Test 1 file
 

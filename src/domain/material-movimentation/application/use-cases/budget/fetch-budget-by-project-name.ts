@@ -47,7 +47,6 @@ export class FetchBudgetByProjectNameUseCase {
       contractId
     );
 
-    console.log(!budgets.length, sendProjectId);
     if (!budgets.length && !sendProjectId)
       return left(new ResourceNotFoundError("Orçamento não encontrado"));
     else if (sendProjectId)
