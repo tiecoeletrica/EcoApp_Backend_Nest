@@ -66,6 +66,8 @@ import { JwtService } from "@nestjs/jwt";
 import { TokenInvalidationService } from "../auth/token-invalidation.service";
 import { FetchProjectsBudgetsByMaterialsController } from "./controllers/material-movimentation/budget/fetch-projects-of-budgets-by-meterials.controller";
 import { FetchProjectsBudgetsByMaterialsUseCase } from "src/domain/material-movimentation/application/use-cases/budget/fetch-projects-of-budgets-by-meterials";
+import { EditBudgetsByMaterialUseCase } from "src/domain/material-movimentation/application/use-cases/budget/edit-budgets-by-material";
+import { EditBudgetsByMaterialController } from "./controllers/material-movimentation/budget/edit-budgets-by-material.controller";
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, DtoModule],
@@ -100,6 +102,7 @@ import { FetchProjectsBudgetsByMaterialsUseCase } from "src/domain/material-movi
     FetchExistingBudgetByProjectsController,
     FetchAllMovimentationHistoryController,
     FetchProjectsBudgetsByMaterialsController,
+    EditBudgetsByMaterialController,
   ],
   providers: [
     TokenInvalidationService,
@@ -136,6 +139,7 @@ import { FetchProjectsBudgetsByMaterialsUseCase } from "src/domain/material-movi
     FetchExistingBudgetByProjectsUseCase,
     FetchAllMovimentationHistoryUseCase,
     FetchProjectsBudgetsByMaterialsUseCase,
+    EditBudgetsByMaterialUseCase,
   ],
 })
 export class HttpModule {}

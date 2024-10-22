@@ -284,7 +284,7 @@ Authorization: Bearer {{authToken}}
 
 # @name fetch_budgets
 GET {{baseURL}}/budgets
-?project_number=B-12345678
+?project_number=B-1004343
 &sendProjectId=true
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
@@ -459,3 +459,20 @@ GET {{baseURL}}/budgets-materials
 ?material_codes=210444,210422,132456
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
+
+
+# B-1004343 210444 to 210422
+
+###
+
+# @name edit_budgets_materials
+PUT {{baseURL}}/budgets-materials
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "project_numbers": ["B-1004343"],
+    "codeFrom": 2203008,
+    "codeTo": 210422,
+    "multiplier": 1
+}
