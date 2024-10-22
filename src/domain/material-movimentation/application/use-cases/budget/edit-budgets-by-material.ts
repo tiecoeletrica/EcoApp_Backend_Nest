@@ -38,8 +38,6 @@ export class EditBudgetsByMaterialUseCase {
     private projectRepository: ProjectRepository
   ) {}
 
-  private toUpdateBudgets: Budget[] = [];
-
   async execute(
     request: EditBudgetsByMaterialUseCaseRequest
   ): Promise<EditBudgetsByMaterialResponse> {

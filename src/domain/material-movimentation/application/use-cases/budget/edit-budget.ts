@@ -48,6 +48,8 @@ export class EditBudgetUseCase {
   async execute(
     editBudgetUseCaseRequest: EditBudgetUseCaseRequest
   ): Promise<EditBudgetResponse> {
+    this.toUpdateBudgets = [];
+
     const { containsIdError, message, estimator } =
       await this.verifyResourcesId(editBudgetUseCaseRequest);
 

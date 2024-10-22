@@ -35,6 +35,8 @@ export class RegisterListOfMaterialsUseCase {
   async execute(
     resquestUseCase: RegisterListOfMaterialsUseCaseRequest[]
   ): Promise<RegisterListOfMaterialsResponse> {
+    this.codes = "";
+
     const { containsIdError, message } = await this.verifyResourcesId(
       resquestUseCase
     );
