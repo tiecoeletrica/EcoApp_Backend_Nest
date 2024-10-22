@@ -9,6 +9,7 @@ import { ApiTags } from "@nestjs/swagger";
 import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
 import { EditBudgetsByMaterialDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/response decorators/edit-budgets-by-material.decorator";
 import { EditBudgetsByMaterialBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/dto classes/edit-budgets-by-material.dto";
+import { ProjectPresenter } from "src/infra/http/presenters/preject-presenter";
 
 const editBudgetsByMaterialBodySchema = z
   .object({
@@ -54,6 +55,8 @@ export class EditBudgetsByMaterialController {
       }
     }
 
-    return { message: "edição realizada" };
+    const projects = result.value.projects.map(ProjectPresenter.toHTTP);
+
+    return { projects };
   }
 }

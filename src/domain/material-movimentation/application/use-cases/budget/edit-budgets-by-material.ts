@@ -41,7 +41,7 @@ export class EditBudgetsByMaterialUseCase {
   async execute(
     request: EditBudgetsByMaterialUseCaseRequest
   ): Promise<EditBudgetsByMaterialResponse> {
-    const { multiplier, contractId } = request;
+    const { multiplier, contractId, codeFrom } = request;
 
     const {
       containsIdError,
@@ -59,6 +59,13 @@ export class EditBudgetsByMaterialUseCase {
       contractId,
       materialFrom
     );
+
+    if (budgetsToModify.length === 0)
+      return left(
+        new ResourceNotFoundError(
+          `Não foram encontrados orçamentos do material ${codeFrom} nos projetos informados.`
+        )
+      );
 
     const budgets = await this.modifyMaterialsOnBudgets(
       budgetsToModify,

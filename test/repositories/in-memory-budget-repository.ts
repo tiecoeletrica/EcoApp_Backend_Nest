@@ -183,7 +183,8 @@ export class InMemoryBudgetRepository implements BudgetRepository {
       (budget) =>
         projectids.includes(budget.projectId.toString()) &&
         budget.contractId.toString() === contractId &&
-        budget.materialId.toString() === materialId
+        budget.materialId.toString() === materialId &&
+        budget.value >= 0.00001
     );
 
     return budgets;

@@ -155,6 +155,7 @@ export class BqBudgetRepository implements BudgetRepository {
       distinct: true,
       whereIn: { projectId: projectids },
       where: { contractId, materialId },
+      greaterOrEqualThan: { value: 0.00001 },
     });
 
     return budgets.map(BqBudgetMapper.toDomain);

@@ -471,8 +471,8 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-    "project_numbers": ["B-1004343"],
-    "codeFrom": 2203008,
-    "codeTo": 210422,
-    "multiplier": 1
+    "project_numbers": ["B-12345678"],
+    "codeFrom": 100999,
+    "codeTo": 536162,
+    "multiplier": 2
 }
