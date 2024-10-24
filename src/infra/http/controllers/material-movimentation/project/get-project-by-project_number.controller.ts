@@ -15,6 +15,8 @@ import { UserPayload } from "src/infra/auth/jwt-strategy.guard";
 import { ProjectPresenter } from "src/infra/http/presenters/preject-presenter";
 import { GetProjectByProjectNumberQueryDto } from "src/infra/http/swagger dto and decorators/material-movimentation/project/dto classes/get-project-by-project_number.dto";
 import { GetProjectByProjectNumberDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/project/response decorators/get-project-by-project_number.decorator";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
 
 const getProjectByProjectNumberQuerySchema = z.object({
   project_number: z.string().min(6),
@@ -30,6 +32,7 @@ export class GetProjectByProjectNumberController {
   @Get()
   @HttpCode(200)
   @GetProjectByProjectNumberDecorator()
+  @RoleAuth(UseCases.GetProjectByProjectNumberUseCase)
   async handle(
     @CurrentUser() user: UserPayload,
     @Query(new ZodValidationPipe(getProjectByProjectNumberQuerySchema))

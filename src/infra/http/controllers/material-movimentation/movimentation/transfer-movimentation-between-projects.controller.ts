@@ -9,6 +9,8 @@ import { ResourceNotFoundError } from "src/domain/material-movimentation/applica
 import { ApiBody, ApiProperty, ApiTags } from "@nestjs/swagger";
 import { TransferMovimentationBetweenProjectsDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/movimentation/response decorators/transfer-movimentation-between-projects.decorator";
 import { TransferMovimentationBetweenProjectsBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/movimentation/dto classes/transfer-movimentation-between-projects.dto";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
 
 const transferMovimentationBetweenProjectsBodySchema = z.array(
   z
@@ -36,6 +38,7 @@ export class TransferMovimentationBetweenProjectsController {
     type: TransferMovimentationBetweenProjectsBodyDto,
     isArray: true,
   }) // for swagger
+  @RoleAuth(UseCases.TransferMovimentationBetweenProjectsUseCase)
   async handle(
     @CurrentUser() user: UserPayload,
     @Body(new ZodValidationPipe(transferMovimentationBetweenProjectsBodySchema))

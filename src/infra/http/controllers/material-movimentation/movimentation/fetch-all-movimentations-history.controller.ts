@@ -18,6 +18,8 @@ import { UserPayload } from "src/infra/auth/jwt-strategy.guard";
 import { CurrentUser } from "src/infra/auth/current-user.decorator";
 import type { Response } from "express";
 import { Readable } from "stream";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
 
 const fetchAllMovimentationHistoryBodySchema = z.object({
   email: z.string().email().optional(),
@@ -47,6 +49,7 @@ export class FetchAllMovimentationHistoryController {
   @Get()
   @HttpCode(200)
   @FetchAllMovimentationHistoryDecorator()
+  @RoleAuth(UseCases.FetchAllMovimentationHistoryUseCase)
   async handle(
     @CurrentUser() user: UserPayload,
     @Query(new ZodValidationPipe(fetchAllMovimentationHistoryBodySchema))

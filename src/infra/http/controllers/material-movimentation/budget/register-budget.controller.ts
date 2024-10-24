@@ -9,6 +9,8 @@ import { ApiBody, ApiTags } from "@nestjs/swagger";
 import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
 import { RegisterBudgetDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/response decorators/register-budget.decorator";
 import { RegisterBudgetBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/dto classes/register-budget.dto";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
 
 const registerBudgetBodySchema = z.array(
   z
@@ -36,6 +38,7 @@ export class RegisterBudgetController {
     type: RegisterBudgetBodyDto,
     isArray: true,
   }) // for swagger
+  @RoleAuth(UseCases.RegisterBudgetUseCase)
   async handle(
     @CurrentUser() user: UserPayload,
     @Body(new ZodValidationPipe(registerBudgetBodySchema))

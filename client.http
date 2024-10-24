@@ -24,7 +24,7 @@ POST {{baseURL}}/sessions
 Content-Type: application/json
 
 {
-    "email": "rodrigo@ecoeletrica.com.br",
+    "email": "alissonpaiva@ecoeletrica.com.br",
     "password": "ECO@2012" 
 }
 
@@ -284,7 +284,7 @@ Authorization: Bearer {{authToken}}
 
 # @name fetch_budgets
 GET {{baseURL}}/budgets
-?project_number=B-1004343
+?project_number=B-12345678
 &sendProjectId=true
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
@@ -471,8 +471,8 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-    "project_numbers": ["B-12345678"],
-    "codeFrom": 100999,
-    "codeTo": 536162,
-    "multiplier": 2
+    "project_numbers": ["B-1004343"],
+    "codeFrom": 2203008,
+    "codeTo": 210422,
+    "multiplier": 1
 }

@@ -7,6 +7,8 @@ import { JwtStrategy } from "./jwt-strategy.guard";
 import { APP_GUARD } from "@nestjs/core";
 import { JwtAuthGuard } from "./jwt-auth.guard";
 import { TokenInvalidationService } from "./token-invalidation.service";
+import { AuthorizationByRole } from "src/domain/material-movimentation/application/authorization/authorization-by-role";
+import { RoleGuard } from "./role.guard";
 
 @Module({
   imports: [
@@ -28,7 +30,10 @@ import { TokenInvalidationService } from "./token-invalidation.service";
   providers: [
     JwtStrategy,
     { provide: APP_GUARD, useClass: JwtAuthGuard },
+    { provide: APP_GUARD, useClass: RoleGuard },
     TokenInvalidationService,
+    AuthorizationByRole,
   ],
+  exports: [AuthorizationByRole],
 })
 export class AuthModule {}

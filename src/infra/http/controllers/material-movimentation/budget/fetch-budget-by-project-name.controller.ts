@@ -15,6 +15,8 @@ import { UserPayload } from "src/infra/auth/jwt-strategy.guard";
 import { CurrentUser } from "src/infra/auth/current-user.decorator";
 import { FetchBudgetByProjectNameDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/response decorators/fetch-budget-by-project-name.decorator";
 import { FetchBudgetByProjectNameQueryDto } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/dto classes/fetch-budget-by-project-name.dto";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
 
 const fetchBudgetByProjectNameQuerySchema = z
   .object({
@@ -33,6 +35,7 @@ export class FetchBudgetByProjectNameController {
   @Get()
   @HttpCode(200)
   @FetchBudgetByProjectNameDecorator()
+  @RoleAuth(UseCases.FetchBudgetByProjectNameUseCase)
   async handle(
     @CurrentUser() user: UserPayload,
     @Query(new ZodValidationPipe(fetchBudgetByProjectNameQuerySchema))

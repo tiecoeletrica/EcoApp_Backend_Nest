@@ -15,6 +15,8 @@ import { ResourceNotFoundError } from "src/domain/material-movimentation/applica
 import { CreateMaterialDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/material/response decorators/create-material.decorator";
 import { CreateMaterialBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/material/dto classes/create-material.dto";
 import { RegisterListOfMaterialsUseCase } from "src/domain/material-movimentation/application/use-cases/material/register-list-of-materials";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
 
 const createMaterialBodySchema = z.union([
   z.object({
@@ -49,6 +51,7 @@ export class CreateMaterialController {
   @Post()
   @HttpCode(201)
   @CreateMaterialDecorator()
+  @RoleAuth(UseCases.CreateMaterialUseCase)
   async handle(
     @CurrentUser() user: UserPayload,
     @Body(new ZodValidationPipe(createMaterialBodySchema))

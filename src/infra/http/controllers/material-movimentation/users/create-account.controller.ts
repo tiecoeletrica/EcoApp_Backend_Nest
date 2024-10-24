@@ -16,6 +16,8 @@ import { CreateAccountBodyDto } from "src/infra/http/swagger dto and decorators/
 import { WrongTypeError } from "src/domain/material-movimentation/application/use-cases/errors/wrong-type";
 import { RegisterUserUseCase } from "src/domain/material-movimentation/application/use-cases/users/register-user";
 import { NotValidError } from "src/domain/material-movimentation/application/use-cases/errors/not-valid-error";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
 
 const createAccountBodyDto = z.object({
   name: z.string(),
@@ -36,6 +38,7 @@ export class CreateAccountController {
   @HttpCode(201)
   @UsePipes(new ZodValidationPipe(createAccountBodyDto))
   @CreateAccountDecorator()
+  @RoleAuth(UseCases.RegisterUserUseCase)
   async handle(@Body() body: CreateAccountBodyDto) {
     const { name, email, password, cpf, type, baseId, contractId } = body;
 

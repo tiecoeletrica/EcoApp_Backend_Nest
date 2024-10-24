@@ -1,4 +1,5 @@
 import { BigQuery } from "@google-cloud/bigquery";
+import "dotenv/config";
 
 interface bigqueryTestCreateTestDataset {
   sourceDatasetId: string;
@@ -7,8 +8,11 @@ interface bigqueryTestCreateTestDataset {
 
 export class BigqueryTests {
   private readonly bigquery = new BigQuery({
-    keyFilename: "bigquery/bigquery-key-api.json",
-    projectId: "ecoeletricatech",
+    projectId: process.env.BIGQUERY_PROJECT_ID,
+    credentials: {
+      private_key: process.env.BIGQUERY_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+      client_email: process.env.BIGQUERY_CLIENT_EMAIL,
+    },
   });
 
   async createTestDataset(datasetsEnv: bigqueryTestCreateTestDataset) {

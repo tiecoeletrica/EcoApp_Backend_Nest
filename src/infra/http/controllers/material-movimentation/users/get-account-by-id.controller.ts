@@ -10,6 +10,8 @@ import { ApiTags } from "@nestjs/swagger";
 import { GetAccountByidDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/users/response decorators/get-account-by-id.decorator";
 import { UserWithBaseContractPresenter } from "src/infra/http/presenters/user-with-base-contract-presenter";
 import { GetUserByIdUseCase } from "src/domain/material-movimentation/application/use-cases/users/get-user-by-id";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
 
 @ApiTags("user")
 @Controller("/accounts/:id")
@@ -19,6 +21,7 @@ export class GetAccountByidController {
   @Get()
   @HttpCode(200)
   @GetAccountByidDecorator()
+  @RoleAuth(UseCases.GetUserByIdUseCase)
   async handle(@Param("id") id: string) {
     const result = await this.getUserByIdUseCase.execute({
       userId: id,

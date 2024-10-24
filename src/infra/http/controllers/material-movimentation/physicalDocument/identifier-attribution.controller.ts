@@ -14,6 +14,8 @@ import { IdentifierAttributionBodyDto } from "src/infra/http/swagger dto and dec
 import { UserPayload } from "src/infra/auth/jwt-strategy.guard";
 import { CurrentUser } from "src/infra/auth/current-user.decorator";
 import { IdentifierAttributionDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/physicalDocument/response decorators/identifier-attribution.decorator";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
 
 const identifierAttributionBodySchema = z.object({
   project_number: z.string(),
@@ -28,6 +30,7 @@ export class IdentifierAttributionController {
   @Post()
   @HttpCode(201)
   @IdentifierAttributionDecorator()
+  @RoleAuth(UseCases.IdentifierAttributionUseCase)
   async handle(
     @CurrentUser() user: UserPayload,
     @Body(new ZodValidationPipe(identifierAttributionBodySchema))

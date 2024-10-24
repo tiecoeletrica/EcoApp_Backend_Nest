@@ -32,7 +32,7 @@ describe("Get Account by Id (E2E)", () => {
   });
 
   test("[GET] /accounts:id", async () => {
-    const base = await baseFactory.makeBqBase()
+    const base = await baseFactory.makeBqBase();
 
     const user = await userFactory.makeBqUser({
       cpf: "00011122234",

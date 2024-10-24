@@ -12,6 +12,8 @@ import { ApiTags } from "@nestjs/swagger";
 import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
 import { RegisterBaseDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/contract-base/response decorators/register-base.decorator";
 import { RegisterBaseBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/contract-base/dto classes/register-base.dto";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
 
 const registerBaseBodySchema = z
   .object({
@@ -28,6 +30,7 @@ export class RegisterBaseController {
   @Post()
   @HttpCode(201)
   @RegisterBaseDecorator()
+  @RoleAuth(UseCases.RegisterBaseUseCase)
   async handle(
     @Body(new ZodValidationPipe(registerBaseBodySchema))
     body: RegisterBaseBodyDto

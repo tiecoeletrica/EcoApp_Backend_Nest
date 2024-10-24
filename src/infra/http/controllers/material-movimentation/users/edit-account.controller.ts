@@ -20,6 +20,8 @@ import { EditUserUseCase } from "src/domain/material-movimentation/application/u
 import { NotValidError } from "src/domain/material-movimentation/application/use-cases/errors/not-valid-error";
 import { TokenInvalidationService } from "src/infra/auth/token-invalidation.service";
 import { JwtService } from "@nestjs/jwt";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
 
 const editAccountBodyDto = z.object({
   status: z.string().optional(),
@@ -41,6 +43,7 @@ export class EditAccountController {
   @Put()
   @HttpCode(201)
   @EditAccountDecorator()
+  @RoleAuth(UseCases.EditUserUseCase)
   async handle(
     @Body(new ZodValidationPipe(editAccountBodyDto))
     body: EditAccountBodyDto,

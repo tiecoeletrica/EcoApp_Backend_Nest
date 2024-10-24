@@ -14,6 +14,8 @@ import { ResourceNotFoundError } from "src/domain/material-movimentation/applica
 import { ApiTags } from "@nestjs/swagger";
 import { FetchBudgetByProjectNameDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/response decorators/fetch-budget-by-project-name.decorator";
 import { UnitizePhysicalDocumentBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/physicalDocument/dto classes/unitize-physical-document.dto";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
 
 const unitizePhysicalDocumentBodySchema = z.object({
   unitized: z.boolean(),
@@ -29,6 +31,7 @@ export class UnitizePhysicalDocumentController {
   @Put()
   @HttpCode(201)
   @FetchBudgetByProjectNameDecorator()
+  @RoleAuth(UseCases.UnitizePhysicalDocumentUseCase)
   async handle(
     @Body(new ZodValidationPipe(unitizePhysicalDocumentBodySchema))
     body: UnitizePhysicalDocumentBodyDto,

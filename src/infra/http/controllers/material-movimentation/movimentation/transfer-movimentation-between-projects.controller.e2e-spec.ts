@@ -50,7 +50,7 @@ describe("Transfer Movimentation Between Projects (E2E)", () => {
   test("[POST] /transfer-movimentation", async () => {
     const base = await baseFactory.makeBqBase();
     const user = await userFactory.makeBqUser({
-      type: "Administrador",
+      type: "Almoxarife",
       baseId: base.id,
     });
     const accessToken = jwt.sign({

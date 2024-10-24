@@ -32,7 +32,7 @@ describe("Fetch Physical Documents (E2E)", () => {
   });
 
   test("[GET] /physical-documents", async () => {
-    const user = await userFactory.makeBqUser({});
+    const user = await userFactory.makeBqUser({ type: "Almoxarife" });
 
     await physicalDocumentFactory.makeBqPhysicalDocument({
       identifier: 2,

@@ -18,6 +18,8 @@ import { BudgetWithDetailsPresenter } from "src/infra/http/presenters/budget-wit
 import type { Response } from "express";
 import { Readable } from "stream";
 import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
 
 const fetchExistingBudgetByProjectsBodySchema = z
   .object({
@@ -35,6 +37,7 @@ export class FetchExistingBudgetByProjectsController {
   @Post() // it's post because the quantity of projects may trespass the url character length limit
   @HttpCode(200)
   @FetchExistingBudgetByProjectsDecorator()
+  @RoleAuth(UseCases.FetchExistingBudgetByProjectsUseCase)
   async handle(
     @CurrentUser() user: UserPayload,
     @Body(new ZodValidationPipe(fetchExistingBudgetByProjectsBodySchema))

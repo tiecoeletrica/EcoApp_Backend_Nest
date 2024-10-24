@@ -32,7 +32,7 @@ describe("Identifier Attribution (E2E)", () => {
   });
 
   test("[POST] /physical-documents", async () => {
-    const user = await userFactory.makeBqUser({});
+    const user = await userFactory.makeBqUser({ type: "Almoxarife" });
 
     const accessToken = jwt.sign({
       sub: user.id.toString(),

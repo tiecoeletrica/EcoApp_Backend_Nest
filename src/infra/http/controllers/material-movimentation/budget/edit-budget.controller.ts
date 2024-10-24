@@ -14,6 +14,8 @@ import { ApiTags } from "@nestjs/swagger";
 import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
 import { EditBudgetDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/response decorators/edit-budget.decorator";
 import { EditBudgetBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/dto classes/edit-budget.dto";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
 
 const editBudgetBodySchema = z
   .object({
@@ -24,10 +26,12 @@ const editBudgetBodySchema = z
       })
     ),
     newBudgets: z.array(
-      z.object({
-        materialId: z.string().uuid(),
-        value: z.number(),
-      }).optional()
+      z
+        .object({
+          materialId: z.string().uuid(),
+          value: z.number(),
+        })
+        .optional()
     ),
   })
   .required();
@@ -40,6 +44,7 @@ export class EditBudgetController {
   @Put()
   @HttpCode(201)
   @EditBudgetDecorator()
+  @RoleAuth(UseCases.EditBudgetUseCase)
   async handle(
     @CurrentUser() user: UserPayload,
     @Body(new ZodValidationPipe(editBudgetBodySchema))

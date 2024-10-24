@@ -32,7 +32,7 @@ describe("Delete Physical Document (E2E)", () => {
   });
 
   test("[DELETE] /physical-documents:id", async () => {
-    const user = await userFactory.makeBqUser({});
+    const user = await userFactory.makeBqUser({ type: "Almoxarife" });
 
     const physicalDocumentToDelete =
       await physicalDocumentFactory.makeBqPhysicalDocument({});

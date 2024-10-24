@@ -57,6 +57,7 @@ describe("Fetch Movimentation History (E2E)", () => {
     const user = await userFactory.makeBqUser({
       baseId: base.id,
       contractId: contract.id,
+      type: "Almoxarife"
     });
 
     const accessToken = jwt.sign({

@@ -22,12 +22,7 @@ describe("Fetch Movimentation History (E2E)", () => {
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [
-        UserFactory,
-        ContractFactory,
-        BaseFactory,
-        ProjectFactory,
-      ],
+      providers: [UserFactory, ContractFactory, BaseFactory, ProjectFactory],
     }).compile();
 
     app = moduleRef.createNestApplication();
@@ -48,7 +43,6 @@ describe("Fetch Movimentation History (E2E)", () => {
     const user = await userFactory.makeBqUser({
       contractId: contract.id,
       baseId: base.id,
-      type: "Administrador",
     });
 
     const accessToken = jwt.sign({

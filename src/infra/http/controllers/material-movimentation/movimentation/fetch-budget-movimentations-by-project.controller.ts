@@ -20,6 +20,8 @@ import { FetchPhysicalDocumentUseCase } from "src/domain/material-movimentation/
 import { PhysicalDocumentWithProjectPresenter } from "src/infra/http/presenters/physical-document-with-project-presenter";
 import { GetProjectByProjectNumberUseCase } from "src/domain/material-movimentation/application/use-cases/project/get-project-by-project_number";
 import { ProjectPresenter } from "src/infra/http/presenters/preject-presenter";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
 
 const fetchBudgetMovimentationByProjectQuerySchema = z.object({
   project_number: z.string(),
@@ -39,6 +41,7 @@ export class FetchBudgetMovimentationByProjectController {
   @Get()
   @HttpCode(200)
   @FetchBudgetMovimentationByProjectDecorator()
+  @RoleAuth(UseCases.FetchBudgetMovimentationByProjectUseCase)
   async handle(
     @CurrentUser() user: UserPayload,
     @Query(new ZodValidationPipe(fetchBudgetMovimentationByProjectQuerySchema))

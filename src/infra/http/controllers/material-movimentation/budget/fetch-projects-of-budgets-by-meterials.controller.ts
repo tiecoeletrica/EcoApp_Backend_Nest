@@ -14,6 +14,8 @@ import { UserPayload } from "src/infra/auth/jwt-strategy.guard";
 import { CurrentUser } from "src/infra/auth/current-user.decorator";
 import { FetchProjectsBudgetsByMaterialsDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/response decorators/fetch-projects-of-budgets-by-meterials.decorator";
 import { FetchProjectsBudgetsByMaterialsQueryDto } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/dto classes/fetch-projects-of-budgets-by-meterials.dto";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
 
 const fetchProjectsBudgetsByMaterialsQuerySchema = z
   .object({
@@ -40,10 +42,11 @@ export class FetchProjectsBudgetsByMaterialsController {
   constructor(
     private fetchProjectsBudgetsByMaterialsUseCase: FetchProjectsBudgetsByMaterialsUseCase
   ) {}
-
-  @Get() // it's post because the quantity of projects may trespass the url character length limit
+  
+  @Get()
   @HttpCode(200)
   @FetchProjectsBudgetsByMaterialsDecorator()
+  @RoleAuth(UseCases.FetchProjectsBudgetsByMaterialsUseCase)
   async handle(
     @CurrentUser() user: UserPayload,
     @Query(new ZodValidationPipe(fetchProjectsBudgetsByMaterialsQuerySchema))

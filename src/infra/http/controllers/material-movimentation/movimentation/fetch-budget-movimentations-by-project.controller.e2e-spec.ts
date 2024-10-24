@@ -60,6 +60,7 @@ describe("Fetch Movimentation and Budget By Project Name (E2E)", () => {
 
     const user = await userFactory.makeBqUser({
       baseId: base.id,
+      type: "Almoxarife",
     });
 
     const material = await materialFactory.makeBqMaterial({

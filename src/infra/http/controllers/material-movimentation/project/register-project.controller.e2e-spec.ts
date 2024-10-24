@@ -36,6 +36,7 @@ describe("Register Project (E2E)", () => {
 
     const user = await userFactory.makeBqUser({
       baseId: base.id,
+      type: "Administrador",
     });
 
     const accessToken = jwt.sign({
@@ -69,6 +70,7 @@ describe("Register Project (E2E)", () => {
 
     const user = await userFactory.makeBqUser({
       baseId: base.id,
+      type: "Administrador",
     });
 
     const accessToken = jwt.sign({

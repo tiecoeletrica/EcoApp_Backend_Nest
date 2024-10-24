@@ -15,6 +15,8 @@ import { FetchPhysicalDocumentsDecorator } from "src/infra/http/swagger dto and 
 import { FetchPhysicalDocumentsQueryDto } from "src/infra/http/swagger dto and decorators/material-movimentation/physicalDocument/dto classes/fetch-physical-document.dto";
 import { UserPayload } from "src/infra/auth/jwt-strategy.guard";
 import { CurrentUser } from "src/infra/auth/current-user.decorator";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
 
 const fetchPhysicalDocumentsQuerySchema = z.object({
   page: z
@@ -47,6 +49,7 @@ export class FetchPhysicalDocumentsController {
   @Get()
   @HttpCode(200)
   @FetchPhysicalDocumentsDecorator()
+  @RoleAuth(UseCases.FetchPhysicalDocumentUseCase)
   async handle(
     @CurrentUser() user: UserPayload,
     @Query(new ZodValidationPipe(fetchPhysicalDocumentsQuerySchema))

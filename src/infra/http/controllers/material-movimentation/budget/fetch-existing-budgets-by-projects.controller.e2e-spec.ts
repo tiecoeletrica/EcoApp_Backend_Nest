@@ -57,6 +57,7 @@ describe("Fetch exsinting budgets by projectIds (E2E)", () => {
     const user = await userFactory.makeBqUser({
       baseId: base.id,
       contractId: contract.id,
+      type: "Orçamentista"
     });
 
     const material = await materialFactory.makeBqMaterial({

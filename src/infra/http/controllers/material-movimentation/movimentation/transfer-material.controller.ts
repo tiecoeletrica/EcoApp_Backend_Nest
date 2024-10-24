@@ -10,6 +10,8 @@ import { ResourceNotFoundError } from "src/domain/material-movimentation/applica
 import { TransferMaterialDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/movimentation/response decorators/transfer-material.decorator";
 import { TransferMaterialBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/movimentation/dto classes/transfer-material.dto";
 import { NotValidError } from "src/domain/material-movimentation/application/use-cases/errors/not-valid-error";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
 
 const transferMaterialBodySchema = z.array(
   z
@@ -38,6 +40,7 @@ export class TransferMaterialController {
     type: TransferMaterialBodyDto,
     isArray: true,
   }) // for swagger
+  @RoleAuth(UseCases.TransferMaterialUseCase)
   async handle(
     @CurrentUser() user: UserPayload,
     @Body(new ZodValidationPipe(transferMaterialBodySchema))

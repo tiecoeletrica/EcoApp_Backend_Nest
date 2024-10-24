@@ -15,6 +15,8 @@ import { FetchMovimentationHistoryDecorator } from "src/infra/http/swagger dto a
 import { FetchMovimentationHistoryQueryDto } from "src/infra/http/swagger dto and decorators/material-movimentation/movimentation/dto classes/fetch-movimentations-history.dto";
 import { UserPayload } from "src/infra/auth/jwt-strategy.guard";
 import { CurrentUser } from "src/infra/auth/current-user.decorator";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
 
 const fetchMovimentationHistoryBodySchema = z.object({
   page: z
@@ -50,6 +52,7 @@ export class FetchMovimentationHistoryController {
   @Get()
   @HttpCode(200)
   @FetchMovimentationHistoryDecorator()
+  @RoleAuth(UseCases.FetchMovimentationHistoryUseCase)
   async handle(
     @CurrentUser() user: UserPayload,
     @Query(new ZodValidationPipe(fetchMovimentationHistoryBodySchema))

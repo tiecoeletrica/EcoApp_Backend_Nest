@@ -14,6 +14,8 @@ import { NotAllowedError } from "src/domain/material-movimentation/application/u
 import { EditAccountDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/users/response decorators/edit-account.decorator";
 import { Storekeeper } from "src/domain/material-movimentation/enterprise/entities/storekeeper";
 import { DeleteUserUseCase } from "src/domain/material-movimentation/application/use-cases/users/delete-user";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
 
 @ApiTags("user")
 @Controller("/accounts/:id")
@@ -23,6 +25,7 @@ export class DeleteAccountController {
   @Delete()
   @HttpCode(201)
   @EditAccountDecorator()
+  @RoleAuth(UseCases.DeleteUserUseCase)
   async handle(@CurrentUser() user: UserPayload, @Param("id") userId: string) {
     const result = await this.deleteUserUseCase.execute({
       authorId: user.sub,

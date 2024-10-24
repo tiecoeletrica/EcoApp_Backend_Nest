@@ -32,7 +32,7 @@ describe("Unitize Physical Document (E2E)", () => {
   });
 
   test("[PUT] /physical-documents:id", async () => {
-    const user = await userFactory.makeBqUser({});
+    const user = await userFactory.makeBqUser({ type: "Almoxarife" });
 
     const physicalDocument =
       await physicalDocumentFactory.makeBqPhysicalDocument({ identifier: 1 });

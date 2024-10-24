@@ -34,7 +34,10 @@ describe("Create Material (E2E)", () => {
 
   test("[POST] /materials - unique material", async () => {
     const contract = await contractFactory.makeBqContract({});
-    const user = await userFactory.makeBqUser({ contractId: contract.id });
+    const user = await userFactory.makeBqUser({
+      type: "Administrador",
+      contractId: contract.id,
+    });
 
     const accessToken = jwt.sign({
       sub: user.id.toString(),
@@ -63,7 +66,10 @@ describe("Create Material (E2E)", () => {
 
   test("[POST] /materials - array of materials", async () => {
     const contract = await contractFactory.makeBqContract({});
-    const user = await userFactory.makeBqUser({ contractId: contract.id });
+    const user = await userFactory.makeBqUser({
+      contractId: contract.id,
+      type: "Administrador",
+    });
 
     const accessToken = jwt.sign({
       sub: user.id.toString(),

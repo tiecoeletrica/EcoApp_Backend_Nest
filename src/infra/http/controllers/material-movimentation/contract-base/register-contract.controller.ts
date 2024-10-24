@@ -7,6 +7,8 @@ import { ResourceAlreadyRegisteredError } from "src/domain/material-movimentatio
 import { ApiProperty, ApiTags } from "@nestjs/swagger";
 import { RegisterContractDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/contract-base/response decorators/register-contract.decorator";
 import { RegisterContractBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/contract-base/dto classes/register-contract.dto";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
 
 const registerContractBodySchema = z
   .object({
@@ -22,6 +24,7 @@ export class RegisterContractController {
   @Post()
   @HttpCode(201)
   @RegisterContractDecorator()
+  @RoleAuth(UseCases.RegisterContractUseCase)
   async handle(
     @Body(new ZodValidationPipe(registerContractBodySchema))
     body: RegisterContractBodyDto
@@ -43,6 +46,6 @@ export class RegisterContractController {
       }
     }
 
-    return { message: "criação realizada" }
+    return { message: "criação realizada" };
   }
 }

@@ -18,6 +18,8 @@ import { FetchAllMaterialQueryDto } from "src/infra/http/swagger dto and decorat
 import { FetchAllMaterialDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/material/response decorators/fetch-all-materials.decorator";
 import type { Response } from "express";
 import { Readable } from "stream";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
 
 const fetchMaterialQuerySchema = z.object({
   type: z.string().optional(),
@@ -31,6 +33,7 @@ export class FetchAllMaterialController {
   @Get()
   @HttpCode(200)
   @FetchAllMaterialDecorator()
+  @RoleAuth(UseCases.FetchAllMaterialUseCase)
   async handle(
     @CurrentUser() user: UserPayload,
     @Query(new ZodValidationPipe(fetchMaterialQuerySchema))

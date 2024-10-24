@@ -32,7 +32,7 @@ describe("Register Base (E2E)", () => {
   });
 
   test("[POST] /bases", async () => {
-    const user = await userFactory.makeBqUser({});
+    const user = await userFactory.makeBqUser({ type: "Administrador" });
     const contract = await contractFactory.makeBqContract({});
 
     const accessToken = jwt.sign({

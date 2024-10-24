@@ -10,6 +10,8 @@ import { ResourceNotFoundError } from "src/domain/material-movimentation/applica
 import { EditBudgetsByMaterialDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/response decorators/edit-budgets-by-material.decorator";
 import { EditBudgetsByMaterialBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/dto classes/edit-budgets-by-material.dto";
 import { ProjectPresenter } from "src/infra/http/presenters/preject-presenter";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
 
 const editBudgetsByMaterialBodySchema = z
   .object({
@@ -28,6 +30,7 @@ export class EditBudgetsByMaterialController {
   @Put()
   @HttpCode(201)
   @EditBudgetsByMaterialDecorator()
+  @RoleAuth(UseCases.EditBudgetsByMaterialUseCase)
   async handle(
     @CurrentUser() user: UserPayload,
     @Body(new ZodValidationPipe(editBudgetsByMaterialBodySchema))
@@ -57,6 +60,6 @@ export class EditBudgetsByMaterialController {
 
     const projects = result.value.projects.map(ProjectPresenter.toHTTP);
 
-    return { projects };
+    return { projects, message: "Edição no(s) orçamento(s) realizada" };
   }
 }

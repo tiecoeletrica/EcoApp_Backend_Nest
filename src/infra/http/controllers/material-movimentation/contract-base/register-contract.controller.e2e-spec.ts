@@ -29,7 +29,7 @@ describe("Register Contract (E2E)", () => {
   });
 
   test("[POST] /contracts", async () => {
-    const user = await userFactory.makeBqUser({});
+    const user = await userFactory.makeBqUser({ type: "Administrador" });
 
     const accessToken = jwt.sign({
       sub: user.id.toString(),

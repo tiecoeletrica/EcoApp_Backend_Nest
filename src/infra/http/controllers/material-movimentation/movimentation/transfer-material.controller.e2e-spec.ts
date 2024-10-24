@@ -22,12 +22,7 @@ describe("Transfer Material (E2E)", () => {
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [
-        UserFactory,
-        MaterialFactory,
-        BaseFactory,
-        ProjectFactory,
-      ],
+      providers: [UserFactory, MaterialFactory, BaseFactory, ProjectFactory],
     }).compile();
 
     app = moduleRef.createNestApplication();
@@ -46,6 +41,7 @@ describe("Transfer Material (E2E)", () => {
     const base = await baseFactory.makeBqBase();
     const user = await userFactory.makeBqUser({
       baseId: base.id,
+      type: "Almoxarife",
     });
 
     const accessToken = jwt.sign({

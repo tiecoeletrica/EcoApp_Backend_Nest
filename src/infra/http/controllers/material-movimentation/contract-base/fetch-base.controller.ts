@@ -12,6 +12,8 @@ import { ResourceNotFoundError } from "src/domain/material-movimentation/applica
 import { BasePresenter } from "src/infra/http/presenters/base-presenter";
 import { ApiTags } from "@nestjs/swagger";
 import { FetchBaseDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/contract-base/response decorators/fetch-base.decorator";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
 
 const pageQueryParamSchema = z
   .string()
@@ -32,6 +34,7 @@ export class FetchBaseController {
   @Get()
   @HttpCode(200)
   @FetchBaseDecorator()
+  @RoleAuth(UseCases.FetchBaseUseCase)
   async handle(@Query("page", queryValidationPipe) page: PageQueryParamSchema) {
     const result = await this.fetchBaseUseCase.execute({
       page,

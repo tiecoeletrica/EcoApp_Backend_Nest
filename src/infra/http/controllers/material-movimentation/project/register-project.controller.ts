@@ -13,6 +13,8 @@ import { ResourceNotFoundError } from "src/domain/material-movimentation/applica
 import { RegisterProjectDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/project/response decorators/register-project.decorator";
 import { RegisterProjectBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/project/dto classes/register-project.dto";
 import { RegisterListOfProjectsUseCase } from "src/domain/material-movimentation/application/use-cases/project/register-list-of-projects";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
 
 const registerProjectBodySchema = z.union([
   z.object({
@@ -49,6 +51,7 @@ export class RegisterProjectController {
   @Post()
   @HttpCode(201)
   @RegisterProjectDecorator()
+  @RoleAuth(UseCases.RegisterProjectUseCase)
   async handle(
     @Body(new ZodValidationPipe(registerProjectBodySchema))
     body: RegisterProjectBodyDto | RegisterProjectBodyDto[]

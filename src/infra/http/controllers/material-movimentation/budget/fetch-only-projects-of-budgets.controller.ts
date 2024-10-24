@@ -14,6 +14,8 @@ import { UserPayload } from "src/infra/auth/jwt-strategy.guard";
 import { CurrentUser } from "src/infra/auth/current-user.decorator";
 import { FetchOnlyProjectsOfBudgetsDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/response decorators/fetch-only-projects-of-budgets.decorator";
 import { FetchOnlyProjectsOfBudgetsBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/dto classes/fetch-only-projects-of-budgets.dto";
+import { RoleAuth } from "src/infra/auth/role-auth.decorator";
+import { UseCases } from "src/core/role-authorization/use-cases.enum";
 
 const fetchOnlyProjectsOfBudgetBodySchema = z
   .object({
@@ -31,6 +33,7 @@ export class FetchOnlyProjectsOfBudgetController {
   @Post() // it's post because the quantity of projects may trespass the url character length limit
   @HttpCode(200)
   @FetchOnlyProjectsOfBudgetsDecorator()
+  @RoleAuth(UseCases.FetchOnlyProjectsOfBudgetsUseCase)
   async handle(
     @CurrentUser() user: UserPayload,
     @Body(new ZodValidationPipe(fetchOnlyProjectsOfBudgetBodySchema))

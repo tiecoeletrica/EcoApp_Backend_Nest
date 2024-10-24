@@ -36,6 +36,7 @@ describe("Fetch Accounts (E2E)", () => {
     const user = await userFactory.makeBqUser({
       name: "rodrigo",
       baseId: base.id,
+      type: "Administrador",
     });
     await userFactory.makeBqUser({
       name: "max",

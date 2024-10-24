@@ -60,6 +60,9 @@
 - fix initialization with empty values on classes that has global private variables [x]
 - Create a away to migrate the schemas of "/src/infra/database/bigquery/schemas" from files to tables on bigquery []
 - create supervisor entity to search data []
+- adjust response decorator put budgets-materials []
+- review documentations []
+- on budgets-materials put show observation with replaced material []
 
 # Test 1 file
 
