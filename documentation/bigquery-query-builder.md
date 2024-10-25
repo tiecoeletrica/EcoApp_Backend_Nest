@@ -107,6 +107,7 @@ Essa [classe](../bigquery/bigqueryMethods.ts) reúne todas as operações entre 
   | limit | limitar quantidade de linhas do resultado | número limite |
   | offset | desloca quantidade de linhas do resultado | número de linhas deslocadas |
   | include | inclui tabelas que estão relacionadas | Configuração do "join" e o tipo de relacionamento |
+  | count_results | retorna a quantidade de resultados da pesquisa | verdadeiro ou falso |
 
   Segue um exemplo de utilização do `select` utilizando vários dos métodos acima
 
@@ -192,5 +193,3 @@ afterAll(async () => {
   }
 });
 ```
-
-

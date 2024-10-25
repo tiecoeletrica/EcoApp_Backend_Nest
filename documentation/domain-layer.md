@@ -10,6 +10,10 @@ Para que essa aplicação consiga receber outras funcionalidades no futuro, prim
 
 Nessa camada da aplicação temos os contratos para os repositórios da aplicação e para os métodos de criptografia, além dos casos de uso.
 
+### Authorization
+
+Aqui é feita a gestão de lógica de autorização de casos de uso a partir do tipo (Role) do usuário.
+
 ### Cryptography
 
 Essa sessão cria os contratos de criptografia da aplicação.
@@ -35,13 +39,15 @@ export abstract class ContractRepository {
 
 Os casos de uso exemplificam tipos de iteração que os usuários terão nessa aplicação. Elas estão organizadas pelas entidades desses casos de uso conforme tabela abaixo:
 
-| Pasta                                                                                                                    | Descrição                                                                                                |
-| :----------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------- |
-| [contract-base](../src/domain/material-movimentation/application/use-cases/contract-base)                                | reúne os casos de uso de criação e listagem de contratos e bases                                         |
-| [material](../src/domain/material-movimentation/application/use-cases/material)                                          | reúne os casos de uso de cadastro de materiais e sua listagem                                            |
-| [physicalDocument](../src/domain/material-movimentation/application/use-cases/physicalDocument/)                         | reúne os casos de uso de cadastro de materiais e sua listagem                                            |
-| [project-movimentation-budget](../src/domain/material-movimentation/application/use-cases/project-movimentation-budget/) | reúne os principais casos de uso da aplicação. Que abrange os orçamentos, as movimentações e os projetos |
-| [users](../src/domain/material-movimentation/application/use-cases/users/)                                               | reúne todos os casos de uso ligados aos usuários                                                         |
+| Pasta                                                                                            | Descrição                                                                                |
+| :----------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------- |
+| [contract-base](../src/domain/material-movimentation/application/use-cases/contract-base)        | reúne os casos de uso de criação e listagem de contratos e bases                         |
+| [material](../src/domain/material-movimentation/application/use-cases/material)                  | reúne os casos de uso de cadastro de materiais e sua listagem                            |
+| [physicalDocument](../src/domain/material-movimentation/application/use-cases/physicalDocument/) | reúne os casos de uso de cadastro de materiais e sua listagem                            |
+| [project](../src/domain/material-movimentation/application/use-cases/project/)                   | reúne os casos de uso da de visualização e registro de projetos                          |
+| [movimentation](../src/domain/material-movimentation/application/use-cases/movimentation/)       | reúne os principais casos de uso relacionados ao almoxarifado de gestão de materiais     |
+| [budget](../src/domain/material-movimentation/application/use-cases/budget/)                     | reúne os principais casos de uso ligados à criação de modificação de orçamentos de obras |
+| [users](../src/domain/material-movimentation/application/use-cases/users/)                       | reúne todos os casos de uso ligados aos usuários                                         |
 
 A pasta de [errors](../src/domain/material-movimentation/application/use-cases/errors) implementa a classe de erro natural do javascript/typescript para informar mais detalhes do erro na resposta do caso de uso.
 
@@ -85,4 +91,3 @@ export class BaseWithContract extends ValueObject<BaseWithContractProps> {
   }
 }
 ```
-
