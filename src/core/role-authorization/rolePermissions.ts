@@ -76,5 +76,17 @@ export const rolePermissions = {
     UseCases.FetchProjectsBudgetsByMaterialsUseCase,
     UseCases.EditBudgetsByMaterialUseCase,
   ],
+  [Role.Supervisor]: [
+    UseCases.FetchMaterialUseCase,
+    UseCases.FetchAllMaterialUseCase,
+    UseCases.AuthenticateUserUseCase,
+    UseCases.GetUserByIdUseCase,
+    UseCases.FetchContractUseCase,
+    UseCases.FetchBaseUseCase,
+    UseCases.FetchMovimentationHistoryUseCase,
+    UseCases.FetchBudgetMovimentationByProjectUseCase,
+    UseCases.FetchBudgetByProjectNameUseCase,
+    UseCases.GetProjectByProjectNumberUseCase,
+    UseCases.FetchAllMovimentationHistoryUseCase,
+  ],
 };
-

@@ -8,16 +8,17 @@ import {
   PaginationParams,
   PaginationParamsResponse,
 } from "src/core/repositories/pagination-params";
+import { Supervisor } from "src/domain/material-movimentation/enterprise/entities/supervisor";
 
 export class InMemoryUserRepository implements UserRepository {
-  public items: Array<Estimator | Storekeeper> = [];
+  public items: Array<Storekeeper | Estimator | Supervisor> = [];
 
   constructor(
     private baseRepository: InMemoryBaseRepository,
     private contractRepository: InMemoryContractRepository
   ) {}
 
-  async create(user: Storekeeper | Estimator) {
+  async create(user: Storekeeper | Estimator | Supervisor) {
     this.items.push(user);
   }
 
@@ -118,19 +119,23 @@ export class InMemoryUserRepository implements UserRepository {
     return { users, pagination };
   }
 
-  async findByIds(ids: string[]): Promise<Array<Estimator | Storekeeper>> {
+  async findByIds(
+    ids: string[]
+  ): Promise<Array<Storekeeper | Estimator | Supervisor>> {
     const user = this.items.filter((item) => ids.includes(item.id.toString()));
 
     return user;
   }
 
-  async save(user: Storekeeper | Estimator) {
+  async save(user: Storekeeper | Estimator | Supervisor) {
     const itemIndex = this.items.findIndex((item) => item.id == user.id);
 
     this.items[itemIndex] = user;
   }
 
-  async findByEmail(email: string): Promise<Storekeeper | Estimator | null> {
+  async findByEmail(
+    email: string
+  ): Promise<Storekeeper | Estimator | Supervisor | null> {
     const user = this.items.find((item) => item.email.toString() === email);
 
     if (!user) return null;

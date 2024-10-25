@@ -8,13 +8,13 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-    "name": "caiopaulista@ecoeletrica.com.br",
-  "email": "caio2@ecoeletrica.com.br",
-  "cpf": "10101010110",
-  "type": "Orçamentista",
+    "name": "BENTO DUTRA SANTOS",
+  "email": "bento@ecoeletrica.com.br",
+  "cpf": "00463891562",
+  "type": "Supervisor",
   "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
-  "contractId": "a100663c-5a6d-4198-ad7b-1062afa0c4f4",
-  "password": "testeteste"
+  "contractId": "e816f105-e022-4560-b32c-d2af40c18351",
+  "password": "ECO@2012"
 }
 
 ###
@@ -24,7 +24,7 @@ POST {{baseURL}}/sessions
 Content-Type: application/json
 
 {
-    "email": "rodrigo@ecoeletrica.com.br",
+    "email": "bento@ecoeletrica.com.br",
     "password": "ECO@2012" 
 }
 

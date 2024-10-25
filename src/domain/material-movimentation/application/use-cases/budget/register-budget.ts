@@ -13,6 +13,7 @@ import { ContractRepository } from "../../repositories/contract-repository";
 import { Contract } from "src/domain/material-movimentation/enterprise/entities/contract";
 import { Estimator } from "src/domain/material-movimentation/enterprise/entities/estimator";
 import { Storekeeper } from "src/domain/material-movimentation/enterprise/entities/storekeeper";
+import { Supervisor } from "src/domain/material-movimentation/enterprise/entities/supervisor";
 
 interface RegisterBudgetUseCaseRequest {
   estimatorId: string;
@@ -115,7 +116,7 @@ export class RegisterBudgetUseCase {
     );
 
     let result:
-      | Array<Estimator | Storekeeper>
+      | Array<Storekeeper | Estimator | Supervisor>
       | Material[]
       | Project[]
       | Contract[] = [];

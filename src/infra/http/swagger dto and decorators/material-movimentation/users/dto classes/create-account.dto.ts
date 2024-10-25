@@ -19,7 +19,7 @@ export class CreateAccountBodyDto {
   })
   cpf!: string;
   @ApiProperty({
-    example: "Administrador/Almoxarife/Orçamentista",
+    example: "Administrador/Almoxarife/Orçamentista/Supervisor",
     description: "establish the type of access of the user",
   })
   type!: string;

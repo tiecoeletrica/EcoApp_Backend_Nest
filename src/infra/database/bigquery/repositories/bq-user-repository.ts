@@ -10,11 +10,12 @@ import { UserWithBaseContract } from "src/domain/material-movimentation/enterpri
 import { BqUserMapper } from "../mappers/bq-user-mapper";
 import { BqUserWithBaseContractMapper } from "../mappers/bq-user-with-base-contract-mapper";
 import { Injectable } from "@nestjs/common";
+import { Supervisor } from "src/domain/material-movimentation/enterprise/entities/supervisor";
 
 @Injectable()
 export class BqUserRepository implements UserRepository {
   constructor(private bigquery: BigQueryService) {}
-  async create(user: Storekeeper | Estimator): Promise<void> {
+  async create(user: Storekeeper | Estimator | Supervisor): Promise<void> {
     await this.bigquery.user.create([BqUserMapper.toBigquery(user)]);
   }
 
@@ -82,7 +83,9 @@ export class BqUserRepository implements UserRepository {
     };
   }
 
-  async findByIds(userIds: string[]): Promise<Array<Storekeeper | Estimator>> {
+  async findByIds(
+    userIds: string[]
+  ): Promise<Array<Storekeeper | Estimator | Supervisor>> {
     const users = await this.bigquery.user.select({
       whereIn: { id: userIds },
     });
@@ -90,14 +93,16 @@ export class BqUserRepository implements UserRepository {
     return users.map(BqUserMapper.toDomain);
   }
 
-  async save(user: Storekeeper | Estimator): Promise<void> {
+  async save(user: Storekeeper | Estimator | Supervisor): Promise<void> {
     await this.bigquery.user.update({
       data: BqUserMapper.toBigqueryUser(user),
       where: { id: user.id.toString() },
     });
   }
 
-  async findByEmail(email: string): Promise<Storekeeper | Estimator | null> {
+  async findByEmail(
+    email: string
+  ): Promise<Storekeeper | Estimator | Supervisor | null> {
     const [user] = await this.bigquery.user.select({
       where: { email },
     });

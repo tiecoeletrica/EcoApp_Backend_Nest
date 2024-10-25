@@ -14,6 +14,7 @@ import { BaseRepository } from "../../repositories/base-repository";
 import { Base } from "src/domain/material-movimentation/enterprise/entities/base";
 import { Estimator } from "src/domain/material-movimentation/enterprise/entities/estimator";
 import { NotValidError } from "../errors/not-valid-error";
+import { Supervisor } from "src/domain/material-movimentation/enterprise/entities/supervisor";
 
 interface TransferMaterialUseCaseRequest {
   storekeeperId: string;
@@ -134,7 +135,7 @@ export class TransferMaterialUseCase {
     );
 
     let result:
-      | Array<Estimator | Storekeeper>
+      | Array<Estimator | Storekeeper | Supervisor>
       | Material[]
       | Project[]
       | Base[] = [];

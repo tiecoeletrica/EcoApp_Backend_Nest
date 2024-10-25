@@ -11,9 +11,13 @@ import {
 import { faker } from "@faker-js/faker";
 import { BigQueryService } from "src/infra/database/bigquery/bigquery.service";
 import { BqUserMapper } from "src/infra/database/bigquery/mappers/bq-user-mapper";
+import {
+  Supervisor,
+  SupervisorProps,
+} from "src/domain/material-movimentation/enterprise/entities/supervisor";
 
-type UserMakeProps = StorekeeperProps | EstimatorProps;
-type UserMake = Storekeeper | Estimator;
+type UserMakeProps = StorekeeperProps | EstimatorProps | SupervisorProps;
+type UserMake = Storekeeper | Estimator | Supervisor;
 
 export function makeUser(
   override: Partial<UserMakeProps> = {},
@@ -45,6 +49,15 @@ export function makeUser(
       } as StorekeeperProps,
       id
     );
+  } else if (override.type === "Supervisor") {
+    return Supervisor.create(
+      {
+        ...baseProps,
+        type: "Supervisor",
+        ...override,
+      } as SupervisorProps,
+      id
+    );
   } else {
     return Estimator.create(
       {
@@ -72,4 +85,4 @@ export class UserFactory {
 
 const status = ["ativo", "inativo"];
 const storekeeperTypes = ["Administrador", "Almoxarife"];
-const userEntities = ["Storekeeper", "Estimator"];
+const userEntities = ["Storekeeper", "Estimator", "Supervisor"];

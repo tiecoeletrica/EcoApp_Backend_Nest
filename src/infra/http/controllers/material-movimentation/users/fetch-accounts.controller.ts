@@ -40,19 +40,7 @@ export class FetchAccountsController {
   async handle(
     @Query(new ZodValidationPipe(fetchAccountsBodySchema))
     query: FetchAccountsQueryDto
-  ): Promise<{
-    users: {
-      id: import("c:/Users/EcoEletrica/Desktop/GitHub/EcoApp_Backend_Nest/src/core/entities/unique-entity-id").UniqueEntityID;
-      name: string;
-      cpf: string;
-      email: string;
-      status: string;
-      type: string;
-      contract: import("c:/Users/EcoEletrica/Desktop/GitHub/EcoApp_Backend_Nest/src/domain/material-movimentation/enterprise/entities/contract").Contract;
-      base: import("c:/Users/EcoEletrica/Desktop/GitHub/EcoApp_Backend_Nest/src/domain/material-movimentation/enterprise/entities/base").Base;
-    }[];
-    pagination: import("c:/Users/EcoEletrica/Desktop/GitHub/EcoApp_Backend_Nest/src/core/repositories/pagination-params").PaginationParamsResponse;
-  }> {
+  ) {
     const { page, baseId, contractId, name } = query;
 
     const result = await this.fetchUserUseCase.execute({

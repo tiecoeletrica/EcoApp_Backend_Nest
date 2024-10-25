@@ -3,11 +3,26 @@ import { Estimator } from "src/domain/material-movimentation/enterprise/entities
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { BqUserProps } from "../schemas/user";
 import { UserType } from "src/core/types/user-type";
+import { Supervisor } from "src/domain/material-movimentation/enterprise/entities/supervisor";
 
 export class BqUserMapper {
-  static toDomain(raw: BqUserProps): Storekeeper | Estimator {
+  static toDomain(raw: BqUserProps): Storekeeper | Estimator | Supervisor {
     if (raw.type === "Orçamentista") {
       return Estimator.create(
+        {
+          contractId: new UniqueEntityID(raw.contractId),
+          baseId: new UniqueEntityID(raw.baseId),
+          cpf: raw.cpf,
+          email: raw.email,
+          name: raw.name,
+          password: raw.password,
+          type: raw.type,
+          status: raw.status,
+        },
+        new UniqueEntityID(raw.id)
+      );
+    } else if (raw.type === "Supervisor") {
+      return Supervisor.create(
         {
           contractId: new UniqueEntityID(raw.contractId),
           baseId: new UniqueEntityID(raw.baseId),
@@ -38,9 +53,22 @@ export class BqUserMapper {
   }
 
   static toBigquery(
-    storekeeperOrEstimator: Storekeeper | Estimator
+    storekeeperOrEstimator: Storekeeper | Estimator | Supervisor
   ): BqUserProps {
     if (storekeeperOrEstimator instanceof Storekeeper)
+      return {
+        id: storekeeperOrEstimator.id.toString(),
+        cpf: storekeeperOrEstimator.cpf,
+        email: storekeeperOrEstimator.email,
+        name: storekeeperOrEstimator.name,
+        password: storekeeperOrEstimator.password,
+        status: storekeeperOrEstimator.status,
+        type: storekeeperOrEstimator.type,
+        baseId: storekeeperOrEstimator.baseId.toString(),
+        contractId: storekeeperOrEstimator.contractId.toString(),
+      };
+
+    if (storekeeperOrEstimator instanceof Supervisor)
       return {
         id: storekeeperOrEstimator.id.toString(),
         cpf: storekeeperOrEstimator.cpf,
@@ -70,7 +98,9 @@ export class BqUserMapper {
     }
   }
 
-  static toBigqueryUser(user: Storekeeper | Estimator): BqUserProps {
+  static toBigqueryUser(
+    user: Storekeeper | Estimator | Supervisor
+  ): BqUserProps {
     return {
       id: user.id.toString(),
       cpf: user.cpf,

@@ -1,4 +1,3 @@
-import { Estimator } from "src/domain/material-movimentation/enterprise/entities/estimator";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { BqUserProps } from "../schemas/user";
 import { StorekeeperWithBase } from "src/domain/material-movimentation/enterprise/entities/value-objects/storekeeper-with-base";
@@ -7,6 +6,7 @@ import { Base } from "src/domain/material-movimentation/enterprise/entities/base
 import { EstimatorWithContract } from "src/domain/material-movimentation/enterprise/entities/value-objects/estimator-with-contract";
 import { Contract } from "src/domain/material-movimentation/enterprise/entities/contract";
 import { UserWithBaseContract } from "src/domain/material-movimentation/enterprise/entities/value-objects/user-with-base-contract";
+import { SupervisorWithBase } from "src/domain/material-movimentation/enterprise/entities/value-objects/supervisor-with-base";
 
 type BqUserWithBaseContract = BqUserProps & {
   base?: BqBaseProps;
@@ -15,7 +15,7 @@ type BqUserWithBaseContract = BqUserProps & {
 export class BqUserWithBaseContractMapper {
   static toDomain(
     raw: BqUserWithBaseContract
-  ): StorekeeperWithBase | EstimatorWithContract {
+  ): StorekeeperWithBase | EstimatorWithContract | SupervisorWithBase {
     if (raw.type === "Orçamentista") {
       return EstimatorWithContract.create({
         contract: Contract.create(
