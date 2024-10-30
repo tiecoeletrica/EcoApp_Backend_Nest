@@ -57,7 +57,16 @@ export class FetchOnlyProjectsOfBudgetsUseCase {
     if (!budgets.length)
       return left(new ResourceNotFoundError("Nenhum orçamento não encontrado"));
 
-    const foundProjects = this.createProjectAndIdArray(projects, budgets);
+    const projectIdsOnBudgets = budgets.map((budget) =>
+      budget.projectId.toString()
+    );
+
+    console.log(projectIdsOnBudgets);
+
+    const foundProjects = this.createProjectAndIdArray(
+      projects,
+      budgets
+    ).filter((foundProject) => projectIdsOnBudgets.includes(foundProject.id));
 
     return right({ foundProjects });
   }

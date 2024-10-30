@@ -48,7 +48,7 @@ export class RegisterProjectUseCase {
     if (projectSearch)
       return left(
         new ResourceAlreadyRegisteredError(
-          `Projeto ${project_number} não cadastrado`
+          `Projeto ${project_number} já cadastrado`
         )
       );
 

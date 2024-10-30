@@ -284,7 +284,7 @@ Authorization: Bearer {{authToken}}
 
 # @name fetch_budgets
 GET {{baseURL}}/budgets
-?project_number=B-12345678
+?project_number=B-1078051
 &sendProjectId=true
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
@@ -348,7 +348,7 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-    "project_numbers": ["B-12345678", "B-22345678"]
+    "project_numbers": ["B-12345678", "B-22345678", "B-1078051"]
 }
 
 ###
@@ -471,8 +471,8 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-    "project_numbers": ["B-1004343"],
-    "codeFrom": 2203008,
+    "project_numbers": ["B-LALALA"],
+    "codeFrom": 2223464,
     "codeTo": 210422,
-    "multiplier": 1
+    "multiplier": 2
 }
