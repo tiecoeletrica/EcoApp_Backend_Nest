@@ -64,6 +64,9 @@
 - review documentations [x]
 - Create a away to migrate the schemas of "/src/infra/database/bigquery/schemas" from files to tables on bigquery []
 - on budgets-materials put show observation with replaced material []
+- split logic between Administrator and Storekeeper Leader []
+- badges and summary on readme []
+- filter by storekeeper name on movimentations history []
 
 # Test 1 file
 

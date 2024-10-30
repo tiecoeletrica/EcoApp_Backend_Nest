@@ -24,7 +24,7 @@ POST {{baseURL}}/sessions
 Content-Type: application/json
 
 {
-    "email": "bento@ecoeletrica.com.br",
+    "email": "rodrigo@ecoeletrica.com.br",
     "password": "ECO@2012" 
 }
 
@@ -75,12 +75,12 @@ Authorization: Bearer {{authToken}}
 ###
 
 # @name edit_account
-PUT {{baseURL}}/accounts/e673e72b-431c-4212-bbfd-a78c5e06c200
+PUT {{baseURL}}/accounts/a739b640-6db9-4584-874a-b6da6c13c346
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-    "baseId": "468c0cdb-b89f-425c-8e8f-0551f5db94b7"
+    "password": "ECO@2012"
 }
 
 ###

@@ -143,6 +143,16 @@ export class InMemoryUserRepository implements UserRepository {
     return user;
   }
 
+  async findByName(
+    name: string
+  ): Promise<Storekeeper | Estimator | Supervisor | null> {
+    const user = this.items.find((item) => item.name.toString().includes(name));
+
+    if (!user) return null;
+
+    return user;
+  }
+
   async delete(userId: string) {
     const itemIndex = this.items.findIndex(
       (item) => item.id.toString() == userId

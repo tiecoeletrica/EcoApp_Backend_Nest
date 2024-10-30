@@ -25,7 +25,7 @@ const fetchMovimentationHistoryBodySchema = z.object({
     .default("1")
     .transform(Number)
     .pipe(z.number().min(1)),
-  email: z.string().email().optional(),
+  name: z.string().optional(),
   project_number: z.string().optional(),
   material_code: z
     .string()
@@ -58,7 +58,7 @@ export class FetchMovimentationHistoryController {
     @Query(new ZodValidationPipe(fetchMovimentationHistoryBodySchema))
     query: FetchMovimentationHistoryQueryDto
   ) {
-    const { page, project_number, email, endDate, material_code, startDate } =
+    const { page, project_number, name, endDate, material_code, startDate } =
       query;
 
     let endDateAjusted;
@@ -74,7 +74,7 @@ export class FetchMovimentationHistoryController {
     const result = await this.fetchMovimentationHistoryUseCase.execute({
       page,
       baseId: user.baseId,
-      email,
+      name,
       project_number,
       material_code,
       startDate,

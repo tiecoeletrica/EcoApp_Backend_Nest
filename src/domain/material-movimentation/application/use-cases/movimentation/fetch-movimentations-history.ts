@@ -11,7 +11,7 @@ import { PaginationParamsResponse } from "src/core/repositories/pagination-param
 interface FetchMovimentationHistoryUseCaseRequest {
   page: number;
   baseId: string;
-  email?: string;
+  name?: string;
   project_number?: string;
   material_code?: number;
   startDate?: Date;
@@ -38,7 +38,7 @@ export class FetchMovimentationHistoryUseCase {
   async execute({
     page,
     baseId,
-    email,
+    name,
     project_number,
     material_code,
     startDate,
@@ -48,10 +48,10 @@ export class FetchMovimentationHistoryUseCase {
     let projectId;
     let materialId;
 
-    if (email) {
-      const storekeeper = await this.userRepository.findByEmail(email);
+    if (name) {
+      const storekeeper = await this.userRepository.findByName(name);
       if (!storekeeper)
-        return left(new ResourceNotFoundError(`email ${email} não cadastrado`));
+        return left(new ResourceNotFoundError(`Nome "${name}" não encontrado`));
       storekeeperId = storekeeper.id.toString();
     }
 
@@ -62,7 +62,9 @@ export class FetchMovimentationHistoryUseCase {
         );
       if (!project)
         return left(
-          new ResourceNotFoundError(`Projeto ${project_number} não cadastrado`)
+          new ResourceNotFoundError(
+            `Projeto "${project_number}" não cadastrado`
+          )
         );
       projectId = project.id.toString();
     }
@@ -73,7 +75,9 @@ export class FetchMovimentationHistoryUseCase {
       );
       if (!material)
         return left(
-          new ResourceNotFoundError(`Material ${material_code} não cadastrado`)
+          new ResourceNotFoundError(
+            `Material "${material_code}" não cadastrado`
+          )
         );
       materialId = material.id.toString();
     }

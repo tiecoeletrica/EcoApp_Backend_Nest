@@ -12,7 +12,7 @@ Nessa camada da aplicação temos os contratos para os repositórios da aplicaç
 
 ### Authorization
 
-Aqui é feita a gestão de lógica de autorização de casos de uso a partir do tipo (Role) do usuário.
+Aqui é feita a gestão de lógica de autorização de casos de uso a partir do tipo (Role) do usuário. O dicionário de autorizações por tipo de usuário estão [aqui](../src/core/role-authorization)
 
 ### Cryptography
 
