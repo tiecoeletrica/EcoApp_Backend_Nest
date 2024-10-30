@@ -22,7 +22,7 @@ import { RoleAuth } from "src/infra/auth/role-auth.decorator";
 import { UseCases } from "src/core/role-authorization/use-cases.enum";
 
 const fetchAllMovimentationHistoryBodySchema = z.object({
-  email: z.string().email().optional(),
+  name: z.string().optional(),
   project_number: z.string().optional(),
   material_code: z
     .string()
@@ -56,7 +56,7 @@ export class FetchAllMovimentationHistoryController {
     query: FetchAllMovimentationHistoryQueryDto,
     @Res() response: Response
   ) {
-    const { project_number, email, endDate, material_code, startDate } = query;
+    const { project_number, name, endDate, material_code, startDate } = query;
 
     let endDateAjusted;
 
@@ -70,7 +70,7 @@ export class FetchAllMovimentationHistoryController {
 
     const result = await this.fetchAllMovimentationHistoryUseCase.execute({
       baseId: user.baseId,
-      email,
+      name,
       project_number,
       material_code,
       startDate,

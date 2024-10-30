@@ -4,11 +4,11 @@ import { ApiProperty } from "@nestjs/swagger";
 @Injectable()
 export class FetchAllMovimentationHistoryQueryDto {
   @ApiProperty({
-    example: "storekeeper@ecoeletrica.com.br",
-    description: "user's email that made the movimentation",
+    example: "Rodrigo",
+    description: "user's partial name that made the movimentation",
     required: false,
   })
-  email!: string;
+  name!: string;
   @ApiProperty({
     example: "B-1234567",
     description: "project's number that was movimetated",

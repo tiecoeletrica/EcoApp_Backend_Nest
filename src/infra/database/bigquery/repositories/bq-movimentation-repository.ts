@@ -101,7 +101,7 @@ export class BqMovimentationRepository implements MovimentationRepository {
   async findManyHistoryWithDetails(
     { page }: PaginationParams,
     baseId: string,
-    storekeeperId?: string,
+    storekeeperIds?: string[],
     projectId?: string,
     materialId?: string,
     startDate?: Date,
@@ -114,7 +114,8 @@ export class BqMovimentationRepository implements MovimentationRepository {
 
     const { results: movimentations, total_count } =
       await this.bigquery.movimentation.select({
-        where: { baseId, userId: storekeeperId, projectId, materialId },
+        where: { baseId, projectId, materialId },
+        whereIn: { userId: storekeeperIds },
         greaterOrEqualThan: { createdAt: startDate },
         lessOrEqualThan: { createdAt: endDate },
         limit: pageCount,
@@ -166,17 +167,18 @@ export class BqMovimentationRepository implements MovimentationRepository {
       pagination,
     };
   }
-  
+
   async findManyAllHistoryWithDetails(
     baseId: string,
-    storekeeperId?: string,
+    storekeeperIds?: string[],
     projectId?: string,
     materialId?: string,
     startDate?: Date,
     endDate?: Date
   ): Promise<MovimentationWithDetails[]> {
     const movimentations = await this.bigquery.movimentation.select({
-      where: { baseId, userId: storekeeperId, projectId, materialId },
+      where: { baseId, projectId, materialId },
+      whereIn: { userId: storekeeperIds },
       greaterOrEqualThan: { createdAt: startDate },
       lessOrEqualThan: { createdAt: endDate },
       orderBy: { column: "createdAt", direction: "DESC" },

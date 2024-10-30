@@ -135,7 +135,7 @@ export class InMemoryMovimentationRepository
   async findManyHistoryWithDetails(
     { page }: PaginationParams,
     baseId: string,
-    storekeeperId?: string,
+    storekeeperIds?: string[],
     projectId?: string,
     materialId?: string,
     startDate?: Date,
@@ -154,8 +154,8 @@ export class InMemoryMovimentationRepository
       )
       .filter(
         (movimentation) =>
-          !storekeeperId ||
-          movimentation.storekeeperId.toString() === storekeeperId
+          !storekeeperIds ||
+          storekeeperIds.includes(movimentation.storekeeperId.toString())
       )
       .filter(
         (movimentation) =>
@@ -222,7 +222,7 @@ export class InMemoryMovimentationRepository
 
   async findManyAllHistoryWithDetails(
     baseId: string,
-    storekeeperId?: string,
+    storekeeperIds?: string[],
     projectId?: string,
     materialId?: string,
     startDate?: Date,
@@ -236,8 +236,8 @@ export class InMemoryMovimentationRepository
       )
       .filter(
         (movimentation) =>
-          !storekeeperId ||
-          movimentation.storekeeperId.toString() === storekeeperId
+          !storekeeperIds ||
+          storekeeperIds.includes(movimentation.storekeeperId.toString())
       )
       .filter(
         (movimentation) =>

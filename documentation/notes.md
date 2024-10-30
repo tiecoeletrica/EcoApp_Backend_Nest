@@ -62,11 +62,11 @@
 - create supervisor entity to search data [x]
 - fix initialization with empty values on classes that has global private variables [x]
 - review documentations [x]
+- filter by storekeeper name on movimentations history [x]
 - Create a away to migrate the schemas of "/src/infra/database/bigquery/schemas" from files to tables on bigquery []
 - on budgets-materials put show observation with replaced material []
 - split logic between Administrator and Storekeeper Leader []
 - badges and summary on readme []
-- filter by storekeeper name on movimentations history []
 
 # Test 1 file
 

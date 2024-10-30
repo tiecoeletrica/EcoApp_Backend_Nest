@@ -28,8 +28,8 @@ export abstract class UserRepository {
   abstract findByEmail(
     email: string
   ): Promise<Storekeeper | Estimator | Supervisor | null>;
-  abstract findByName(
+  abstract findManyByName(
     name: string
-  ): Promise<Storekeeper | Estimator | Supervisor | null>;
+  ): Promise<(Storekeeper | Estimator | Supervisor)[]>;
   abstract delete(userId: string): Promise<void>;
 }

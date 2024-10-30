@@ -253,7 +253,7 @@ Authorization: Bearer {{authToken}}
 
 # @name fetch_movimentations
 GET {{baseURL}}/movimentations
-?project_number=B-12345678
+?name=rod
 # ?material_code=110014
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
@@ -263,7 +263,7 @@ Authorization: Bearer {{authToken}}
 
 # @name fetch_all_movimentations
 GET {{baseURL}}/movimentations-streaming
-?project_number=B-1081710
+?name=Danilo
 # ?material_code=3310013
 Content-Type: application/json
 Authorization: Bearer {{authToken}}

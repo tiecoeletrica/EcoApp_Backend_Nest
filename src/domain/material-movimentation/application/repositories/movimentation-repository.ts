@@ -27,7 +27,7 @@ export abstract class MovimentationRepository {
   abstract findManyHistoryWithDetails(
     params: PaginationParams,
     baseId: string,
-    storekeeperId?: string,
+    storekeeperIds?: string[],
     projectId?: string,
     materialId?: string,
     startDate?: Date,
@@ -38,7 +38,7 @@ export abstract class MovimentationRepository {
   }>;
   abstract findManyAllHistoryWithDetails(
     baseId: string,
-    storekeeperId?: string,
+    storekeeperIds?: string[],
     projectId?: string,
     materialId?: string,
     startDate?: Date,

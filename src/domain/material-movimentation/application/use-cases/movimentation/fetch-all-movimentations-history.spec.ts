@@ -287,7 +287,7 @@ describe("Fetch Movimentations History", () => {
 
     const storekeeper = makeUser({
       baseId: base.id,
-      email: "storekeeper@ecoeletrica.com.br",
+      name: "João da Silva",
     });
     inMemoryUserRepository.create(storekeeper);
     const storekeeper2 = makeUser({ baseId: base.id });
@@ -326,7 +326,7 @@ describe("Fetch Movimentations History", () => {
 
     const result = await sut.execute({
       baseId: "base-1",
-      email: "storekeeper@ecoeletrica.com.br",
+      name: "João",
     });
 
     expect(result.isRight()).toBeTruthy();

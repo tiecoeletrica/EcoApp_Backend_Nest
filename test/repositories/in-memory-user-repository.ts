@@ -143,12 +143,12 @@ export class InMemoryUserRepository implements UserRepository {
     return user;
   }
 
-  async findByName(
+  async findManyByName(
     name: string
-  ): Promise<Storekeeper | Estimator | Supervisor | null> {
-    const user = this.items.find((item) => item.name.toString().includes(name));
-
-    if (!user) return null;
+  ): Promise<(Storekeeper | Estimator | Supervisor)[]> {
+    const user = this.items.filter((item) =>
+      item.name.toString().includes(name)
+    );
 
     return user;
   }

@@ -9,7 +9,7 @@ import { MaterialRepository } from "../../repositories/material-repository";
 
 interface FetchAllMovimentationHistoryUseCaseRequest {
   baseId: string;
-  email?: string;
+  name?: string;
   project_number?: string;
   material_code?: number;
   startDate?: Date;
@@ -34,21 +34,23 @@ export class FetchAllMovimentationHistoryUseCase {
 
   async execute({
     baseId,
-    email,
+    name,
     project_number,
     material_code,
     startDate,
     endDate,
   }: FetchAllMovimentationHistoryUseCaseRequest): Promise<FetchAllMovimentationHistoryUseCaseResponse> {
-    let storekeeperId;
+    let storekeeperIds;
     let projectId;
     let materialId;
 
-    if (email) {
-      const storekeeper = await this.userRepository.findByEmail(email);
-      if (!storekeeper)
-        return left(new ResourceNotFoundError(`email ${email} não cadastrado`));
-      storekeeperId = storekeeper.id.toString();
+    if (name) {
+      const storekeepers = await this.userRepository.findManyByName(name);
+      if (!storekeepers)
+        return left(new ResourceNotFoundError(`Nome ${name} não cadastrado`));
+      storekeeperIds = storekeepers.map((storekeeper) =>
+        storekeeper.id.toString()
+      );
     }
 
     if (project_number) {
@@ -77,7 +79,7 @@ export class FetchAllMovimentationHistoryUseCase {
     const movimentations =
       await this.movimentationRepository.findManyAllHistoryWithDetails(
         baseId,
-        storekeeperId,
+        storekeeperIds,
         projectId,
         materialId,
         startDate,

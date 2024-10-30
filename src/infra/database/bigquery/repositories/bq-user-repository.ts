@@ -112,16 +112,14 @@ export class BqUserRepository implements UserRepository {
     return BqUserMapper.toDomain(user);
   }
 
-  async findByName(
+  async findManyByName(
     name: string
-  ): Promise<Storekeeper | Estimator | Supervisor | null> {
-    const [user] = await this.bigquery.user.select({
+  ): Promise<(Storekeeper | Estimator | Supervisor)[]> {
+    const user = await this.bigquery.user.select({
       like: { name },
     });
 
-    if (!user) return null;
-
-    return BqUserMapper.toDomain(user);
+    return user.map(BqUserMapper.toDomain);
   }
 
   async delete(userId: string): Promise<void> {

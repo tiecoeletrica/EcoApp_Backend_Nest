@@ -44,15 +44,17 @@ export class FetchMovimentationHistoryUseCase {
     startDate,
     endDate,
   }: FetchMovimentationHistoryUseCaseRequest): Promise<FetchMovimentationHistoryUseCaseResponse> {
-    let storekeeperId;
+    let storekeeperIds;
     let projectId;
     let materialId;
 
     if (name) {
-      const storekeeper = await this.userRepository.findByName(name);
-      if (!storekeeper)
+      const storekeepers = await this.userRepository.findManyByName(name);
+      if (storekeepers.length < 1)
         return left(new ResourceNotFoundError(`Nome "${name}" não encontrado`));
-      storekeeperId = storekeeper.id.toString();
+      storekeeperIds = storekeepers.map((storekeeper) =>
+        storekeeper.id.toString()
+      );
     }
 
     if (project_number) {
@@ -88,7 +90,7 @@ export class FetchMovimentationHistoryUseCase {
           page,
         },
         baseId,
-        storekeeperId,
+        storekeeperIds,
         projectId,
         materialId,
         startDate,
