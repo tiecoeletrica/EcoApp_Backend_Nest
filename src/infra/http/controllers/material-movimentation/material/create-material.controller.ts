@@ -73,7 +73,7 @@ export class CreateMaterialController {
         this.handleError(result.value);
       }
 
-      return { message: "materiais registrados" };
+      return { message: "Materiais criados!" };
     }
 
     const { code, description, type, unit } = body;
@@ -90,7 +90,11 @@ export class CreateMaterialController {
       this.handleError(result.value);
     }
 
-    return { message: "material criado" };
+    return {
+      message: `Material ${
+        result.isRight() ? result.value.material.code : ""
+      } - ${result.isRight() ? result.value.material.description : ""} criado!`,
+    };
   }
 
   private handleError(error: Error) {

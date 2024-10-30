@@ -13,9 +13,21 @@ interface UserPayload {
 
 @Injectable()
 export class AuthorizationByRole {
-  canUserPerformAction(user: UserPayload, useCase: UseCases): boolean {
+  canUserPerformAction(
+    user: UserPayload,
+    useCase: UseCases
+  ): { allowed: boolean; message?: string } {
     const userRole = user.type;
     const userPermissions = rolePermissions[userRole];
-    return userPermissions?.includes(useCase) ?? false;
+    const allowed = userPermissions?.includes(useCase) ?? false;
+
+    if (!allowed) {
+      return {
+        allowed: false,
+        message: `O usuário do tipo ${userRole} não tem permissão para executar essa ação`,
+      };
+    }
+
+    return { allowed: true };
   }
 }

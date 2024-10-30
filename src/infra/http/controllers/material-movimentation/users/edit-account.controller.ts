@@ -19,7 +19,6 @@ import { EditAccountBodyDto } from "src/infra/http/swagger dto and decorators/ma
 import { EditUserUseCase } from "src/domain/material-movimentation/application/use-cases/users/edit-user";
 import { NotValidError } from "src/domain/material-movimentation/application/use-cases/errors/not-valid-error";
 import { TokenInvalidationService } from "src/infra/auth/token-invalidation.service";
-import { JwtService } from "@nestjs/jwt";
 import { UseCases } from "src/core/role-authorization/use-cases.enum";
 import { RoleAuth } from "src/infra/auth/role-auth.decorator";
 
@@ -36,8 +35,7 @@ const editAccountBodyDto = z.object({
 export class EditAccountController {
   constructor(
     private editUserUseCase: EditUserUseCase,
-    private tokenInvalidationService: TokenInvalidationService,
-    private jwtService: JwtService
+    private tokenInvalidationService: TokenInvalidationService
   ) {}
 
   @Put()
@@ -81,6 +79,6 @@ export class EditAccountController {
       await this.tokenInvalidationService.invalidateUserTokens(userId);
     }
 
-    return { message: "edição realizada" };
+    return { message: `O usuário foi alterado!` };
   }
 }
