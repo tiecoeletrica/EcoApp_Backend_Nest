@@ -63,11 +63,11 @@
 - fix initialization with empty values on classes that has global private variables [x]
 - review documentations [x]
 - filter by storekeeper name on movimentations history [x]
+- sort data on fetch movimentation-budgets by material [x]
+- badges and summary on readme [x]
+- split logic between Administrator and Storekeeper Leader []
 - Create a away to migrate the schemas of "/src/infra/database/bigquery/schemas" from files to tables on bigquery []
 - on budgets-materials put show observation with replaced material []
-- split logic between Administrator and Storekeeper Leader []
-- badges and summary on readme []
-- sort data on fetch movimentation-budgets by material []
 
 # Test 1 file
 

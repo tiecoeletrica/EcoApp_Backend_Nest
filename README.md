@@ -1,8 +1,27 @@
 # Nest EcoApp
 
+![NpmBadge](https://img.shields.io/npm/v/npm.svg?logo=npm) ![NodeBadge](https://img.shields.io/npm/v/node.svg?logo=nodedotjs) ![NestBadge](https://img.shields.io/npm/v/nestjs.svg?logo=nestjs) ![VitestBadge](https://img.shields.io/npm/v/vitest.svg?logo=vitest)
+
+## Sumário
+
+- [Nest EcoApp](#nest-ecoapp)
+  - [Descrição](#descrição)
+  - [Funcionalidades Principais](#funcionalidades-principais)
+  - [Pré-requisitos](#pré-requisitos)
+  - [Instalação](#instalação)
+  - [Executando a aplicação](#executando-a-aplicação)
+  - [Documentação das rotas via Swagger](#documentação-das-rotas-via-swagger)
+  - [Estrutura de Pastas do Projeto](#estrutura-de-pastas-do-projeto)
+  - [Testes](#testes)
+  - [Contato](#contato)
+- [Query Builder do Bigquery](/documentation/bigquery-query-builder.md)
+- [Camada de Domínio](/documentation/domain-layer.md)
+- [Camada de Infraestrutura](/documentation/infra-layer.md)
+- [Testes Automatizados](/documentation/automated-tests.md)
+
 ## Descrição
 
-Nest EcoApp é uma aplicação backend desenvolvida com NestJS para gerenciar operações relacionadas a almoxarifados e orçamentos de obras. O projeto utiliza TypeScript e integra-se com o Google BigQuery para armazenamento e recuperação de dados. Futuramente será incluso outros módulos como a programação de obras, chamados do TI, gerencimento de produção de campo, dentre outros.
+Nest EcoApp é uma aplicação backend desenvolvida com NestJS para gerenciar operações relacionadas a almoxarifados e orçamentos de obras. O projeto utiliza TypeScript e integra-se com o Google BigQuery para armazenamento e recuperação de dados. Futuramente será incluso outros módulos como a programação de obras, chamados do TI, gerenciamento de produção de campo, dentre outros.
 
 ## Funcionalidades Principais
 
@@ -102,13 +121,6 @@ Para executar os testes:
 
 - npm run test `executa os testes da camada de domínio`
 - npm run test:e2e `executa os testes da camada de infraestrutura`
-
-## Documentações detalhadas
-
-- [Query Builder do Bigquery](/documentation/bigquery-query-builder.md)
-- [Camada de Domínio](/documentation/domain-layer.md)
-- [Camada de Infraestrutura](/documentation/infra-layer.md)
-- [Testes Automatizados](/documentation/automated-tests.md)
 
 ## Contato
 
