@@ -26,6 +26,7 @@ export class BqBudgetRepository implements BudgetRepository {
   ): Promise<BudgetWithDetails[]> {
     const budgets = await this.bigquery.budget.select({
       where: { projectId, contractId },
+      orderBy: { column: "material.code", direction: "ASC" },
       include: {
         project: {
           join: {

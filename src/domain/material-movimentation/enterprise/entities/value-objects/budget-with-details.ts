@@ -5,16 +5,17 @@ import { Project } from "../project";
 import { Estimator } from "../estimator";
 import { Contract } from "../contract";
 import { Storekeeper } from "../storekeeper";
+import { Supervisor } from "../supervisor";
 
 export interface BudgetWithDetailsProps {
   budgetId: UniqueEntityID;
   value: number;
   createdAt: Date;
-  estimator: Estimator | Storekeeper;
+  estimator: Estimator | Storekeeper | Supervisor;
   material: Material;
   project: Project;
   contract: Contract;
-  updatedAuthor?: Estimator | Storekeeper;
+  updatedAuthor?: Estimator | Storekeeper | Supervisor;
   updatedAt?: Date;
 }
 

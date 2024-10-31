@@ -93,7 +93,8 @@ export class InMemoryMovimentationRepository
           project,
           base,
         });
-      });
+      })
+      .sort((a, b) => a.material.code - b.material.code);
 
     return movimentations;
   }

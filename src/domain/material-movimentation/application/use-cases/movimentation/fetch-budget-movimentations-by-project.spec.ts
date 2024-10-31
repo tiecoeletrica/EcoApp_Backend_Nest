@@ -59,7 +59,7 @@ describe("Fetch budgets and Movimentations by project", () => {
     );
   });
 
-  it("should be able to fetch budgets and movimentations by project", async () => {
+  it("should be able to fetch budgets and movimentations by project sorted by material code", async () => {
     // entity creation for details
     const contract = makeContract();
     await inMemoryContractRepository.create(contract);
@@ -73,8 +73,12 @@ describe("Fetch budgets and Movimentations by project", () => {
     const estimator = makeUser({ contractId: contract.id });
     await inMemoryUserRepository.create(estimator);
 
-    const material = makeMaterial({ contractId: contract.id });
-    await inMemoryMaterialRepository.create(material);
+    const material1 = makeMaterial({ code: 1, contractId: contract.id });
+    await inMemoryMaterialRepository.create(material1);
+    const material2 = makeMaterial({ code: 2, contractId: contract.id });
+    await inMemoryMaterialRepository.create(material2);
+    const material3 = makeMaterial({ code: 3, contractId: contract.id });
+    await inMemoryMaterialRepository.create(material3);
 
     const newProject = makeProject({
       project_number: "Obra-teste",
@@ -91,19 +95,19 @@ describe("Fetch budgets and Movimentations by project", () => {
     const newMovimentation1 = makeMovimentation({
       projectId: newProject.id,
       baseId: base.id,
-      materialId: material.id,
+      materialId: material1.id,
       storekeeperId: storekeeper.id,
     });
     const newMovimentation2 = makeMovimentation({
       projectId: newProject.id,
       baseId: base.id,
-      materialId: material.id,
+      materialId: material2.id,
       storekeeperId: storekeeper.id,
     });
     const newMovimentation3 = makeMovimentation({
       projectId: newProject2.id,
       baseId: base.id,
-      materialId: material.id,
+      materialId: material3.id,
       storekeeperId: storekeeper.id,
     });
 
@@ -116,19 +120,19 @@ describe("Fetch budgets and Movimentations by project", () => {
     const newBudget1 = makeBudget({
       projectId: newProject.id,
       contractId: contract.id,
-      materialId: material.id,
+      materialId: material1.id,
       estimatorId: estimator.id,
     });
     const newBudget2 = makeBudget({
       projectId: newProject.id,
       contractId: contract.id,
-      materialId: material.id,
+      materialId: material3.id,
       estimatorId: estimator.id,
     });
     const newBudget3 = makeBudget({
       projectId: newProject2.id,
       contractId: contract.id,
-      materialId: material.id,
+      materialId: material2.id,
       estimatorId: estimator.id,
     });
 
@@ -142,7 +146,28 @@ describe("Fetch budgets and Movimentations by project", () => {
     expect(result.isRight()).toBeTruthy();
     if (result.isRight()) {
       expect(result.value.movimentations).toHaveLength(2);
+      expect(result.value.movimentations).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            material: expect.objectContaining({ code: 1 }),
+          }),
+          expect.objectContaining({
+            material: expect.objectContaining({ code: 2 }),
+          }),
+        ])
+      );
+
       expect(result.value.budgets).toHaveLength(2);
+      expect(result.value.budgets).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            material: expect.objectContaining({ code: 1 }),
+          }),
+          expect.objectContaining({
+            material: expect.objectContaining({ code: 3 }),
+          }),
+        ])
+      );
     }
   });
 

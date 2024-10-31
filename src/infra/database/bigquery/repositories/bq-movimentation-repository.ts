@@ -36,6 +36,7 @@ export class BqMovimentationRepository implements MovimentationRepository {
   ): Promise<MovimentationWithDetails[]> {
     const movimentations = await this.bigquery.movimentation.select({
       where: { projectId, baseId, materialId },
+      orderBy: { column: "material.code", direction: "ASC" },
       include: {
         project: {
           join: {

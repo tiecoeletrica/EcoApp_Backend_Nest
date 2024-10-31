@@ -23,7 +23,7 @@ describe("Authorize By Role", () => {
       UseCases.RegisterUserUseCase
     );
 
-    expect(result).toBeTruthy();
+    expect(result.allowed).toBeTruthy();
   });
 
   it("should be able to unauthorize an use case", async () => {
@@ -39,7 +39,7 @@ describe("Authorize By Role", () => {
       UseCases.RegisterUserUseCase
     );
 
-    expect(result).toBeFalsy();
+    expect(result.allowed).toBeFalsy();
   });
 
   it("should be able to authorize an use case for Storekeeper and unauthorize the same use case for Estimator", async () => {
@@ -67,7 +67,7 @@ describe("Authorize By Role", () => {
       UseCases.TransferMaterialUseCase
     );
 
-    expect(resultStorekeeper).toBeTruthy();
-    expect(resultEstimator).toBeFalsy();
+    expect(resultStorekeeper.allowed).toBeTruthy();
+    expect(resultEstimator.allowed).toBeFalsy();
   });
 });

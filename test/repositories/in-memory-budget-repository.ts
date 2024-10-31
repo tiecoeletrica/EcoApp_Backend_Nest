@@ -85,7 +85,8 @@ export class InMemoryBudgetRepository implements BudgetRepository {
           updatedAuthor: author,
           updatedAt: budget.updatedAt,
         });
-      });
+      })
+      .sort((a, b) => a.material.code - b.material.code);
 
     return budgets;
   }

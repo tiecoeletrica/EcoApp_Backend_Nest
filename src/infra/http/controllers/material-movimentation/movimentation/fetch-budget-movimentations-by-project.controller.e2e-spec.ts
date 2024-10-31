@@ -63,7 +63,16 @@ describe("Fetch Movimentation and Budget By Project Name (E2E)", () => {
       type: "Almoxarife",
     });
 
-    const material = await materialFactory.makeBqMaterial({
+    const material1 = await materialFactory.makeBqMaterial({
+      code: 1,
+      contractId: contract.id,
+    });
+    const material2 = await materialFactory.makeBqMaterial({
+      code: 2,
+      contractId: contract.id,
+    });
+    const material3 = await materialFactory.makeBqMaterial({
+      code: 3,
       contractId: contract.id,
     });
 
@@ -83,30 +92,30 @@ describe("Fetch Movimentation and Budget By Project Name (E2E)", () => {
       projectId: project.id,
       baseId: base.id,
       storekeeperId: user.id,
-      materialId: material.id,
+      materialId: material1.id,
     });
 
     await movimentationFactory.makeBqMovimentation({
       projectId: project.id,
       baseId: base.id,
       storekeeperId: user.id,
-      materialId: material.id,
+      materialId: material2.id,
     });
 
     await budgetFactory.makeBqBudget({
       projectId: project.id,
       contractId: contract.id,
-      materialId: material.id,
+      materialId: material1.id,
     });
     await budgetFactory.makeBqBudget({
       projectId: project.id,
       contractId: contract.id,
-      materialId: material.id,
+      materialId: material2.id,
     });
     await budgetFactory.makeBqBudget({
       projectId: project.id,
       contractId: contract.id,
-      materialId: material.id,
+      materialId: material3.id,
     });
 
     const response = await request(app.getHttpServer())
@@ -116,6 +125,25 @@ describe("Fetch Movimentation and Budget By Project Name (E2E)", () => {
 
     expect(response.statusCode).toBe(200);
     expect(response.body.movimentations).toHaveLength(2);
+    expect(response.body.movimentations).toEqual([
+      expect.objectContaining({
+        material: expect.objectContaining({ code: 1 }),
+      }),
+      expect.objectContaining({
+        material: expect.objectContaining({ code: 2 }),
+      }),
+    ]);
     expect(response.body.budgets).toHaveLength(3);
+    expect(response.body.budgets).toEqual([
+      expect.objectContaining({
+        material: expect.objectContaining({ code: 1 }),
+      }),
+      expect.objectContaining({
+        material: expect.objectContaining({ code: 2 }),
+      }),
+      expect.objectContaining({
+        material: expect.objectContaining({ code: 3 }),
+      }),
+    ]);
   });
 });

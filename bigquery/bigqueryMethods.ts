@@ -17,7 +17,7 @@ export interface SelectOptions<T> {
   like?: Partial<T>;
   join?: { table: string; on: string };
   distinct?: boolean;
-  orderBy?: { column: keyof T; direction: "ASC" | "DESC" };
+  orderBy?: { column: string; direction: "ASC" | "DESC" };
   groupBy?: (keyof T)[];
   limit?: number;
   offset?: number;
@@ -172,7 +172,7 @@ export class BigQueryMethods<T extends Record<string, any>> {
       whereClauses.length > 0 ? `WHERE ${whereClauses.join(" AND ")}` : "";
     const joinClause = this.buildJoinClause(join);
     const groupByClause = this.buildGroupByClause(tableAlias, groupBy);
-    const orderByClause = this.buildOrderByClause(tableAlias, orderBy);
+    const orderByClause = this.buildOrderByClause(tableAlias, orderBy, include);
     const limitClause = limit ? `LIMIT ${limit}` : "";
     const offsetClause = offset ? `OFFSET ${offset}` : "";
 
@@ -369,11 +369,30 @@ export class BigQueryMethods<T extends Record<string, any>> {
 
   private buildOrderByClause(
     tableAlias: string,
-    orderBy?: { column: keyof T; direction: "ASC" | "DESC" }
+    orderBy?: { column: string; direction: "ASC" | "DESC" },
+    include?: { [K in keyof T]?: IncludeOptions<T[K]> }
   ): string {
-    return orderBy
-      ? `ORDER BY ${tableAlias}.${String(orderBy.column)} ${orderBy.direction}`
-      : "";
+    if (!orderBy) return "";
+
+    const { column, direction } = orderBy;
+    let orderByColumn = column;
+
+    // Verifica se a coluna pertence a uma tabela incluída
+    if (include) {
+      for (const [alias, options] of Object.entries(include)) {
+        if (column.startsWith(`${alias}.`)) {
+          orderByColumn = column.replace(`${alias}.`, `${alias}_`);
+          break;
+        }
+      }
+    }
+
+    // Se não for uma coluna de uma tabela incluída, adiciona o alias da tabela principal
+    if (!orderByColumn.includes(".") && !orderByColumn.includes("_")) {
+      orderByColumn = `${tableAlias}.${orderByColumn}`;
+    }
+
+    return `ORDER BY ${orderByColumn} ${direction}`;
   }
 
   private buildQueryWithIncludes(
@@ -544,9 +563,14 @@ export class BigQueryMethods<T extends Record<string, any>> {
       case "NUMERIC":
         return parseFloat(value);
       case "DATE":
+        return new Date(value.value || value);
       case "TIMESTAMP":
       case "DATETIME":
-        return new Date(value.value || value);
+        const utcDate = new Date(value.value || value);
+        const localDate = new Date(
+          utcDate.getTime() - utcDate.getTimezoneOffset() * 60000
+        );
+        return localDate;
       case "BOOLEAN":
         return Boolean(value);
       default:
