@@ -15,9 +15,17 @@ import {
   Supervisor,
   SupervisorProps,
 } from "src/domain/material-movimentation/enterprise/entities/supervisor";
+import {
+  Administrator,
+  AdministratorProps,
+} from "src/domain/material-movimentation/enterprise/entities/Administrator";
 
-type UserMakeProps = StorekeeperProps | EstimatorProps | SupervisorProps;
-type UserMake = Storekeeper | Estimator | Supervisor;
+type UserMakeProps =
+  | StorekeeperProps
+  | EstimatorProps
+  | SupervisorProps
+  | AdministratorProps;
+type UserMake = Storekeeper | Estimator | Supervisor | Administrator;
 
 export function makeUser(
   override: Partial<UserMakeProps> = {},
@@ -44,7 +52,7 @@ export function makeUser(
         ...baseProps,
         type: faker.helpers.arrayElement(storekeeperTypes) as
           | "Almoxarife"
-          | "Administrador",
+          | "Almoxarife Líder",
         ...override,
       } as StorekeeperProps,
       id
@@ -56,6 +64,15 @@ export function makeUser(
         type: "Supervisor",
         ...override,
       } as SupervisorProps,
+      id
+    );
+  } else if (override.type === "Administrador") {
+    return Administrator.create(
+      {
+        ...baseProps,
+        type: "Administrador",
+        ...override,
+      } as AdministratorProps,
       id
     );
   } else {
@@ -84,5 +101,10 @@ export class UserFactory {
 }
 
 const status = ["ativo", "inativo"];
-const storekeeperTypes = ["Administrador", "Almoxarife"];
-const userEntities = ["Storekeeper", "Estimator", "Supervisor"];
+const storekeeperTypes = ["Almoxarife Líder", "Almoxarife"];
+const userEntities = [
+  "Storekeeper",
+  "Estimator",
+  "Supervisor",
+  "Administrator",
+];

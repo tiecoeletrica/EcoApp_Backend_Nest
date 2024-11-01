@@ -2,4 +2,5 @@ export type UserType =
   | "Administrador"
   | "Orçamentista"
   | "Almoxarife"
-  | "Supervisor";
+  | "Supervisor"
+  | "Almoxarife Líder";

@@ -11,11 +11,12 @@ import { BqUserMapper } from "../mappers/bq-user-mapper";
 import { BqUserWithBaseContractMapper } from "../mappers/bq-user-with-base-contract-mapper";
 import { Injectable } from "@nestjs/common";
 import { Supervisor } from "src/domain/material-movimentation/enterprise/entities/supervisor";
+import { Administrator } from "src/domain/material-movimentation/enterprise/entities/Administrator";
 
 @Injectable()
 export class BqUserRepository implements UserRepository {
   constructor(private bigquery: BigQueryService) {}
-  async create(user: Storekeeper | Estimator | Supervisor): Promise<void> {
+  async create(user: Storekeeper | Estimator | Supervisor | Administrator): Promise<void> {
     await this.bigquery.user.create([BqUserMapper.toBigquery(user)]);
   }
 
@@ -85,7 +86,7 @@ export class BqUserRepository implements UserRepository {
 
   async findByIds(
     userIds: string[]
-  ): Promise<Array<Storekeeper | Estimator | Supervisor>> {
+  ): Promise<Array<Storekeeper | Estimator | Supervisor | Administrator>> {
     const users = await this.bigquery.user.select({
       whereIn: { id: userIds },
     });
@@ -93,7 +94,7 @@ export class BqUserRepository implements UserRepository {
     return users.map(BqUserMapper.toDomain);
   }
 
-  async save(user: Storekeeper | Estimator | Supervisor): Promise<void> {
+  async save(user: Storekeeper | Estimator | Supervisor | Administrator): Promise<void> {
     await this.bigquery.user.update({
       data: BqUserMapper.toBigqueryUser(user),
       where: { id: user.id.toString() },
@@ -102,7 +103,7 @@ export class BqUserRepository implements UserRepository {
 
   async findByEmail(
     email: string
-  ): Promise<Storekeeper | Estimator | Supervisor | null> {
+  ): Promise<Storekeeper | Estimator | Supervisor | Administrator | null> {
     const [user] = await this.bigquery.user.select({
       where: { email },
     });
@@ -114,7 +115,7 @@ export class BqUserRepository implements UserRepository {
 
   async findManyByName(
     name: string
-  ): Promise<(Storekeeper | Estimator | Supervisor)[]> {
+  ): Promise<(Storekeeper | Estimator | Supervisor | Administrator)[]> {
     const user = await this.bigquery.user.select({
       like: { name },
     });

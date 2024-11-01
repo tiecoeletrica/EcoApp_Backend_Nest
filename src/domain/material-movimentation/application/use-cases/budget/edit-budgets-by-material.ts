@@ -12,6 +12,7 @@ import { Material } from "src/domain/material-movimentation/enterprise/entities/
 import { Estimator } from "src/domain/material-movimentation/enterprise/entities/estimator";
 import { Storekeeper } from "src/domain/material-movimentation/enterprise/entities/storekeeper";
 import { Supervisor } from "src/domain/material-movimentation/enterprise/entities/supervisor";
+import { Administrator } from "src/domain/material-movimentation/enterprise/entities/Administrator";
 
 interface EditBudgetsByMaterialUseCaseRequest {
   contractId: string;
@@ -168,7 +169,7 @@ export class EditBudgetsByMaterialUseCase {
     budgetsToModify: Budget[],
     materialTo: Material,
     multiplier: number,
-    estimator: Storekeeper | Estimator | Supervisor,
+    estimator: Storekeeper | Estimator | Supervisor | Administrator,
     contractId: string
   ): Promise<Budget[]> {
     let newBudgets: Budget[] = [];

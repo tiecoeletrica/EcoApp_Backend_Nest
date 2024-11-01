@@ -3,4 +3,5 @@ export enum Role {
   Almoxarife = "Almoxarife",
   Orçamentista = "Orçamentista",
   Supervisor = "Supervisor",
+  AlmoxarifeLider = "Almoxarife Líder",
 }

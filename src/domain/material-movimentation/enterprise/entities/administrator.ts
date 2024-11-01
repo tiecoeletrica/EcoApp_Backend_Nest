@@ -2,16 +2,16 @@ import { UniqueEntityID } from "../../../../core/entities/unique-entity-id";
 import { Optional } from "../../../../core/types/optional";
 import { User, UserProps } from "./user";
 
-export interface StorekeeperProps extends UserProps {
-  type: "Almoxarife" | "Almoxarife Líder";
+export interface AdministratorProps extends UserProps {
+  type: "Administrador";
 }
 
-export class Storekeeper extends User<StorekeeperProps> {
+export class Administrator extends User<AdministratorProps> {
   static create(
-    props: Optional<StorekeeperProps, "status">,
+    props: Optional<AdministratorProps, "status">,
     id?: UniqueEntityID
   ) {
-    const storekeeper = new Storekeeper(
+    const administrator = new Administrator(
       {
         ...props,
         status: props.status ?? "ativo",
@@ -19,6 +19,6 @@ export class Storekeeper extends User<StorekeeperProps> {
       id
     );
 
-    return storekeeper;
+    return administrator;
   }
 }

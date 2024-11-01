@@ -11,6 +11,10 @@ import { Base } from "src/domain/material-movimentation/enterprise/entities/base
 import { ContractRepository } from "../../repositories/contract-repository";
 import { Contract } from "src/domain/material-movimentation/enterprise/entities/contract";
 import { NotValidError } from "../errors/not-valid-error";
+import { Storekeeper } from "src/domain/material-movimentation/enterprise/entities/storekeeper";
+import { Estimator } from "src/domain/material-movimentation/enterprise/entities/estimator";
+import { Supervisor } from "src/domain/material-movimentation/enterprise/entities/supervisor";
+import { Administrator } from "src/domain/material-movimentation/enterprise/entities/Administrator";
 
 interface EditUserUseCaseRequest {
   userId: string;
@@ -27,6 +31,8 @@ type EditUserResponse = Eihter<
   null
 >;
 
+type UserEntities = Storekeeper | Estimator | Supervisor | Administrator;
+
 @Injectable()
 export class EditUserUseCase {
   constructor(
@@ -36,20 +42,80 @@ export class EditUserUseCase {
     private contractRepository: ContractRepository
   ) {}
 
-  async execute({
-    userId,
-    authorId,
-    type,
-    baseId,
-    contractId,
-    status,
-    password,
-  }: EditUserUseCaseRequest): Promise<EditUserResponse> {
-    if (!password && !status && !contractId && !baseId && !type)
+  private base;
+  private contract;
+  private user;
+  private author;
+
+  async execute(request: EditUserUseCaseRequest): Promise<EditUserResponse> {
+    this.base = undefined;
+    this.contract = undefined;
+    this.user = undefined;
+    this.author = undefined;
+
+    const { userId, authorId, type, baseId, contractId, status, password } =
+      request;
+
+    if (this.noParametersToEdit(request)) {
       return left(
         new ResourceNotFoundError("Nenhum parâmetro para edição enviado")
       );
+    }
 
+    const usersResult = await this.findUsers(userId, authorId);
+    if (usersResult.isLeft()) return usersResult;
+
+    const user = this.user;
+    const author = this.author;
+
+    const permissionCheck = this.checkPermissions(
+      author,
+      user,
+      authorId,
+      type,
+      password
+    );
+    if (permissionCheck.isLeft()) return permissionCheck;
+
+    const baseAndContractResult = await this.validateBaseAndContract(
+      baseId,
+      contractId
+    );
+    if (baseAndContractResult.isLeft()) return baseAndContractResult;
+    const base = this.base;
+    const contract = this.contract;
+
+    if (base && contract) {
+      const baseContractCheck = this.checkBaseContract(base, contract);
+      if (baseContractCheck.isLeft()) return baseContractCheck;
+    }
+
+    this.updateUserFields(user, type, baseId, contractId, status, password);
+
+    if (base) {
+      const userBaseCheck = this.checkUserBase(user, base);
+      if (userBaseCheck.isLeft()) return userBaseCheck;
+    }
+
+    await this.userRepository.save(user);
+
+    return right(null);
+  }
+
+  private noParametersToEdit(request: EditUserUseCaseRequest): boolean {
+    return (
+      !request.password &&
+      !request.status &&
+      !request.contractId &&
+      !request.baseId &&
+      !request.type
+    );
+  }
+
+  private async findUsers(
+    userId: string,
+    authorId: string
+  ): Promise<Eihter<ResourceNotFoundError, null>> {
     const users = await this.userRepository.findByIds([authorId, userId]);
     const user = users.find((item) => item.id.toString() === userId);
     const author = users.find((item) => item.id.toString() === authorId);
@@ -59,31 +125,102 @@ export class EditUserUseCase {
     if (!user)
       return left(new ResourceNotFoundError("Id do usuário não encontrado"));
 
-    if (author.type != "Administrador" && authorId !== user.id.toString())
-      return left(new NotAllowedError());
+    this.user = user;
+    this.author = author;
 
+    return right(null);
+  }
+
+  private checkPermissions(
+    author: UserEntities,
+    user: UserEntities,
+    authorId: string,
+    type?: string,
+    password?: string
+  ): Eihter<NotAllowedError, null> {
+    const allowedToEditRoles = ["Almoxarife Líder", "Administrador"];
+
+    if (
+      !allowedToEditRoles.includes(author.type) &&
+      authorId !== user.id.toString()
+    ) {
+      return left(
+        new NotAllowedError(
+          "Você não tem permissão para editar outros usuários"
+        )
+      );
+    }
+
+    if (
+      author.type !== "Administrador" &&
+      authorId !== user.id.toString() &&
+      password
+    ) {
+      return left(
+        new NotAllowedError(
+          "Somente Administradores podem trocar a senha de outro usuário"
+        )
+      );
+    }
+
+    if (author.type !== "Administrador" && type === "Administrador") {
+      return left(
+        new NotAllowedError(
+          "Somente Administradores podem trocar o tipo de um usuário para Administrador"
+        )
+      );
+    }
+
+    return right(null);
+  }
+
+  private async validateBaseAndContract(
+    baseId?: string,
+    contractId?: string
+  ): Promise<Eihter<ResourceNotFoundError, null>> {
     let base: Base | null = null;
+    let contract: Contract | null = null;
+
     if (baseId) {
       base = await this.baseRepository.findById(baseId);
       if (!base)
         return left(new ResourceNotFoundError("baseId não encontrado"));
     }
 
-    let contract: Contract | null = null;
     if (contractId) {
       contract = await this.contractRepository.findById(contractId);
       if (!contract)
         return left(new ResourceNotFoundError("contractId não encontrado"));
     }
 
-    if (base && contract)
-      if (base.contractId.toString() !== contractId)
-        return left(
-          new NotValidError(
-            `A base ${base.baseName} não pertence ao contrato ${contract.contractName}`
-          )
-        );
+    this.base = base;
+    this.contract = contract;
 
+    return right(null);
+  }
+
+  private checkBaseContract(
+    base: Base,
+    contract: Contract
+  ): Eihter<NotValidError, null> {
+    if (base.contractId.toString() !== contract.id.toString()) {
+      return left(
+        new NotValidError(
+          `A base ${base.baseName} não pertence ao contrato ${contract.contractName}`
+        )
+      );
+    }
+    return right(null);
+  }
+
+  private async updateUserFields(
+    user: UserEntities,
+    type?: string,
+    baseId?: string,
+    contractId?: string,
+    status?: string,
+    password?: string
+  ): Promise<void> {
     user.type = (type ?? user.type) as UserType;
     user.baseId =
       baseId === undefined ? user.baseId : new UniqueEntityID(baseId);
@@ -96,17 +233,19 @@ export class EditUserUseCase {
       password === undefined
         ? user.password
         : await this.hashGenerator.hash(password);
+  }
 
-    if (base)
-      if (base.contractId.toString() !== user.contractId.toString())
-        return left(
-          new NotValidError(
-            `A base ${base.baseName} não pertence ao contrato do usuário`
-          )
-        );
-
-    await this.userRepository.save(user);
-
+  private checkUserBase(
+    user: UserEntities,
+    base: Base
+  ): Eihter<NotValidError, null> {
+    if (base.contractId.toString() !== user.contractId.toString()) {
+      return left(
+        new NotValidError(
+          `A base ${base.baseName} não pertence ao contrato do usuário`
+        )
+      );
+    }
     return right(null);
   }
 }

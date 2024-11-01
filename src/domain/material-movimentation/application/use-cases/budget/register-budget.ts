@@ -14,6 +14,7 @@ import { Contract } from "src/domain/material-movimentation/enterprise/entities/
 import { Estimator } from "src/domain/material-movimentation/enterprise/entities/estimator";
 import { Storekeeper } from "src/domain/material-movimentation/enterprise/entities/storekeeper";
 import { Supervisor } from "src/domain/material-movimentation/enterprise/entities/supervisor";
+import { Administrator } from "src/domain/material-movimentation/enterprise/entities/Administrator";
 
 interface RegisterBudgetUseCaseRequest {
   estimatorId: string;
@@ -116,7 +117,7 @@ export class RegisterBudgetUseCase {
     );
 
     let result:
-      | Array<Storekeeper | Estimator | Supervisor>
+      | Array<Storekeeper | Estimator | Supervisor | Administrator>
       | Material[]
       | Project[]
       | Contract[] = [];

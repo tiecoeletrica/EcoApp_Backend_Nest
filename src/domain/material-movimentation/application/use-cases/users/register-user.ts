@@ -13,6 +13,7 @@ import { ContractRepository } from "../../repositories/contract-repository";
 import { NotValidError } from "../errors/not-valid-error";
 import { ResourceAlreadyRegisteredError } from "../errors/resource-already-registered-error";
 import { Supervisor } from "src/domain/material-movimentation/enterprise/entities/supervisor";
+import { Administrator } from "src/domain/material-movimentation/enterprise/entities/Administrator";
 
 interface RegisterUserUseCaseRequest {
   name: string;
@@ -30,7 +31,7 @@ type RegisterUserResponse = Eihter<
   | NotValidError
   | ResourceAlreadyRegisteredError,
   {
-    user: Storekeeper | Estimator | Supervisor;
+    user: Storekeeper | Estimator | Supervisor | Administrator;
   }
 >;
 
@@ -52,7 +53,7 @@ export class RegisterUserUseCase {
     contractId,
     password,
   }: RegisterUserUseCaseRequest): Promise<RegisterUserResponse> {
-    let user: Storekeeper | Estimator | Supervisor;
+    let user: Storekeeper | Estimator | Supervisor | Administrator;
 
     const base = await this.baseRepository.findById(baseId);
     if (!base) return left(new ResourceNotFoundError("baseId não encontrado"));
@@ -93,6 +94,16 @@ export class RegisterUserUseCase {
         contractId: new UniqueEntityID(contractId),
         password: await this.hashGenerator.hash(password),
       });
+    else if (type === "Administrador")
+      user = Administrator.create({
+        name,
+        email,
+        cpf,
+        type,
+        baseId: new UniqueEntityID(baseId),
+        contractId: new UniqueEntityID(contractId),
+        password: await this.hashGenerator.hash(password),
+      });
     else
       user = Storekeeper.create({
         name,
@@ -113,6 +124,7 @@ export class RegisterUserUseCase {
     return [
       "Administrador",
       "Almoxarife",
+      "Almoxarife Líder",
       "Orçamentista",
       "Supervisor",
     ].includes(type as UserType);

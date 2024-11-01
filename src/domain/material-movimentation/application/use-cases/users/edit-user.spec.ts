@@ -52,7 +52,7 @@ describe("Edit User", () => {
     await inMemoryUserRepository.create(author);
     await inMemoryUserRepository.create(user);
 
-    await sut.execute({
+    const result = await sut.execute({
       authorId: author.id.toString(),
       userId: user.id.toString(),
       baseId: "Vitória da Conquista",
@@ -60,6 +60,7 @@ describe("Edit User", () => {
       password: "123456",
     });
 
+    expect(result.isRight()).toBeTruthy();
     expect(inMemoryUserRepository.items[1]).toMatchObject({
       props: {
         baseId: new UniqueEntityID("Vitória da Conquista"),
@@ -73,7 +74,7 @@ describe("Edit User", () => {
     ).toBe(true);
   });
 
-  it("should not be able to edit a user if the author is not 'Administrador' or itself", async () => {
+  it("should not be able to edit a user if the author is not 'Administrador' 'Almoxarife Líder' or itself", async () => {
     const base = makeBase({}, new UniqueEntityID("Vitória da Conquista"));
     await inMemoryBaseRepository.create(base);
 
@@ -148,5 +149,61 @@ describe("Edit User", () => {
 
     expect(result.isLeft()).toBeTruthy();
     expect(result.value).toBeInstanceOf(NotValidError);
+  });
+
+  it("should not be able to edit the password of another user if author is not 'Administrador'", async () => {
+    const contract = makeContract({}, new UniqueEntityID("Bahia"));
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase(
+      { contractId: contract.id },
+      new UniqueEntityID("Vitória da Conquista")
+    );
+    await inMemoryBaseRepository.create(base);
+
+    const user = makeUser();
+    const author = makeUser({ type: "Almoxarife Líder" });
+
+    await inMemoryUserRepository.create(author);
+    await inMemoryUserRepository.create(user);
+
+    const result = await sut.execute({
+      authorId: author.id.toString(),
+      userId: user.id.toString(),
+      baseId: "Vitória da Conquista",
+      contractId: "Bahia",
+      password: "123456",
+    });
+
+    expect(result.isLeft()).toBeTruthy();
+    expect(inMemoryUserRepository.items[1].baseId).toEqual(user.baseId);
+    expect(result.value).toBeInstanceOf(NotAllowedError);
+  });
+
+  it("should not be able update user type to 'Administrador' if author is not 'Administrador'", async () => {
+    const contract = makeContract({}, new UniqueEntityID("Bahia"));
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase(
+      { contractId: contract.id },
+      new UniqueEntityID("Vitória da Conquista")
+    );
+    await inMemoryBaseRepository.create(base);
+
+    const user = makeUser({ type: "Supervisor" });
+    const author = makeUser({ type: "Almoxarife Líder" });
+
+    await inMemoryUserRepository.create(author);
+    await inMemoryUserRepository.create(user);
+
+    const result = await sut.execute({
+      authorId: author.id.toString(),
+      userId: user.id.toString(),
+      type: "Administrador",
+    });
+
+    expect(result.isLeft()).toBeTruthy();
+    expect(inMemoryUserRepository.items[1].type).toEqual("Supervisor");
+    expect(result.value).toBeInstanceOf(NotAllowedError);
   });
 });

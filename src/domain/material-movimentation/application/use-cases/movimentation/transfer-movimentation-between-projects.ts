@@ -14,6 +14,7 @@ import { Base } from "src/domain/material-movimentation/enterprise/entities/base
 import { UserRepository } from "../../repositories/user-repository";
 import { Estimator } from "src/domain/material-movimentation/enterprise/entities/estimator";
 import { Supervisor } from "src/domain/material-movimentation/enterprise/entities/supervisor";
+import { Administrator } from "src/domain/material-movimentation/enterprise/entities/Administrator";
 
 interface TransferMovimentationBetweenProjectsUseCaseRequest {
   storekeeperId: string;
@@ -235,7 +236,7 @@ export class TransferMovimentationBetweenProjectsUseCase {
     }
 
     let result:
-      | Array<Storekeeper | Estimator | Supervisor>
+      | Array<Storekeeper | Estimator | Supervisor | Administrator>
       | Material[]
       | Project[]
       | Base[] = [];

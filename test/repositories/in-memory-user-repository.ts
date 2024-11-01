@@ -9,16 +9,18 @@ import {
   PaginationParamsResponse,
 } from "src/core/repositories/pagination-params";
 import { Supervisor } from "src/domain/material-movimentation/enterprise/entities/supervisor";
+import { Administrator } from "src/domain/material-movimentation/enterprise/entities/Administrator";
 
 export class InMemoryUserRepository implements UserRepository {
-  public items: Array<Storekeeper | Estimator | Supervisor> = [];
+  public items: Array<Storekeeper | Estimator | Supervisor | Administrator> =
+    [];
 
   constructor(
     private baseRepository: InMemoryBaseRepository,
     private contractRepository: InMemoryContractRepository
   ) {}
 
-  async create(user: Storekeeper | Estimator | Supervisor) {
+  async create(user: Storekeeper | Estimator | Supervisor | Administrator) {
     this.items.push(user);
   }
 
@@ -121,13 +123,13 @@ export class InMemoryUserRepository implements UserRepository {
 
   async findByIds(
     ids: string[]
-  ): Promise<Array<Storekeeper | Estimator | Supervisor>> {
+  ): Promise<Array<Storekeeper | Estimator | Supervisor | Administrator>> {
     const user = this.items.filter((item) => ids.includes(item.id.toString()));
 
     return user;
   }
 
-  async save(user: Storekeeper | Estimator | Supervisor) {
+  async save(user: Storekeeper | Estimator | Supervisor | Administrator) {
     const itemIndex = this.items.findIndex((item) => item.id == user.id);
 
     this.items[itemIndex] = user;
@@ -135,7 +137,7 @@ export class InMemoryUserRepository implements UserRepository {
 
   async findByEmail(
     email: string
-  ): Promise<Storekeeper | Estimator | Supervisor | null> {
+  ): Promise<Storekeeper | Estimator | Supervisor | Administrator | null> {
     const user = this.items.find((item) => item.email.toString() === email);
 
     if (!user) return null;
@@ -145,7 +147,7 @@ export class InMemoryUserRepository implements UserRepository {
 
   async findManyByName(
     name: string
-  ): Promise<(Storekeeper | Estimator | Supervisor)[]> {
+  ): Promise<(Storekeeper | Estimator | Supervisor | Administrator)[]> {
     const user = this.items.filter((item) =>
       item.name.toString().includes(name)
     );

@@ -6,9 +6,12 @@ import { Estimator } from "../../enterprise/entities/estimator";
 import { Storekeeper } from "../../enterprise/entities/storekeeper";
 import { UserWithBaseContract } from "../../enterprise/entities/value-objects/user-with-base-contract";
 import { Supervisor } from "../../enterprise/entities/supervisor";
+import { Administrator } from "../../enterprise/entities/Administrator";
 
 export abstract class UserRepository {
-  abstract create(user: Storekeeper | Estimator | Supervisor): Promise<void>;
+  abstract create(
+    user: Storekeeper | Estimator | Supervisor | Administrator
+  ): Promise<void>;
   abstract findByIdWithBaseContract(
     userId: string
   ): Promise<UserWithBaseContract | null>;
@@ -23,13 +26,15 @@ export abstract class UserRepository {
   }>;
   abstract findByIds(
     userIds: string[]
-  ): Promise<Array<Storekeeper | Estimator | Supervisor>>;
-  abstract save(user: Storekeeper | Estimator | Supervisor): Promise<void>;
+  ): Promise<Array<Storekeeper | Estimator | Supervisor | Administrator>>;
+  abstract save(
+    user: Storekeeper | Estimator | Supervisor | Administrator
+  ): Promise<void>;
   abstract findByEmail(
     email: string
-  ): Promise<Storekeeper | Estimator | Supervisor | null>;
+  ): Promise<Storekeeper | Estimator | Supervisor | Administrator | null>;
   abstract findManyByName(
     name: string
-  ): Promise<(Storekeeper | Estimator | Supervisor)[]>;
+  ): Promise<(Storekeeper | Estimator | Supervisor | Administrator)[]>;
   abstract delete(userId: string): Promise<void>;
 }
