@@ -6,7 +6,7 @@ import { Project } from "src/domain/material-movimentation/enterprise/entities/p
 import { Storekeeper } from "src/domain/material-movimentation/enterprise/entities/storekeeper";
 import { Base } from "src/domain/material-movimentation/enterprise/entities/base";
 import { UserType } from "src/core/types/user-type";
-import { Administrator } from "src/domain/material-movimentation/enterprise/entities/Administrator";
+import { Administrator } from "src/domain/material-movimentation/enterprise/entities/administrator";
 
 export class BqMovimentationWithDetailsMapper {
   static toDomain(raw: BqMovimentationProps): MovimentationWithDetails {

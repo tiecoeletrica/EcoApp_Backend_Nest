@@ -18,7 +18,7 @@ import {
 import {
   Administrator,
   AdministratorProps,
-} from "src/domain/material-movimentation/enterprise/entities/Administrator";
+} from "src/domain/material-movimentation/enterprise/entities/administrator";
 import { UserEntities } from "src/core/types/user-type";
 
 type UserMakeProps =

@@ -4,7 +4,7 @@ import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { BqUserProps } from "../schemas/user";
 import { UserEntities, UserType } from "src/core/types/user-type";
 import { Supervisor } from "src/domain/material-movimentation/enterprise/entities/supervisor";
-import { Administrator } from "src/domain/material-movimentation/enterprise/entities/Administrator";
+import { Administrator } from "src/domain/material-movimentation/enterprise/entities/administrator";
 
 export class BqUserMapper {
   static toDomain(raw: BqUserProps): UserEntities {

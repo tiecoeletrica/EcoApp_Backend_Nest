@@ -13,7 +13,7 @@ import { ContractRepository } from "../../repositories/contract-repository";
 import { NotValidError } from "../errors/not-valid-error";
 import { ResourceAlreadyRegisteredError } from "../errors/resource-already-registered-error";
 import { Supervisor } from "src/domain/material-movimentation/enterprise/entities/supervisor";
-import { Administrator } from "src/domain/material-movimentation/enterprise/entities/Administrator";
+import { Administrator } from "src/domain/material-movimentation/enterprise/entities/administrator";
 import { NotAllowedError } from "../errors/not-allowed-error";
 
 interface RegisterUserUseCaseRequest {
