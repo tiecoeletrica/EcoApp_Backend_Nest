@@ -4,19 +4,16 @@ import {
   PaginationParams,
   PaginationParamsResponse,
 } from "src/core/repositories/pagination-params";
-import { Estimator } from "src/domain/material-movimentation/enterprise/entities/estimator";
-import { Storekeeper } from "src/domain/material-movimentation/enterprise/entities/storekeeper";
 import { UserWithBaseContract } from "src/domain/material-movimentation/enterprise/entities/value-objects/user-with-base-contract";
 import { BqUserMapper } from "../mappers/bq-user-mapper";
 import { BqUserWithBaseContractMapper } from "../mappers/bq-user-with-base-contract-mapper";
 import { Injectable } from "@nestjs/common";
-import { Supervisor } from "src/domain/material-movimentation/enterprise/entities/supervisor";
-import { Administrator } from "src/domain/material-movimentation/enterprise/entities/Administrator";
+import { UserEntities } from "src/core/types/user-type";
 
 @Injectable()
 export class BqUserRepository implements UserRepository {
   constructor(private bigquery: BigQueryService) {}
-  async create(user: Storekeeper | Estimator | Supervisor | Administrator): Promise<void> {
+  async create(user: UserEntities): Promise<void> {
     await this.bigquery.user.create([BqUserMapper.toBigquery(user)]);
   }
 
@@ -84,9 +81,7 @@ export class BqUserRepository implements UserRepository {
     };
   }
 
-  async findByIds(
-    userIds: string[]
-  ): Promise<Array<Storekeeper | Estimator | Supervisor | Administrator>> {
+  async findByIds(userIds: string[]): Promise<Array<UserEntities>> {
     const users = await this.bigquery.user.select({
       whereIn: { id: userIds },
     });
@@ -94,16 +89,14 @@ export class BqUserRepository implements UserRepository {
     return users.map(BqUserMapper.toDomain);
   }
 
-  async save(user: Storekeeper | Estimator | Supervisor | Administrator): Promise<void> {
+  async save(user: UserEntities): Promise<void> {
     await this.bigquery.user.update({
       data: BqUserMapper.toBigqueryUser(user),
       where: { id: user.id.toString() },
     });
   }
 
-  async findByEmail(
-    email: string
-  ): Promise<Storekeeper | Estimator | Supervisor | Administrator | null> {
+  async findByEmail(email: string): Promise<UserEntities | null> {
     const [user] = await this.bigquery.user.select({
       where: { email },
     });
@@ -113,9 +106,7 @@ export class BqUserRepository implements UserRepository {
     return BqUserMapper.toDomain(user);
   }
 
-  async findManyByName(
-    name: string
-  ): Promise<(Storekeeper | Estimator | Supervisor | Administrator)[]> {
+  async findManyByName(name: string): Promise<UserEntities[]> {
     const user = await this.bigquery.user.select({
       like: { name },
     });

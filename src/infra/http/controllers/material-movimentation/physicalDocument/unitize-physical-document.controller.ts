@@ -1,9 +1,9 @@
 import {
   BadRequestException,
+  ForbiddenException,
   NotFoundException,
   Param,
   Put,
-  UnauthorizedException,
 } from "@nestjs/common";
 import { Body, Controller, HttpCode } from "@nestjs/common";
 import { z } from "zod";
@@ -49,11 +49,11 @@ export class UnitizePhysicalDocumentController {
 
       switch (error.constructor) {
         case NotAllowedError:
-          throw new UnauthorizedException();
+          throw new ForbiddenException(error.message);
         case ResourceNotFoundError:
-          throw new NotFoundException();
+          throw new NotFoundException(error.message);
         default:
-          throw new BadRequestException();
+          throw new BadRequestException(error.message);
       }
     }
 

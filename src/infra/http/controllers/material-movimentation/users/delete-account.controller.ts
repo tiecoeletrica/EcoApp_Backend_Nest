@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Delete,
+  ForbiddenException,
   NotFoundException,
   Param,
   UnauthorizedException,
@@ -12,7 +13,6 @@ import { ResourceNotFoundError } from "src/domain/material-movimentation/applica
 import { ApiTags } from "@nestjs/swagger";
 import { NotAllowedError } from "src/domain/material-movimentation/application/use-cases/errors/not-allowed-error";
 import { EditAccountDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/users/response decorators/edit-account.decorator";
-import { Storekeeper } from "src/domain/material-movimentation/enterprise/entities/storekeeper";
 import { DeleteUserUseCase } from "src/domain/material-movimentation/application/use-cases/users/delete-user";
 import { UseCases } from "src/core/role-authorization/use-cases.enum";
 import { RoleAuth } from "src/infra/auth/role-auth.decorator";
@@ -37,9 +37,9 @@ export class DeleteAccountController {
 
       switch (error.constructor) {
         case NotAllowedError:
-          throw new UnauthorizedException();
+          throw new ForbiddenException(error.message);
         case ResourceNotFoundError:
-          throw new NotFoundException();
+          throw new NotFoundException(error.message);
         default:
           throw new BadRequestException();
       }

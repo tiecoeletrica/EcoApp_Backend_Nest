@@ -9,6 +9,7 @@ import { WrongTypeError } from "../errors/wrong-type";
 import { RegisterUserUseCase } from "./register-user";
 import { makeContract } from "test/factories/make-contract";
 import { NotValidError } from "../errors/not-valid-error";
+import { NotAllowedError } from "../errors/not-allowed-error";
 
 let inMemoryUserRepository: InMemoryUserRepository;
 let inMemoryContractRepository: InMemoryContractRepository;
@@ -43,6 +44,7 @@ describe("Create user", () => {
     await inMemoryBaseRepository.create(base);
 
     const result = await sut.execute({
+      authorType: "Administrador",
       name: "Rodrigo",
       email: "rodrigo@ecoeletrica.com.br",
       cpf: "12345678901",
@@ -70,6 +72,7 @@ describe("Create user", () => {
     await inMemoryBaseRepository.create(base);
 
     const result = await sut.execute({
+      authorType: "Administrador",
       name: "Rodrigo",
       email: "rodrigo@ecoeletrica.com.br",
       cpf: "12345678901",
@@ -91,6 +94,7 @@ describe("Create user", () => {
 
   it("should not be able to register a user if baseId does not exist", async () => {
     const result = await sut.execute({
+      authorType: "Administrador",
       name: "Rodrigo",
       email: "rodrigo@ecoeletrica.com.br",
       cpf: "12345678901",
@@ -112,6 +116,7 @@ describe("Create user", () => {
     await inMemoryBaseRepository.create(base);
 
     const result = await sut.execute({
+      authorType: "Administrador",
       name: "Rodrigo",
       email: "rodrigo@ecoeletrica.com.br",
       cpf: "12345678901",
@@ -133,6 +138,7 @@ describe("Create user", () => {
     await inMemoryBaseRepository.create(base);
 
     const result = await sut.execute({
+      authorType: "Administrador",
       name: "Rodrigo",
       email: "rodrigo@ecoeletrica.com.br",
       cpf: "12345678901",
@@ -144,5 +150,49 @@ describe("Create user", () => {
 
     expect(result.isLeft()).toBeTruthy();
     expect(result.value).toBeInstanceOf(NotValidError);
+  });
+
+  it("should not be able to register a user the author is not 'Almoxarife Líder' or 'Administrador'", async () => {
+    const contract = makeContract();
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase({ contractId: contract.id });
+    await inMemoryBaseRepository.create(base);
+
+    const result = await sut.execute({
+      authorType: "Almoxarife",
+      name: "Rodrigo",
+      email: "rodrigo@ecoeletrica.com.br",
+      cpf: "12345678901",
+      type: "Almoxarife",
+      baseId: base.id.toString(),
+      contractId: contract.id.toString(),
+      password: "123456",
+    });
+
+    expect(result.isLeft()).toBeTruthy();
+    expect(result.value).toBeInstanceOf(NotAllowedError);
+  });
+
+  it("should not be able to register a user with type 'Administrador' if the author is not 'Administrador'", async () => {
+    const contract = makeContract();
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase({ contractId: contract.id });
+    await inMemoryBaseRepository.create(base);
+
+    const result = await sut.execute({
+      authorType: "Almoxarife Líder",
+      name: "Rodrigo",
+      email: "rodrigo@ecoeletrica.com.br",
+      cpf: "12345678901",
+      type: "Administrador",
+      baseId: base.id.toString(),
+      contractId: contract.id.toString(),
+      password: "123456",
+    });
+
+    expect(result.isLeft()).toBeTruthy();
+    expect(result.value).toBeInstanceOf(NotAllowedError);
   });
 });

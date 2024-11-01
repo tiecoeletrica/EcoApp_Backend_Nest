@@ -19,20 +19,19 @@ export class CreateAccountBodyDto {
   })
   cpf!: string;
   @ApiProperty({
-    example: "Administrador/Almoxarife/Orçamentista/Supervisor",
+    example:
+      "Administrador/Almoxarife/Orçamentista/Supervisor/Almoxarife Líder",
     description: "establish the type of access of the user",
   })
   type!: string;
   @ApiProperty({
     example: "base-id",
-    description:
-      "base's id that a storekeeper que interect. undefined if the user is not a storekeeper",
+    description: "base's id of the user",
   })
   baseId!: string;
   @ApiProperty({
     example: "contract-id",
-    description:
-      "contract's id that a estimator que interect. undefined if the user is not a estimator",
+    description: "contract's id of the user",
     required: false,
   })
   contractId!: string;

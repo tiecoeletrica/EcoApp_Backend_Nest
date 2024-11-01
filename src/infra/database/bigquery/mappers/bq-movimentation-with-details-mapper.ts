@@ -6,6 +6,7 @@ import { Project } from "src/domain/material-movimentation/enterprise/entities/p
 import { Storekeeper } from "src/domain/material-movimentation/enterprise/entities/storekeeper";
 import { Base } from "src/domain/material-movimentation/enterprise/entities/base";
 import { UserType } from "src/core/types/user-type";
+import { Administrator } from "src/domain/material-movimentation/enterprise/entities/Administrator";
 
 export class BqMovimentationWithDetailsMapper {
   static toDomain(raw: BqMovimentationProps): MovimentationWithDetails {
@@ -31,23 +32,46 @@ export class BqMovimentationWithDetailsMapper {
         },
         new UniqueEntityID(raw.material?.id)
       ),
-      storekeeper: Storekeeper.create(
-        {
-          baseId: new UniqueEntityID(
-            raw.user?.baseId == null ? undefined : raw.user?.baseId
-          ),
-          cpf: raw.user?.cpf ?? "",
-          email: raw.user?.email ?? "",
-          name: raw.user?.name ?? "",
-          password: raw.user?.password ?? "",
-          type: userType,
-          status: raw.user?.status ?? "",
-          contractId: new UniqueEntityID(
-            raw.user?.contractId == null ? undefined : raw.user?.contractId
-          ),
-        },
-        new UniqueEntityID(raw.user?.id)
-      ),
+      storekeeper:
+        userType === "Administrador"
+          ? Administrator.create(
+              {
+                baseId: new UniqueEntityID(
+                  raw.user?.baseId == null ? undefined : raw.user?.baseId
+                ),
+                cpf: raw.user?.cpf ?? "",
+                email: raw.user?.email ?? "",
+                name: raw.user?.name ?? "",
+                password: raw.user?.password ?? "",
+                type: userType,
+                status: raw.user?.status ?? "",
+                contractId: new UniqueEntityID(
+                  raw.user?.contractId == null
+                    ? undefined
+                    : raw.user?.contractId
+                ),
+              },
+              new UniqueEntityID(raw.user?.id)
+            )
+          : Storekeeper.create(
+              {
+                baseId: new UniqueEntityID(
+                  raw.user?.baseId == null ? undefined : raw.user?.baseId
+                ),
+                cpf: raw.user?.cpf ?? "",
+                email: raw.user?.email ?? "",
+                name: raw.user?.name ?? "",
+                password: raw.user?.password ?? "",
+                type: userType,
+                status: raw.user?.status ?? "",
+                contractId: new UniqueEntityID(
+                  raw.user?.contractId == null
+                    ? undefined
+                    : raw.user?.contractId
+                ),
+              },
+              new UniqueEntityID(raw.user?.id)
+            ),
       project: Project.create(
         {
           baseId: new UniqueEntityID(raw.project?.baseId),
@@ -70,7 +94,9 @@ export class BqMovimentationWithDetailsMapper {
 
   private static isUserType(
     type: string
-  ): type is "Administrador" | "Almoxarife" {
-    return ["Administrador", "Almoxarife"].includes(type as UserType);
+  ): type is "Administrador" | "Almoxarife" | "Almoxarife Líder" {
+    return ["Administrador", "Almoxarife", "Almoxarife Líder"].includes(
+      type as UserType
+    );
   }
 }

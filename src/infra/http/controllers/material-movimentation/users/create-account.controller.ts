@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ConflictException,
+  ForbiddenException,
   NotFoundException,
   UnprocessableEntityException,
   UsePipes,
@@ -18,6 +19,9 @@ import { RegisterUserUseCase } from "src/domain/material-movimentation/applicati
 import { NotValidError } from "src/domain/material-movimentation/application/use-cases/errors/not-valid-error";
 import { UseCases } from "src/core/role-authorization/use-cases.enum";
 import { RoleAuth } from "src/infra/auth/role-auth.decorator";
+import { UserPayload } from "src/infra/auth/jwt-strategy.guard";
+import { CurrentUser } from "src/infra/auth/current-user.decorator";
+import { NotAllowedError } from "src/domain/material-movimentation/application/use-cases/errors/not-allowed-error";
 
 const createAccountBodyDto = z.object({
   name: z.string(),
@@ -36,13 +40,17 @@ export class CreateAccountController {
 
   @Post()
   @HttpCode(201)
-  @UsePipes(new ZodValidationPipe(createAccountBodyDto))
   @CreateAccountDecorator()
   @RoleAuth(UseCases.RegisterUserUseCase)
-  async handle(@Body() body: CreateAccountBodyDto) {
+  async handle(
+    @Body(new ZodValidationPipe(createAccountBodyDto))
+    body: CreateAccountBodyDto,
+    @CurrentUser() user: UserPayload
+  ) {
     const { name, email, password, cpf, type, baseId, contractId } = body;
 
     const result = await this.registerUserUseCase.execute({
+      authorType: user.type,
       name,
       email,
       password,
@@ -56,6 +64,8 @@ export class CreateAccountController {
       const error = result.value;
 
       switch (error.constructor) {
+        case NotAllowedError:
+          throw new ForbiddenException(error.message);
         case NotValidError:
           throw new ConflictException(error.message);
         case ResourceAlreadyRegisteredError:

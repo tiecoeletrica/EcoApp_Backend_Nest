@@ -6,15 +6,11 @@ import { NotAllowedError } from "../errors/not-allowed-error";
 import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 import { HashGenerator } from "../../cryptography/hash-generator";
 import { BaseRepository } from "../../repositories/base-repository";
-import { UserType } from "src/core/types/user-type";
+import { UserEntities, UserType } from "src/core/types/user-type";
 import { Base } from "src/domain/material-movimentation/enterprise/entities/base";
 import { ContractRepository } from "../../repositories/contract-repository";
 import { Contract } from "src/domain/material-movimentation/enterprise/entities/contract";
 import { NotValidError } from "../errors/not-valid-error";
-import { Storekeeper } from "src/domain/material-movimentation/enterprise/entities/storekeeper";
-import { Estimator } from "src/domain/material-movimentation/enterprise/entities/estimator";
-import { Supervisor } from "src/domain/material-movimentation/enterprise/entities/supervisor";
-import { Administrator } from "src/domain/material-movimentation/enterprise/entities/Administrator";
 
 interface EditUserUseCaseRequest {
   userId: string;
@@ -30,8 +26,6 @@ type EditUserResponse = Eihter<
   ResourceNotFoundError | NotAllowedError | NotValidError,
   null
 >;
-
-type UserEntities = Storekeeper | Estimator | Supervisor | Administrator;
 
 @Injectable()
 export class EditUserUseCase {

@@ -11,10 +11,7 @@ import { Material } from "src/domain/material-movimentation/enterprise/entities/
 import { Project } from "src/domain/material-movimentation/enterprise/entities/project";
 import { ContractRepository } from "../../repositories/contract-repository";
 import { Contract } from "src/domain/material-movimentation/enterprise/entities/contract";
-import { Estimator } from "src/domain/material-movimentation/enterprise/entities/estimator";
-import { Storekeeper } from "src/domain/material-movimentation/enterprise/entities/storekeeper";
-import { Supervisor } from "src/domain/material-movimentation/enterprise/entities/supervisor";
-import { Administrator } from "src/domain/material-movimentation/enterprise/entities/Administrator";
+import { UserEntities } from "src/core/types/user-type";
 
 interface RegisterBudgetUseCaseRequest {
   estimatorId: string;
@@ -116,11 +113,7 @@ export class RegisterBudgetUseCase {
       key
     );
 
-    let result:
-      | Array<Storekeeper | Estimator | Supervisor | Administrator>
-      | Material[]
-      | Project[]
-      | Contract[] = [];
+    let result: Array<UserEntities> | Material[] | Project[] | Contract[] = [];
 
     switch (key) {
       case "estimatorId":

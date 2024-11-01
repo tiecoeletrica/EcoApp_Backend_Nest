@@ -7,14 +7,11 @@ import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 import { MaterialRepository } from "../../repositories/material-repository";
 import { ProjectRepository } from "../../repositories/project-repository";
 import { BaseRepository } from "../../repositories/base-repository";
-import { Storekeeper } from "src/domain/material-movimentation/enterprise/entities/storekeeper";
 import { Material } from "src/domain/material-movimentation/enterprise/entities/material";
 import { Project } from "src/domain/material-movimentation/enterprise/entities/project";
 import { Base } from "src/domain/material-movimentation/enterprise/entities/base";
 import { UserRepository } from "../../repositories/user-repository";
-import { Estimator } from "src/domain/material-movimentation/enterprise/entities/estimator";
-import { Supervisor } from "src/domain/material-movimentation/enterprise/entities/supervisor";
-import { Administrator } from "src/domain/material-movimentation/enterprise/entities/Administrator";
+import { UserEntities } from "src/core/types/user-type";
 
 interface TransferMovimentationBetweenProjectsUseCaseRequest {
   storekeeperId: string;
@@ -236,7 +233,7 @@ export class TransferMovimentationBetweenProjectsUseCase {
     }
 
     let result:
-      | Array<Storekeeper | Estimator | Supervisor | Administrator>
+      | Array<UserEntities>
       | Material[]
       | Project[]
       | Base[] = [];

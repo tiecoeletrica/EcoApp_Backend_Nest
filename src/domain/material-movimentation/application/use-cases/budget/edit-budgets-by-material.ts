@@ -9,10 +9,7 @@ import { ProjectRepository } from "../../repositories/project-repository";
 import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 import { Project } from "src/domain/material-movimentation/enterprise/entities/project";
 import { Material } from "src/domain/material-movimentation/enterprise/entities/material";
-import { Estimator } from "src/domain/material-movimentation/enterprise/entities/estimator";
-import { Storekeeper } from "src/domain/material-movimentation/enterprise/entities/storekeeper";
-import { Supervisor } from "src/domain/material-movimentation/enterprise/entities/supervisor";
-import { Administrator } from "src/domain/material-movimentation/enterprise/entities/Administrator";
+import { UserEntities } from "src/core/types/user-type";
 
 interface EditBudgetsByMaterialUseCaseRequest {
   contractId: string;
@@ -169,7 +166,7 @@ export class EditBudgetsByMaterialUseCase {
     budgetsToModify: Budget[],
     materialTo: Material,
     multiplier: number,
-    estimator: Storekeeper | Estimator | Supervisor | Administrator,
+    estimator: UserEntities,
     contractId: string
   ): Promise<Budget[]> {
     let newBudgets: Budget[] = [];

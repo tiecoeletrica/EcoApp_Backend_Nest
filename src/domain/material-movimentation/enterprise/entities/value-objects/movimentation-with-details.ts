@@ -1,19 +1,16 @@
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { ValueObject } from "src/core/entities/value-object";
-import { Storekeeper } from "../storekeeper";
 import { Material } from "../material";
 import { Project } from "../project";
 import { Base } from "../base";
-import { Estimator } from "../estimator";
-import { Supervisor } from "../supervisor";
-import { Administrator } from "../Administrator";
+import { UserEntities } from "src/core/types/user-type";
 
 export interface MovimentationWithDetailsProps {
   movimentationId: UniqueEntityID;
   value: number;
   createdAt: Date;
   observation: string;
-  storekeeper: Storekeeper | Estimator | Supervisor | Administrator;
+  storekeeper: UserEntities;
   material: Material;
   project: Project;
   base: Base;

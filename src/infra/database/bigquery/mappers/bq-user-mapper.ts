@@ -2,14 +2,12 @@ import { Storekeeper } from "src/domain/material-movimentation/enterprise/entiti
 import { Estimator } from "src/domain/material-movimentation/enterprise/entities/estimator";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { BqUserProps } from "../schemas/user";
-import { UserType } from "src/core/types/user-type";
+import { UserEntities, UserType } from "src/core/types/user-type";
 import { Supervisor } from "src/domain/material-movimentation/enterprise/entities/supervisor";
 import { Administrator } from "src/domain/material-movimentation/enterprise/entities/Administrator";
 
 export class BqUserMapper {
-  static toDomain(
-    raw: BqUserProps
-  ): Storekeeper | Estimator | Supervisor | Administrator {
+  static toDomain(raw: BqUserProps): UserEntities {
     if (raw.type === "Orçamentista") {
       return Estimator.create(
         {
@@ -69,9 +67,7 @@ export class BqUserMapper {
     }
   }
 
-  static toBigquery(
-    storekeeperOrEstimator: Storekeeper | Estimator | Supervisor | Administrator
-  ): BqUserProps {
+  static toBigquery(storekeeperOrEstimator: UserEntities): BqUserProps {
     return {
       id: storekeeperOrEstimator.id.toString(),
       cpf: storekeeperOrEstimator.cpf,
@@ -85,9 +81,7 @@ export class BqUserMapper {
     };
   }
 
-  static toBigqueryUser(
-    user: Storekeeper | Estimator | Supervisor | Administrator
-  ): BqUserProps {
+  static toBigqueryUser(user: UserEntities): BqUserProps {
     return {
       id: user.id.toString(),
       cpf: user.cpf,

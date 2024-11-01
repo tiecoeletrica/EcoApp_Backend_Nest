@@ -2,16 +2,11 @@ import {
   PaginationParams,
   PaginationParamsResponse,
 } from "src/core/repositories/pagination-params";
-import { Estimator } from "../../enterprise/entities/estimator";
-import { Storekeeper } from "../../enterprise/entities/storekeeper";
 import { UserWithBaseContract } from "../../enterprise/entities/value-objects/user-with-base-contract";
-import { Supervisor } from "../../enterprise/entities/supervisor";
-import { Administrator } from "../../enterprise/entities/Administrator";
+import { UserEntities } from "src/core/types/user-type";
 
 export abstract class UserRepository {
-  abstract create(
-    user: Storekeeper | Estimator | Supervisor | Administrator
-  ): Promise<void>;
+  abstract create(user: UserEntities): Promise<void>;
   abstract findByIdWithBaseContract(
     userId: string
   ): Promise<UserWithBaseContract | null>;
@@ -24,17 +19,9 @@ export abstract class UserRepository {
     users: UserWithBaseContract[];
     pagination: PaginationParamsResponse;
   }>;
-  abstract findByIds(
-    userIds: string[]
-  ): Promise<Array<Storekeeper | Estimator | Supervisor | Administrator>>;
-  abstract save(
-    user: Storekeeper | Estimator | Supervisor | Administrator
-  ): Promise<void>;
-  abstract findByEmail(
-    email: string
-  ): Promise<Storekeeper | Estimator | Supervisor | Administrator | null>;
-  abstract findManyByName(
-    name: string
-  ): Promise<(Storekeeper | Estimator | Supervisor | Administrator)[]>;
+  abstract findByIds(userIds: string[]): Promise<Array<UserEntities>>;
+  abstract save(user: UserEntities): Promise<void>;
+  abstract findByEmail(email: string): Promise<UserEntities | null>;
+  abstract findManyByName(name: string): Promise<UserEntities[]>;
   abstract delete(userId: string): Promise<void>;
 }

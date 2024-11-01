@@ -1,6 +1,4 @@
 import { UserRepository } from "src/domain/material-movimentation/application/repositories/user-repository";
-import { Estimator } from "src/domain/material-movimentation/enterprise/entities/estimator";
-import { Storekeeper } from "src/domain/material-movimentation/enterprise/entities/storekeeper";
 import { InMemoryBaseRepository } from "./in-memory-base-repository";
 import { InMemoryContractRepository } from "./in-memory-contract-repository";
 import { UserWithBaseContract } from "src/domain/material-movimentation/enterprise/entities/value-objects/user-with-base-contract";
@@ -8,19 +6,17 @@ import {
   PaginationParams,
   PaginationParamsResponse,
 } from "src/core/repositories/pagination-params";
-import { Supervisor } from "src/domain/material-movimentation/enterprise/entities/supervisor";
-import { Administrator } from "src/domain/material-movimentation/enterprise/entities/Administrator";
+import { UserEntities } from "src/core/types/user-type";
 
 export class InMemoryUserRepository implements UserRepository {
-  public items: Array<Storekeeper | Estimator | Supervisor | Administrator> =
-    [];
+  public items: Array<UserEntities> = [];
 
   constructor(
     private baseRepository: InMemoryBaseRepository,
     private contractRepository: InMemoryContractRepository
   ) {}
 
-  async create(user: Storekeeper | Estimator | Supervisor | Administrator) {
+  async create(user: UserEntities) {
     this.items.push(user);
   }
 
@@ -121,23 +117,19 @@ export class InMemoryUserRepository implements UserRepository {
     return { users, pagination };
   }
 
-  async findByIds(
-    ids: string[]
-  ): Promise<Array<Storekeeper | Estimator | Supervisor | Administrator>> {
+  async findByIds(ids: string[]): Promise<Array<UserEntities>> {
     const user = this.items.filter((item) => ids.includes(item.id.toString()));
 
     return user;
   }
 
-  async save(user: Storekeeper | Estimator | Supervisor | Administrator) {
+  async save(user: UserEntities) {
     const itemIndex = this.items.findIndex((item) => item.id == user.id);
 
     this.items[itemIndex] = user;
   }
 
-  async findByEmail(
-    email: string
-  ): Promise<Storekeeper | Estimator | Supervisor | Administrator | null> {
+  async findByEmail(email: string): Promise<UserEntities | null> {
     const user = this.items.find((item) => item.email.toString() === email);
 
     if (!user) return null;
@@ -145,9 +137,7 @@ export class InMemoryUserRepository implements UserRepository {
     return user;
   }
 
-  async findManyByName(
-    name: string
-  ): Promise<(Storekeeper | Estimator | Supervisor | Administrator)[]> {
+  async findManyByName(name: string): Promise<UserEntities[]> {
     const user = this.items.filter((item) =>
       item.name.toString().includes(name)
     );

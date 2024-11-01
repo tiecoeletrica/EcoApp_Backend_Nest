@@ -61,8 +61,6 @@ export class FetchOnlyProjectsOfBudgetsUseCase {
       budget.projectId.toString()
     );
 
-    console.log(projectIdsOnBudgets);
-
     const foundProjects = this.createProjectAndIdArray(
       projects,
       budgets

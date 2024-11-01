@@ -19,18 +19,18 @@ import {
   Administrator,
   AdministratorProps,
 } from "src/domain/material-movimentation/enterprise/entities/Administrator";
+import { UserEntities } from "src/core/types/user-type";
 
 type UserMakeProps =
   | StorekeeperProps
   | EstimatorProps
   | SupervisorProps
   | AdministratorProps;
-type UserMake = Storekeeper | Estimator | Supervisor | Administrator;
 
 export function makeUser(
   override: Partial<UserMakeProps> = {},
   id?: UniqueEntityID
-): UserMake {
+): UserEntities {
   const entity = faker.helpers.arrayElement(userEntities);
 
   const baseProps = {
@@ -91,7 +91,7 @@ export function makeUser(
 export class UserFactory {
   constructor(private bigquery: BigQueryService) {}
 
-  async makeBqUser(data: Partial<UserMakeProps> = {}): Promise<UserMake> {
+  async makeBqUser(data: Partial<UserMakeProps> = {}): Promise<UserEntities> {
     const user = makeUser(data);
 
     await this.bigquery.user.create([BqUserMapper.toBigquery(user)]);
