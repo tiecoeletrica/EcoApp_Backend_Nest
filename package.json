@@ -1,11 +1,14 @@
 {
   "name": "ecoapp_backend_nest",
-  "version": "0.12.2",
+  "version": "0.12.3",
   "description": "",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "release": "standard-version --release-as patch",
+    "release:minor": "standard-version --release-as minor",
+    "release:major": "standard-version --release-as major",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -54,6 +57,7 @@
     "@vitest/coverage-v8": "^2.1.3",
     "dotenv": "^16.4.5",
     "source-map-support": "^0.5.21",
+    "standard-version": "^9.5.0",
     "supertest": "^7.0.0",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
