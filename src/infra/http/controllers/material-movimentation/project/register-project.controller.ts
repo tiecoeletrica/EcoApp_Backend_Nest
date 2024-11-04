@@ -75,9 +75,11 @@ export class RegisterProjectController {
       if (result.isLeft()) {
         this.handleError(result.value);
       }
+      if (result.isRight())
+        return {
+          message: `Projeto '${result.value.project.project_number}' registrado`,
+        };
     }
-
-    return { message: "projeto registrado" };
   }
 
   private handleError(error: Error) {

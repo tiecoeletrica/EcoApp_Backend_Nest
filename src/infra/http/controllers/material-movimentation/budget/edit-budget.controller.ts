@@ -71,6 +71,6 @@ export class EditBudgetController {
       }
     }
 
-    return { message: "edição realizada" };
+    return { message: "Edição realizada" };
   }
 }

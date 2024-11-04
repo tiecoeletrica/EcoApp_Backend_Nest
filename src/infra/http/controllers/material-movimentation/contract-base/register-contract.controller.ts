@@ -46,6 +46,6 @@ export class RegisterContractController {
       }
     }
 
-    return { message: "criação realizada" };
+    return { message: `Contrato '${contractName}' registrado` };
   }
 }

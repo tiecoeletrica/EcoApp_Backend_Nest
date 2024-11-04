@@ -72,6 +72,8 @@ export class TransferMovimentationBetweenProjectsController {
       }
     }
 
-    return { message: "criação realizada" };
+    return {
+      message: `Materiais transferidos`,
+    };
   }
 }

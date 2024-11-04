@@ -70,6 +70,6 @@ export class RegisterBudgetController {
       }
     }
 
-    return { message: "criação realizada" };
+    return { message: "Orçamento registrado" };
   }
 }
