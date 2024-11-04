@@ -11,6 +11,7 @@ import { BaseRepository } from "../../repositories/base-repository";
 interface FetchBudgetMovimentationByProjectUseCaseRequest {
   project_number: string;
   baseId: string;
+  sendProjectId?: boolean;
 }
 
 type FetchBudgetMovimentationByProjectUseCaseResponse = Eihter<
@@ -18,6 +19,7 @@ type FetchBudgetMovimentationByProjectUseCaseResponse = Eihter<
   {
     movimentations: MovimentationWithDetails[];
     budgets: BudgetWithDetails[];
+    projectId?: string;
   }
 >;
 
@@ -33,6 +35,7 @@ export class FetchBudgetMovimentationByProjectUseCase {
   async execute({
     project_number,
     baseId,
+    sendProjectId,
   }: FetchBudgetMovimentationByProjectUseCaseRequest): Promise<FetchBudgetMovimentationByProjectUseCaseResponse> {
     const base = await this.baseRepository.findById(baseId);
 
@@ -60,6 +63,12 @@ export class FetchBudgetMovimentationByProjectUseCase {
       base.contractId.toString()
     );
 
-    return right({ movimentations, budgets });
+    if (sendProjectId)
+      return right({
+        movimentations,
+        budgets,
+        projectId: project.id.toString(),
+      });
+    else return right({ movimentations, budgets });
   }
 }

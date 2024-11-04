@@ -64,6 +64,9 @@ describe("Edit Budgets by material", () => {
     const project2 = makeProject({ baseId: base.id });
     await inMemoryProjectRepository.create(project2);
 
+    const project3 = makeProject({ project_number: "Btest2", baseId: base.id });
+    await inMemoryProjectRepository.create(project3);
+
     const material1 = makeMaterial({ contractId: contract.id, code: 123456 });
     await inMemoryMaterialRepository.create(material1);
 
@@ -95,12 +98,33 @@ describe("Edit Budgets by material", () => {
         projectId: project2.id,
         value: 3,
       }),
+      makeBudget({
+        contractId: contract.id,
+        estimatorId: user.id,
+        materialId: material1.id,
+        projectId: project3.id,
+        value: 5,
+      }),
+      makeBudget({
+        contractId: contract.id,
+        estimatorId: user.id,
+        materialId: material1.id,
+        projectId: project3.id,
+        value: 3,
+      }),
+      makeBudget({
+        contractId: contract.id,
+        estimatorId: user.id,
+        materialId: material2.id,
+        projectId: project3.id,
+        value: 5,
+      }),
     ];
     await inMemoryBudgetRepository.create(budgets);
 
     const result = await sut.execute({
       estimatorId: user.id.toString(),
-      project_numbers: ["B-test"],
+      project_numbers: ["B-test", "Btest2"],
       codeFrom: 123456,
       codeTo: 654321,
       contractId: contract.id.toString(),
@@ -109,8 +133,8 @@ describe("Edit Budgets by material", () => {
 
     expect(result.isRight()).toBe(true);
     if (result.isRight()) {
-      expect(result.value.budgets).toHaveLength(2);
-      expect(result.value.projects).toHaveLength(1);
+      expect(result.value.budgets).toHaveLength(6);
+      expect(result.value.projects).toHaveLength(2);
       expect(result.value.budgets).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
@@ -123,10 +147,64 @@ describe("Edit Budgets by material", () => {
             materialId: material2.id,
             value: 10,
           }),
+          expect.objectContaining({
+            projectId: project3.id,
+            materialId: material1.id,
+            value: 0,
+          }),
+          expect.objectContaining({
+            projectId: project3.id,
+            materialId: material2.id,
+            value: 10,
+          }),
+          expect.objectContaining({
+            projectId: project3.id,
+            materialId: material1.id,
+            value: 0,
+          }),
+          expect.objectContaining({
+            projectId: project3.id,
+            materialId: material2.id,
+            value: 6,
+          }),
         ])
       );
     }
-    expect(inMemoryBudgetRepository.items).toHaveLength(4);
+    expect(inMemoryBudgetRepository.items).toHaveLength(9);
+    expect(inMemoryBudgetRepository.items).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          projectId: project1.id,
+          materialId: material1.id,
+          value: 0,
+        }),
+        expect.objectContaining({
+          projectId: project1.id,
+          materialId: material2.id,
+          value: 10,
+        }),
+        expect.objectContaining({
+          projectId: project3.id,
+          materialId: material1.id,
+          value: 0,
+        }),
+        expect.objectContaining({
+          projectId: project3.id,
+          materialId: material2.id,
+          value: 10,
+        }),
+        expect.objectContaining({
+          projectId: project3.id,
+          materialId: material1.id,
+          value: 0,
+        }),
+        expect.objectContaining({
+          projectId: project3.id,
+          materialId: material2.id,
+          value: 6,
+        }),
+      ])
+    );
   });
 
   it("should not be able to edit a list of budgets if a material code is not found", async () => {
