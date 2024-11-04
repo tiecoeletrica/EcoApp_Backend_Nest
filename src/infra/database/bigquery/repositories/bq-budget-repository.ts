@@ -182,4 +182,17 @@ export class BqBudgetRepository implements BudgetRepository {
       where: { id: budget.id.toString() },
     });
   }
+
+  async saveBulk(budgets: Budget[]): Promise<void> {
+    const arrayToUpdate = budgets.map((budget) => {
+      return {
+        set: BqBudgetMapper.toBigquery(budget),
+        where: { id: budget.id.toString() },
+      };
+    });
+
+    await this.bigquery.budget.updateBulk({
+      updates: arrayToUpdate,
+    });
+  }
 }

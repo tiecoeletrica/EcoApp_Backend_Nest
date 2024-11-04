@@ -27,4 +27,5 @@ export abstract class BudgetRepository {
   ): Promise<Budget[]>;
   abstract create(budgets: Budget[]): Promise<void>;
   abstract save(budget: Budget): Promise<void>;
+  abstract saveBulk(budgets: Budget[]): Promise<void>;
 }

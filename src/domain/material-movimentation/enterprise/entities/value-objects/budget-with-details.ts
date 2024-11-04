@@ -6,16 +6,17 @@ import { Estimator } from "../estimator";
 import { Contract } from "../contract";
 import { Storekeeper } from "../storekeeper";
 import { Supervisor } from "../supervisor";
+import { UserEntities } from "src/core/types/user-type";
 
 export interface BudgetWithDetailsProps {
   budgetId: UniqueEntityID;
   value: number;
   createdAt: Date;
-  estimator: Estimator | Storekeeper | Supervisor;
+  estimator: UserEntities;
   material: Material;
   project: Project;
   contract: Contract;
-  updatedAuthor?: Estimator | Storekeeper | Supervisor;
+  updatedAuthor?: UserEntities;
   updatedAt?: Date;
 }
 

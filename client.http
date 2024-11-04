@@ -86,7 +86,7 @@ Authorization: Bearer {{authToken}}
 ###
 
 # @name delete_user_by_id
-DELETE  {{baseURL}}/accounts/d0b19fe2-4bcc-4047-99c8-d6104319b12d
+DELETE  {{baseURL}}/accounts/08eed696-4c62-4e9a-97cf-fad97cb80700
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
@@ -215,11 +215,11 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
     {
-        "project_number": "B-TESTE-RAFA",
-        "description": "MP-CCOL-POV. OLHOS D'AGUA-RURAL",
+        "project_number": "B-1066915",
+        "description": "MP-CIND-POV.CANSANÇÃO-RURAL",
         "type": "obra",
         "baseId": "468c0cdb-b89f-425c-8e8f-0551f5db94b7",
-        "city": "MORRO DO CHAPEU"
+        "city": "MULUNGU DO MORRO"
     }
 
 ###
