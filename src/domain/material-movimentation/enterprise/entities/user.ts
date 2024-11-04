@@ -11,6 +11,7 @@ export interface UserProps {
   password: string;
   baseId: UniqueEntityID;
   contractId: UniqueEntityID;
+  firstLogin: boolean;
 }
 
 export class User<Props extends UserProps> extends Entity<Props> {
@@ -38,12 +39,17 @@ export class User<Props extends UserProps> extends Entity<Props> {
     return this.props.password;
   }
 
+  get firstLogin() {
+    return this.props.firstLogin;
+  }
+
   set status(status: string) {
     this.props.status = status;
   }
 
   set password(password: string) {
     this.props.password = password;
+    this.touch();
   }
 
   set type(type: UserType) {
@@ -64,5 +70,9 @@ export class User<Props extends UserProps> extends Entity<Props> {
 
   set contractId(contractId: UniqueEntityID) {
     this.props.contractId = contractId;
+  }
+
+  private touch() {
+    this.props.firstLogin = false;
   }
 }

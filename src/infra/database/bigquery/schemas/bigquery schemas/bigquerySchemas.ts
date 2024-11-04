@@ -128,6 +128,7 @@ const allSchemas = {
       { name: "status", type: "STRING", mode: "NULLABLE" },
       { name: "baseId", type: "STRING", mode: "NULLABLE" },
       { name: "contractId", type: "STRING", mode: "NULLABLE" },
+      { name: "firstLogin", type: "BOOLEAN", mode: "NULLABLE" },
     ],
   },
 };

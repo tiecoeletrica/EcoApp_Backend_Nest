@@ -41,6 +41,7 @@ export function makeUser(
     password: faker.internet.password(),
     baseId: new UniqueEntityID(),
     contractId: new UniqueEntityID(),
+    firstLogin: false,
   };
 
   if (

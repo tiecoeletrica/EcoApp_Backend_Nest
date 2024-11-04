@@ -53,11 +53,13 @@ describe("Transfer Movimentation Between Projects (E2E)", () => {
       type: "Almoxarife",
       baseId: base.id,
     });
+    
     const accessToken = jwt.sign({
       sub: user.id.toString(),
       type: user.type,
       baseId: user.baseId.toString(),
       contractId: user.contractId.toString(),
+      firstLogin: user.firstLogin,
     });
 
     const projectOut = await projectFactory.makeBqProject();

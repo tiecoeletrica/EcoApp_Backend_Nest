@@ -8,13 +8,14 @@ export interface EstimatorProps extends UserProps {
 
 export class Estimator extends User<EstimatorProps> {
   static create(
-    props: Optional<EstimatorProps, "status">,
+    props: Optional<EstimatorProps, "status" | "firstLogin">,
     id?: UniqueEntityID
   ) {
     const estimator = new Estimator(
       {
         ...props,
         status: props.status ?? "ativo",
+        firstLogin: props.firstLogin ?? true,
       },
       id
     );

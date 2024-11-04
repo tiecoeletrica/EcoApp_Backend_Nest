@@ -8,13 +8,14 @@ export interface StorekeeperProps extends UserProps {
 
 export class Storekeeper extends User<StorekeeperProps> {
   static create(
-    props: Optional<StorekeeperProps, "status">,
+    props: Optional<StorekeeperProps, "status" | "firstLogin">,
     id?: UniqueEntityID
   ) {
     const storekeeper = new Storekeeper(
       {
         ...props,
         status: props.status ?? "ativo",
+        firstLogin: props.firstLogin ?? true,
       },
       id
     );

@@ -50,6 +50,7 @@ describe("Fetch Movimentation History (E2E)", () => {
       type: user.type,
       baseId: user.baseId.toString(),
       contractId: user.contractId.toString(),
+      firstLogin: user.firstLogin,
     });
 
     await projectFactory.makeBqProject({

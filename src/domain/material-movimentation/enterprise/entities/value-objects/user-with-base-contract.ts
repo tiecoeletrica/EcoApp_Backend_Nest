@@ -13,6 +13,7 @@ export interface UserWithBaseContractProps {
   contract: Contract;
   status: string;
   password: string;
+  firstLogin: boolean;
 }
 
 export class UserWithBaseContract extends ValueObject<UserWithBaseContractProps> {
@@ -42,6 +43,9 @@ export class UserWithBaseContract extends ValueObject<UserWithBaseContractProps>
   }
   get cpf() {
     return this.props.cpf;
+  }
+  get firstLogin() {
+    return this.props.firstLogin;
   }
 
   static create(props: UserWithBaseContractProps) {
