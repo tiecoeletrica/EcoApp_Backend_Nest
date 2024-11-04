@@ -8,13 +8,14 @@ export interface SupervisorProps extends UserProps {
 
 export class Supervisor extends User<SupervisorProps> {
   static create(
-    props: Optional<SupervisorProps, "status">,
+    props: Optional<SupervisorProps, "status" | "firstLogin">,
     id?: UniqueEntityID
   ) {
     const supervisor = new Supervisor(
       {
         ...props,
         status: props.status ?? "ativo",
+        firstLogin: props.firstLogin ?? true,
       },
       id
     );

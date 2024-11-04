@@ -15,6 +15,7 @@ export interface BqUserProps {
   status: string;
   baseId: string;
   contractId: string;
+  firstLogin: boolean;
 
   // relacionamentos
   base?: BqBaseProps;

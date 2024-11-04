@@ -8,13 +8,14 @@ export interface AdministratorProps extends UserProps {
 
 export class Administrator extends User<AdministratorProps> {
   static create(
-    props: Optional<AdministratorProps, "status">,
+    props: Optional<AdministratorProps, "status" | "firstLogin">,
     id?: UniqueEntityID
   ) {
     const administrator = new Administrator(
       {
         ...props,
         status: props.status ?? "ativo",
+        firstLogin: props.firstLogin ?? true,
       },
       id
     );

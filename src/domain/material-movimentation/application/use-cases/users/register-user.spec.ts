@@ -60,6 +60,7 @@ describe("Create user", () => {
     if (result.isRight()) {
       expect(result.value.user.status).toBeTruthy();
       expect(result.value.user.password).toEqual(hashedPassword);
+      expect(result.value.user.firstLogin).toBeTruthy();
     }
     expect(inMemoryUserRepository.items[0].id).toBeTruthy();
   });

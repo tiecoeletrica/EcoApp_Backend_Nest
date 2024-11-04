@@ -65,6 +65,7 @@ describe("Fetch and Budget By Project Name (E2E)", () => {
       type: user.type,
       baseId: user.baseId.toString(),
       contractId: user.contractId.toString(),
+      firstLogin: user.firstLogin,
     });
 
     const material = await materialFactory.makeBqMaterial({

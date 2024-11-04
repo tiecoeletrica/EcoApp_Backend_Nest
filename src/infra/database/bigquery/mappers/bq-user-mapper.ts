@@ -78,6 +78,7 @@ export class BqUserMapper {
       type: storekeeperOrEstimator.type,
       baseId: storekeeperOrEstimator.baseId.toString(),
       contractId: storekeeperOrEstimator.contractId.toString(),
+      firstLogin: storekeeperOrEstimator.firstLogin,
     };
   }
 
@@ -92,6 +93,7 @@ export class BqUserMapper {
       type: user.type,
       baseId: user.baseId.toString(),
       contractId: user.contractId.toString(),
+      firstLogin: user.firstLogin,
     };
   }
 

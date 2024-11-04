@@ -70,6 +70,7 @@ export class BqUserWithBaseContractMapper {
       type: raw.type,
       status: raw.status,
       userId: new UniqueEntityID(raw.id),
+      firstLogin: raw.firstLogin,
     });
   }
 }

@@ -49,6 +49,7 @@ describe("Create account (E2E)", () => {
       type: user.type,
       baseId: user.baseId.toString(),
       contractId: user.contractId.toString(),
+      firstLogin: user.firstLogin,
     });
 
     const response = await request(app.getHttpServer())

@@ -206,4 +206,37 @@ describe("Edit User", () => {
     expect(inMemoryUserRepository.items[1].type).toEqual("Supervisor");
     expect(result.value).toBeInstanceOf(NotAllowedError);
   });
+
+  it("should be able to edit a user's password and the paramter 'firstLogin' should be falsy", async () => {
+    const contract = makeContract({}, new UniqueEntityID("Bahia"));
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase(
+      { contractId: contract.id },
+      new UniqueEntityID("Vitória da Conquista")
+    );
+    await inMemoryBaseRepository.create(base);
+
+    const user = makeUser({ firstLogin: true });
+    const author = makeUser({ type: "Administrador" });
+
+    await inMemoryUserRepository.create(author);
+    await inMemoryUserRepository.create(user);
+    expect(user.firstLogin).toBeTruthy();
+
+    const result = await sut.execute({
+      authorId: author.id.toString(),
+      userId: user.id.toString(),
+      baseId: "Vitória da Conquista",
+      contractId: "Bahia",
+      password: "123456",
+    });
+
+    expect(result.isRight()).toBeTruthy();
+    expect(inMemoryUserRepository.items[1]).toMatchObject({
+      props: {
+        firstLogin: false,
+      },
+    });
+  });
 });
