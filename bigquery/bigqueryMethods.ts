@@ -8,6 +8,13 @@ export interface UpdateProps<T> {
   where: Partial<T>;
 }
 
+export interface BulkUpdateProps<T> {
+  updates: Array<{
+    set: Partial<T>;
+    where: Partial<T>;
+  }>;
+}
+
 export interface SelectOptions<T> {
   where?: Partial<T> | { OR: Partial<T>[]; AND?: Partial<T> };
   whereIn?: { [K in keyof T]?: any[] };
@@ -47,6 +54,7 @@ export class BigQueryMethods<T extends Record<string, any>> {
   }
 
   async runQuery(query: string) {
+    // console.log(query);
     const options = { query };
     const [rows] = await this.bigquery.query(options);
 
@@ -87,6 +95,11 @@ export class BigQueryMethods<T extends Record<string, any>> {
 
   async update(props: UpdateProps<T>): Promise<{}> {
     const query = this.buildUpdateQuery(props);
+    return this.runQuery(query);
+  }
+
+  async updateBulk(props: BulkUpdateProps<T>): Promise<{}> {
+    const query = this.buildBulkUpdateQuery(props);
     return this.runQuery(query);
   }
 
@@ -453,6 +466,42 @@ export class BigQueryMethods<T extends Record<string, any>> {
     `;
   }
 
+  private buildBulkUpdateQuery(props: BulkUpdateProps<T>): string {
+    const { updates } = props;
+    const allColumns = new Set<string>();
+    updates.forEach((update) => {
+      Object.keys(update.set).forEach((key) => allColumns.add(key));
+    });
+
+    const updateClauses = Array.from(allColumns).map((column) => {
+      const caseStatement = updates
+        .map((update) => {
+          const whereClause = this.buildWhereClause(null, update.where);
+          const setValue = update.set[column as keyof T];
+          let formattedValue;
+          if (this.isDate(setValue)) {
+            formattedValue = `'${(setValue as Date).toISOString()}'`;
+          } else if (typeof setValue === "string") {
+            formattedValue = `'${this.escapeString(setValue)}'`;
+          } else {
+            formattedValue = setValue;
+          }
+          return `WHEN ${whereClause} THEN ${formattedValue}`;
+        })
+        .join(" ");
+      return `${column} = CASE ${caseStatement} ELSE ${column} END`;
+    });
+
+    const allWhereConditions = updates.map((update) =>
+      this.buildWhereClause(null, update.where)
+    );
+
+    return `
+      UPDATE \`${this.datasetId}\`
+      SET ${updateClauses.join(", ")}
+      WHERE ${allWhereConditions.join(" OR ")}
+    `;
+  }
   private buildSetClause(data: Partial<T>): string {
     return Object.entries(data)
       .map(([key, value]) => {

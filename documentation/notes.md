@@ -1,15 +1,17 @@
 # ChangeLog
 
-| Date       | Change                                                               |
-| :--------- | :------------------------------------------------------------------- |
-| 30/10/2024 | filter by storekeeper name on movimentations history                 |
-| 30/10/2024 | review documentations                                                |
-| 31/10/2024 | badges and summary on readme                                         |
-| 31/10/2024 | sort data on fetch movimentation-budgets by material                 |
-| 01/11/2024 | split logic between Administrator and Storekeeper Leader             |
-| 01/11/2024 | only Storekeepers Leaders and Administrators can create new accounts |
-| 04/11/2024 | adjust success responses                                             |
-| 04/11/2024 | create first login parameter on users entities                       |
+| Date       | Change                                                                |
+| :--------- | :-------------------------------------------------------------------- |
+| 30/10/2024 | filter by storekeeper name on movimentations history                  |
+| 30/10/2024 | review documentations                                                 |
+| 31/10/2024 | badges and summary on readme                                          |
+| 31/10/2024 | sort data on fetch movimentation-budgets by material                  |
+| 01/11/2024 | split logic between Administrator and Storekeeper Leader              |
+| 01/11/2024 | only Storekeepers Leaders and Administrators can create new accounts  |
+| 04/11/2024 | adjust success responses                                              |
+| 04/11/2024 | create first login parameter on users entities                        |
+| 04/11/2024 | projectId on fetch budget movimentation and fix date on insert by dev |
+| 04/11/2024 | edit by array on BigqueryMethods -> saveBulk                          |
 
 # Technical debt
 
@@ -82,11 +84,13 @@
 - only Storekeepers Leaders and Administrators can create new accounts [x]
 - adjust success responses [x]
 - create first login parameter on users entities [x]
+- projectId on fetch budget movimentation and fix date on insert by dev [x]
+- review edit budget by material script [x]
+- edit by array on BigqueryMethods [x]
 - create a away to migrate the schemas of "/src/infra/database/bigquery/schemas" from files to tables on bigquery []
 - on budgets-materials put show observation with replaced material []
-- review edit budget by material script []
-- edit by array on BigqueryMethods []
 - create use cases to password recover []
+- accept base_name on register project by array []
 
 # Test 1 file
 

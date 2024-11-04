@@ -202,4 +202,14 @@ export class InMemoryBudgetRepository implements BudgetRepository {
 
     this.items[itemIndex] = budget;
   }
+
+  async saveBulk(budgets: Budget[]) {
+    budgets.forEach((budget) => {
+      const itemIndex = this.items.findIndex(
+        (item) => item.id.toString() === budget.id.toString()
+      );
+
+      this.items[itemIndex] = budget;
+    });
+  }
 }

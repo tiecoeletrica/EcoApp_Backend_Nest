@@ -79,9 +79,7 @@ export class EditBudgetUseCase {
     if (editBudgetUseCaseRequest.newBudgets.length !== 0)
       await this.budgetRepository.create(newBudgets);
 
-    for (let index = 0; index < updatedBudgets.length; index++) {
-      await this.budgetRepository.save(updatedBudgets[index]);
-    }
+    await this.budgetRepository.saveBulk(updatedBudgets);
 
     return right({ newBudgets, updatedBudgets });
   }

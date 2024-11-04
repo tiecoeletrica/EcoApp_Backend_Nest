@@ -189,9 +189,7 @@ export class EditBudgetsByMaterialUseCase {
     });
 
     await this.budgetRepository.create(newBudgets);
-    for (let i = 0; i < editedBudgets.length; i++) {
-      await this.budgetRepository.save(editedBudgets[i]);
-    }
+    await this.budgetRepository.saveBulk(editedBudgets);
 
     const budgets = newBudgets.concat(editedBudgets);
 
