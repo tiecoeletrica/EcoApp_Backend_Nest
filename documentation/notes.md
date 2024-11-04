@@ -8,6 +8,7 @@
 | 31/10/2024 | sort data on fetch movimentation-budgets by material                 |
 | 01/11/2024 | split logic between Administrator and Storekeeper Leader             |
 | 01/11/2024 | only Storekeepers Leaders and Administrators can create new accounts |
+| 04/11/2024 | adjust success responses                                             |
 
 # Technical debt
 
@@ -78,9 +79,11 @@
 - badges and summary on readme [x]
 - split logic between Administrator and Storekeeper Leader [x]
 - only Storekeepers Leaders and Administrators can create new accounts [x]
+- adjust success responses [x]
 - create a away to migrate the schemas of "/src/infra/database/bigquery/schemas" from files to tables on bigquery []
 - on budgets-materials put show observation with replaced material []
 - review edit budget by material scrip []
+- edit by array on BigqueryMethods []
 - create use cases to first login and password recover []
 
 # Test 1 file
