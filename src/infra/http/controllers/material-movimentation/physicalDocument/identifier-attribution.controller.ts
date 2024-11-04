@@ -57,6 +57,8 @@ export class IdentifierAttributionController {
       }
     }
 
-    return { message: "criação realizada" };
+    return {
+      message: `Projeto '${project_number}' registrado no ID '${identifier}'`,
+    };
   }
 }

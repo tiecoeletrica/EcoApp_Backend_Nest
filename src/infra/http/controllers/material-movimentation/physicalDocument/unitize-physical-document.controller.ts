@@ -57,6 +57,8 @@ export class UnitizePhysicalDocumentController {
       }
     }
 
-    return { message: "edição realizada" };
+    return {
+      message: `Projeto ${unitized ? `unitizado` : `com unitização retirada`}`,
+    };
   }
 }

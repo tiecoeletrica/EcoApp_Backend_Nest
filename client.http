@@ -8,12 +8,12 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-    "name": "BENTO DUTRA SANTOS",
-  "email": "bento@ecoeletrica.com.br",
-  "cpf": "00463891562",
+    "name": "usuário teste",
+  "email": "teste@ecoeletrica.com.br",
+  "cpf": "00000011100",
   "type": "Supervisor",
-  "baseId": "dbe82710-e5e8-449a-ba49-471b356f808d",
-  "contractId": "e816f105-e022-4560-b32c-d2af40c18351",
+  "baseId": "cf5413a2-04bf-4459-a261-e22cb838f3e8",
+  "contractId": "5d93f010-189b-4d35-a26b-58c1e6f79aff",
   "password": "ECO@2012"
 }
 
@@ -86,7 +86,7 @@ Authorization: Bearer {{authToken}}
 ###
 
 # @name delete_user_by_id
-DELETE  {{baseURL}}/accounts/2d8c64e4-0ae3-448e-8fa4-eb4edaaaf963
+DELETE  {{baseURL}}/accounts/d0b19fe2-4bcc-4047-99c8-d6104319b12d
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
@@ -149,8 +149,8 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-    "project_number": "B-1081710",
-    "identifier": 3
+    "project_number": "B-TESTE",
+    "identifier": 1
 }
 
 
@@ -158,7 +158,7 @@ Authorization: Bearer {{authToken}}
 
 # @name fetch_physical_documents
 GET {{baseURL}}/physical-documents
-?unitized=true
+# ?unitized=true
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
@@ -167,19 +167,19 @@ Authorization: Bearer {{authToken}}
 ###
 
 # @name uniteze_physical_documents
-PUT {{baseURL}}/physical-documents/fc13dc69-7493-4644-9667-576cfaf85735
+PUT {{baseURL}}/physical-documents/221362de-3f6c-4979-9317-40e8f3fd7ad1
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-    "unitized": true
+    "unitized": false
 }
 
 
 ###
 
 # @name delete_physical_document
-DELETE  {{baseURL}}/physical-documents/88b6a558-046d-47bf-be45-11fccec6d328
+DELETE  {{baseURL}}/physical-documents/221362de-3f6c-4979-9317-40e8f3fd7ad1
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
@@ -193,14 +193,14 @@ Authorization: Bearer {{authToken}}
 
 [
     {
-        "materialId": "18c41419-c993-4b62-8672-ded49ee06d3d",
-        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
+        "materialId": "d36098c3-409f-4486-80ef-03384e07aa29",
+        "projectId": "8a031bf4-8bb9-4ec1-a2e6-e4146f46a4ec",
         "observation": "cia CIA cia Cia cia",
         "value": 5
     },
     {
-        "materialId": "7a7b5a91-e91a-4340-8a5f-5e1acdf502f8",
-        "projectId": "44e9fa57-e4fd-4c41-a7d6-c456cc75ea98",
+        "materialId": "c5b558c2-ae43-4e77-8aba-9944f384be74",
+        "projectId": "8a031bf4-8bb9-4ec1-a2e6-e4146f46a4ec",
         "observation": "",
         "value": 2
     }
@@ -240,11 +240,11 @@ Authorization: Bearer {{authToken}}
 
 [
     {
-        "materialId": "019b2ef9-75bc-47fb-831c-f81b21b30aea",
-        "projectIdOut": "7a86f3b8-058a-4f3b-bd49-3427e8d6d3a5",
-        "projectIdIn": "80b87f18-8b74-4a0a-a405-c2a10b9cb3cb",
+        "materialId": "d36098c3-409f-4486-80ef-03384e07aa29",
+        "projectIdOut": "8a031bf4-8bb9-4ec1-a2e6-e4146f46a4ec",
+        "projectIdIn": "b09944e7-1699-4a40-b826-6e27649a5541",
         "observation": "Num sei das quantas",
-        "baseId": "468c0cdb-b89f-425c-8e8f-0551f5db94b7",
+        "baseId": "cf5413a2-04bf-4459-a261-e22cb838f3e8",
         "value": 5
     }
 ]
@@ -284,7 +284,7 @@ Authorization: Bearer {{authToken}}
 
 # @name fetch_budgets
 GET {{baseURL}}/budgets
-?project_number=B-LALALA
+?project_number=B-TESTE
 &sendProjectId=true
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
@@ -331,11 +331,11 @@ Authorization: Bearer {{authToken}}
 
 {
     "updatedBudgets": [{
-        "budgetId": "245dedfe-2c7c-4e6e-b10f-a6003a53d601",
-        "value": 250
+        "budgetId": "f6a5929e-5277-422e-ab3e-b16433a7f01b",
+        "value": 14.5
     }],
     "newBudgets": [{
-        "materialId": "386dafeb-d232-4857-ab91-746643045bf3",
+        "materialId": "109592f2-cf65-43bd-968e-2ffcb919e772",
         "value": 2
     }]
 }
@@ -471,8 +471,8 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-    "project_numbers": ["B-LALALA"],
-    "codeFrom": 2223464,
-    "codeTo": 210422,
-    "multiplier": 2
+    "project_numbers": ["B-TESTE"],
+    "codeFrom": 251898,
+    "codeTo": 252392,
+    "multiplier": 1.2
 }

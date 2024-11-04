@@ -79,6 +79,8 @@ export class CreateAccountController {
       }
     }
 
-    return { message: "Usuário criado com sucesso!" };
+    return {
+      message: `Usuário '${result.value.user.name}' criado com sucesso!`,
+    };
   }
 }

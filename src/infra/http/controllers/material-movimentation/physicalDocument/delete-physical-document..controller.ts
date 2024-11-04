@@ -37,6 +37,6 @@ export class DeletePhysicalDocumentController {
       }
     }
 
-    return { message: "exclusão realizada" };
+    return { message: "Identificador excluido" };
   }
 }

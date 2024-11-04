@@ -55,6 +55,6 @@ export class RegisterBaseController {
       }
     }
 
-    return { message: "criação realizada" };
+    return { message: `Base '${baseName}' registrado` };
   }
 }

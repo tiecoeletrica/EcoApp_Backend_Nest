@@ -60,6 +60,9 @@ export class EditBudgetsByMaterialController {
 
     const projects = result.value.projects.map(ProjectPresenter.toHTTP);
 
-    return { projects, message: "Edição no(s) orçamento(s) realizada" };
+    return {
+      projects,
+      message: `Mudança no(s) orçamento(s) realizada do material '${codeFrom}' para o material '${codeTo}'`,
+    };
   }
 }

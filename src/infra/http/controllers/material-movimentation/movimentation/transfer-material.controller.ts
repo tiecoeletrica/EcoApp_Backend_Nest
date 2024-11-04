@@ -75,6 +75,6 @@ export class TransferMaterialController {
       }
     }
 
-    return { message: "criação realizada" };
+    return { message: `Movimentação realizada` };
   }
 }
