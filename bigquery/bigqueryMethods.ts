@@ -128,7 +128,12 @@ export class BigQueryMethods<T extends Record<string, any>> {
 
   private formatValue(value: any): string {
     if (typeof value === "string") return `'${this.escapeString(value)}'`;
-    if (value instanceof Date) return `'${value.toISOString()}'`;
+    if (value instanceof Date) {
+      const utcDate = new Date(
+        value.getTime() + value.getTimezoneOffset() * 60000
+      );
+      return `'${utcDate.toISOString()}'`;
+    }
     return value;
   }
 

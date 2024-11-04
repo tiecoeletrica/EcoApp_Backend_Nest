@@ -20,4 +20,11 @@ export class FetchBudgetMovimentationByProjectQueryDto {
     required: false,
   })
   projectIn!: string;
+  @ApiProperty({
+    example: true,
+    description:
+      "if true, it'll be send the projectId of the searched project_number",
+    required: false,
+  })
+  sendProjectId!: boolean;
 }

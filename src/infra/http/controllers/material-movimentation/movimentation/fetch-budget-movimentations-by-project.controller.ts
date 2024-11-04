@@ -27,6 +27,7 @@ const fetchBudgetMovimentationByProjectQuerySchema = z.object({
   project_number: z.string(),
   physicalDocument: z.string().optional().transform(Boolean),
   projectIn: z.string().optional(),
+  sendProjectId: z.string().optional().transform(Boolean),
 });
 
 @ApiTags("movimentation")
@@ -47,13 +48,14 @@ export class FetchBudgetMovimentationByProjectController {
     @Query(new ZodValidationPipe(fetchBudgetMovimentationByProjectQuerySchema))
     query: FetchBudgetMovimentationByProjectQueryDto
   ) {
-    let physicalDocumentSearch;
-    let projectSearch;
-    const { project_number, physicalDocument, projectIn } = query;
+    let physicalDocumentSearch, projectSearch, projectId;
+    const { project_number, physicalDocument, projectIn, sendProjectId } =
+      query;
 
     const result = await this.fetchBudgetMovimentationByProjec.execute({
       project_number,
       baseId: user.baseId,
+      sendProjectId,
     });
 
     if (result.isLeft()) {
@@ -106,6 +108,8 @@ export class FetchBudgetMovimentationByProjectController {
       projectSearch = ProjectPresenter.toHTTP(resultProjectIn.value.project);
     }
 
+    if (sendProjectId) projectId = result.value.projectId;
+
     return {
       movimentations: movimentations.map(
         MovimentationWithDetailsPresenter.toHTTP
@@ -113,6 +117,7 @@ export class FetchBudgetMovimentationByProjectController {
       budgets: budgets.map(BudgetWithDetailsPresenter.toHTTP),
       physicalDocumentSearch,
       projectSearch,
+      projectId,
     };
   }
 }

@@ -84,7 +84,7 @@
 - create first login parameter on users entities [x]
 - create a away to migrate the schemas of "/src/infra/database/bigquery/schemas" from files to tables on bigquery []
 - on budgets-materials put show observation with replaced material []
-- review edit budget by material scrip []
+- review edit budget by material script []
 - edit by array on BigqueryMethods []
 - create use cases to password recover []
 

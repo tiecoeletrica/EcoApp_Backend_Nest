@@ -195,7 +195,7 @@ Authorization: Bearer {{authToken}}
     {
         "materialId": "d36098c3-409f-4486-80ef-03384e07aa29",
         "projectId": "8a031bf4-8bb9-4ec1-a2e6-e4146f46a4ec",
-        "observation": "cia CIA cia Cia cia",
+        "observation": "fiz isso as 15:44",
         "value": 5
     },
     {
@@ -214,22 +214,13 @@ POST  {{baseURL}}/projects
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
-[
     {
-        "project_number": "B-teste3",
-        "description": "MP-CCOL-POV. OLHOS D'AGUA-RURAL",
-        "type": "obra",
-        "baseId": "468c0cdb-b89f-425c-8e8f-0551f5db94b7",
-        "city": "MORRO DO CHAPEU"
-    },
-    {
-        "project_number": "B-teste2",
+        "project_number": "B-TESTE-RAFA",
         "description": "MP-CCOL-POV. OLHOS D'AGUA-RURAL",
         "type": "obra",
         "baseId": "468c0cdb-b89f-425c-8e8f-0551f5db94b7",
         "city": "MORRO DO CHAPEU"
     }
-]
 
 ###
 
@@ -273,9 +264,9 @@ Authorization: Bearer {{authToken}}
 
 # @name fetch_movimentations_budgets
 GET {{baseURL}}/movimentations-budgets
-?project_number=B-12345678
+?project_number=B-TESTE
 &physicalDocument=true
-&projectIn=B-1234567
+&sendProjectId=true
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
