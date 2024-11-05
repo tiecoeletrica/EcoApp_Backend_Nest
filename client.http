@@ -254,7 +254,7 @@ Authorization: Bearer {{authToken}}
 
 # @name fetch_all_movimentations
 GET {{baseURL}}/movimentations-streaming
-?name=Danilo
+# ?name=Danilo
 # ?material_code=3310013
 Content-Type: application/json
 Authorization: Bearer {{authToken}}

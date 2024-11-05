@@ -57,7 +57,7 @@ describe("Fetch All Movimentation History (E2E)", () => {
     const user = await userFactory.makeBqUser({
       baseId: base.id,
       contractId: contract.id,
-      type: "Almoxarife"
+      type: "Almoxarife",
     });
 
     const accessToken = jwt.sign({
@@ -70,15 +70,15 @@ describe("Fetch All Movimentation History (E2E)", () => {
     const project = await projectFactory.makeBqProject({ baseId: base.id });
 
     const material1 = await materialFactory.makeBqMaterial(
-      { contractId: contract.id },
+      { contractId: contract.id, description: "material 1" },
       new UniqueEntityID("material1")
     );
     const material2 = await materialFactory.makeBqMaterial(
-      { contractId: contract.id },
+      { contractId: contract.id, description: "material 2" },
       new UniqueEntityID("material2")
     );
     const material3 = await materialFactory.makeBqMaterial(
-      { contractId: contract.id },
+      { contractId: contract.id, description: "material 3" },
       new UniqueEntityID("material3")
     );
 
@@ -112,13 +112,13 @@ describe("Fetch All Movimentation History (E2E)", () => {
     expect(response.body).toEqual({
       movimentations: expect.arrayContaining([
         expect.objectContaining({
-          material: expect.objectContaining({ id: "material1" }),
+          material: expect.objectContaining({ description: "material 1" }),
         }),
         expect.objectContaining({
-          material: expect.objectContaining({ id: "material2" }),
+          material: expect.objectContaining({ description: "material 2" }),
         }),
         expect.objectContaining({
-          material: expect.objectContaining({ id: "material3" }),
+          material: expect.objectContaining({ description: "material 3" }),
         }),
       ]),
     });

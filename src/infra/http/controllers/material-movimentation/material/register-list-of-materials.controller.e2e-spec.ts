@@ -8,7 +8,7 @@ import { UserFactory } from "test/factories/make-user";
 import { DatabaseModule } from "src/infra/database/database.module";
 import { ContractFactory } from "test/factories/make-contract";
 
-describe("Create Material (E2E)", () => {
+describe("Register Material Bulk (E2E)", () => {
   let app: INestApplication;
   let bigquery: BigQueryService;
   let jwt: JwtService;
@@ -31,11 +31,11 @@ describe("Create Material (E2E)", () => {
     await app.init();
   });
 
-  test("[POST] /materials - unique material", async () => {
+  test("[POST] /materials-bulk - array of materials", async () => {
     const contract = await contractFactory.makeBqContract({});
     const user = await userFactory.makeBqUser({
-      type: "Administrador",
       contractId: contract.id,
+      type: "Administrador",
     });
 
     const accessToken = jwt.sign({
@@ -47,20 +47,28 @@ describe("Create Material (E2E)", () => {
     });
 
     const response = await request(app.getHttpServer())
-      .post("/materials")
+      .post("/materials-bulk")
       .set("Authorization", `Bearer ${accessToken}`)
-      .send({
-        code: 123132,
-        description: "material de teste",
-        type: "concreto",
-        unit: "CDA",
-      });
+      .send([
+        {
+          code: 123131,
+          description: "material de teste",
+          type: "concreto",
+          unit: "CDA",
+        },
+        {
+          code: 123133,
+          description: "material de teste",
+          type: "equipamento",
+          unit: "CDA",
+        },
+      ]);
 
-    const [MaterialDataBase] = await bigquery.material.select({
-      where: { code: 123132 },
+    const MaterialDataBase = await bigquery.material.select({
+      whereIn: { code: [123133, 123131] },
     });
 
     expect(response.statusCode).toBe(201);
-    expect(MaterialDataBase.description).toEqual("MATERIAL DE TESTE");
+    expect(MaterialDataBase).toHaveLength(2);
   });
 });
