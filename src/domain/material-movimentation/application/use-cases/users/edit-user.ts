@@ -84,14 +84,21 @@ export class EditUserUseCase {
       if (baseContractCheck.isLeft()) return baseContractCheck;
     }
 
-    this.updateUserFields(user, type, baseId, contractId, status, password);
-
     if (base) {
       const userBaseCheck = this.checkUserBase(user, base);
       if (userBaseCheck.isLeft()) return userBaseCheck;
     }
 
-    await this.userRepository.save(user);
+    const updatedUser = await this.updateUserFields(
+      user,
+      type,
+      baseId,
+      contractId,
+      status,
+      password
+    );
+
+    await this.userRepository.save(updatedUser);
 
     return right(null);
   }
@@ -214,7 +221,7 @@ export class EditUserUseCase {
     contractId?: string,
     status?: string,
     password?: string
-  ): Promise<void> {
+  ): Promise<UserEntities> {
     user.type = (type ?? user.type) as UserType;
     user.baseId =
       baseId === undefined ? user.baseId : new UniqueEntityID(baseId);
@@ -227,6 +234,7 @@ export class EditUserUseCase {
       password === undefined
         ? user.password
         : await this.hashGenerator.hash(password);
+    return user;
   }
 
   private checkUserBase(

@@ -11,12 +11,13 @@ import { BaseFactory } from "test/factories/make-base";
 import { MaterialFactory } from "test/factories/make-material";
 import { ContractFactory } from "test/factories/make-contract";
 import { BudgetFactory } from "test/factories/make-budget";
+import { AccessTokenCreator } from "test/access-token-creator";
 
 describe("Edit Budgets by Material (E2E)", () => {
   let app: INestApplication;
   let bigquery: BigQueryService;
-  let jwt: JwtService;
   let userFactory: UserFactory;
+  let accessTokenCreator: AccessTokenCreator;
   let projectFactory: ProjectFactory;
   let baseFactory: BaseFactory;
   let materialFactory: MaterialFactory;
@@ -28,6 +29,7 @@ describe("Edit Budgets by Material (E2E)", () => {
       imports: [AppModule, DatabaseModule],
       providers: [
         UserFactory,
+        AccessTokenCreator,
         MaterialFactory,
         BaseFactory,
         ProjectFactory,
@@ -39,8 +41,8 @@ describe("Edit Budgets by Material (E2E)", () => {
     app = moduleRef.createNestApplication();
 
     bigquery = moduleRef.get(BigQueryService);
-    jwt = moduleRef.get(JwtService);
     userFactory = moduleRef.get(UserFactory);
+    accessTokenCreator = moduleRef.get(AccessTokenCreator);
     materialFactory = moduleRef.get(MaterialFactory);
     baseFactory = moduleRef.get(BaseFactory);
     projectFactory = moduleRef.get(ProjectFactory);
@@ -59,13 +61,7 @@ describe("Edit Budgets by Material (E2E)", () => {
       type: "Orçamentista",
     });
 
-    const accessToken = jwt.sign({
-      sub: user.id.toString(),
-      type: user.type,
-      baseId: user.baseId.toString(),
-      contractId: user.contractId.toString(),
-      firstLogin: user.firstLogin,
-    });
+    const accessToken = accessTokenCreator.execute(user);
 
     const project1 = await projectFactory.makeBqProject({
       project_number: "B-test-1",

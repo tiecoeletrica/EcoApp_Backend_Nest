@@ -12,12 +12,13 @@ import { BudgetFactory } from "test/factories/make-budget";
 import { ContractFactory } from "test/factories/make-contract";
 import { BaseFactory } from "test/factories/make-base";
 import { MaterialFactory } from "test/factories/make-material";
+import { AccessTokenCreator } from "test/access-token-creator";
 
 describe("Fetch Movimentation and Budget By Project Name (E2E)", () => {
   let app: INestApplication;
   let bigquery: BigQueryService;
-  let jwt: JwtService;
   let userFactory: UserFactory;
+  let accessTokenCreator: AccessTokenCreator;
   let movimentationFactory: MovimentationFactory;
   let projectFactory: ProjectFactory;
   let budgetFactory: BudgetFactory;
@@ -30,6 +31,7 @@ describe("Fetch Movimentation and Budget By Project Name (E2E)", () => {
       imports: [AppModule, DatabaseModule],
       providers: [
         UserFactory,
+        AccessTokenCreator,
         MovimentationFactory,
         BudgetFactory,
         ProjectFactory,
@@ -42,8 +44,8 @@ describe("Fetch Movimentation and Budget By Project Name (E2E)", () => {
     app = moduleRef.createNestApplication();
 
     bigquery = moduleRef.get(BigQueryService);
-    jwt = moduleRef.get(JwtService);
     userFactory = moduleRef.get(UserFactory);
+    accessTokenCreator = moduleRef.get(AccessTokenCreator);
     movimentationFactory = moduleRef.get(MovimentationFactory);
     budgetFactory = moduleRef.get(BudgetFactory);
     projectFactory = moduleRef.get(ProjectFactory);
@@ -76,13 +78,7 @@ describe("Fetch Movimentation and Budget By Project Name (E2E)", () => {
       contractId: contract.id,
     });
 
-    const accessToken = jwt.sign({
-      sub: user.id.toString(),
-      type: user.type,
-      baseId: user.baseId.toString(),
-      contractId: user.contractId.toString(),
-      firstLogin: user.firstLogin,
-    });
+    const accessToken = accessTokenCreator.execute(user);
 
     const project = await projectFactory.makeBqProject({
       project_number: "B-teste",

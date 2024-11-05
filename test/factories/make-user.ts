@@ -35,7 +35,7 @@ export function makeUser(
 
   const baseProps = {
     name: faker.person.firstName(),
-    cpf: faker.number.int({ min: 100000000, max: 10000000000 }).toString(),
+    cpf: faker.number.int({ min: 10000000000, max: 99999999999 }).toString(),
     email: faker.internet.email({ provider: "ecoeletrica.com.br" }),
     status: faker.helpers.arrayElement(status),
     password: faker.internet.password(),

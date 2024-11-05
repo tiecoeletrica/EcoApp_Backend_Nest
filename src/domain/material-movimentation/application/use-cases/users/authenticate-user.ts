@@ -30,6 +30,7 @@ export class AuthenticateUserUseCase {
     password,
   }: AuthenticateUserUseCaseRequest): Promise<AuthenticateUserResponse> {
     const user = await this.userRepository.findByEmail(email);
+    console.log(user);
 
     if (!user || user.status === "inativo")
       return left(new WrogCredentialsError());
@@ -47,6 +48,9 @@ export class AuthenticateUserUseCase {
       baseId: user.baseId.toString(),
       contractId: user.contractId.toString(),
       firstLogin: user.firstLogin,
+      cpf: user.cpf,
+      name: user.name,
+      email: user.email,
     });
 
     return right({ accessToken });

@@ -68,19 +68,19 @@ Authorization: Bearer {{authToken}}
 ###
 
 # @name get_user_by_id
-GET {{baseURL}}/accounts/e673e72b-431c-4212-bbfd-a78c5e06c200
+GET {{baseURL}}/accounts/cb6af78c-4207-4549-8111-7a28eeca73d4
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 ###
 
 # @name edit_account
-PUT {{baseURL}}/accounts/a739b640-6db9-4584-874a-b6da6c13c346
+PUT {{baseURL}}/accounts/381eb27e-f1a6-403f-ad97-67e7582c32ab
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-    "password": "ECO@2012"
+    "password": "123456"
 }
 
 ###
