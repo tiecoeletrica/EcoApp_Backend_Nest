@@ -15,6 +15,8 @@
 | 05/11/2024 | new presenter on movimentations-streaming to process less data        |
 | 05/11/2024 | accept baseName on register project by array                          |
 | 05/11/2024 | create controllers to register bulk of projects and materials         |
+| 05/11/2024 | create Access Token Creator for e2e tests                             |
+| 05/11/2024 | all user data on access token and fix edit password                   |
 
 # Technical debt
 
@@ -92,10 +94,11 @@
 - edit by array on BigqueryMethods [x]
 - accept baseName on register project by array [x]
 - create controllers to register bulk of projects and materials [x]
+- create Access Token Creator for e2e tests [x]
+- send all user data on access token [x]
 - create a away to migrate the schemas of "/src/infra/database/bigquery/schemas" from files to tables on bigquery []
 - on budgets-materials put show observation with replaced material []
 - create use cases to password recover []
-- send all user data on access token []
 
 # Test 1 file
 

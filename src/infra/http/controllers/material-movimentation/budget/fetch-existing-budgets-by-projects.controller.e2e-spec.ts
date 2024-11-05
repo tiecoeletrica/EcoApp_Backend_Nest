@@ -11,12 +11,13 @@ import { BudgetFactory } from "test/factories/make-budget";
 import { ContractFactory } from "test/factories/make-contract";
 import { BaseFactory } from "test/factories/make-base";
 import { MaterialFactory } from "test/factories/make-material";
+import { AccessTokenCreator } from "test/access-token-creator";
 
 describe("Fetch exsinting budgets by projectIds (E2E)", () => {
   let app: INestApplication;
   let bigquery: BigQueryService;
-  let jwt: JwtService;
   let userFactory: UserFactory;
+  let accessTokenCreator: AccessTokenCreator;
   let projectFactory: ProjectFactory;
   let budgetFactory: BudgetFactory;
   let contractFactory: ContractFactory;
@@ -28,6 +29,7 @@ describe("Fetch exsinting budgets by projectIds (E2E)", () => {
       imports: [AppModule, DatabaseModule],
       providers: [
         UserFactory,
+        AccessTokenCreator,
         BudgetFactory,
         ProjectFactory,
         BaseFactory,
@@ -39,8 +41,8 @@ describe("Fetch exsinting budgets by projectIds (E2E)", () => {
     app = moduleRef.createNestApplication();
 
     bigquery = moduleRef.get(BigQueryService);
-    jwt = moduleRef.get(JwtService);
     userFactory = moduleRef.get(UserFactory);
+    accessTokenCreator = moduleRef.get(AccessTokenCreator);
     budgetFactory = moduleRef.get(BudgetFactory);
     projectFactory = moduleRef.get(ProjectFactory);
     baseFactory = moduleRef.get(BaseFactory);
@@ -57,20 +59,14 @@ describe("Fetch exsinting budgets by projectIds (E2E)", () => {
     const user = await userFactory.makeBqUser({
       baseId: base.id,
       contractId: contract.id,
-      type: "Orçamentista"
+      type: "Orçamentista",
     });
 
     const material = await materialFactory.makeBqMaterial({
       contractId: contract.id,
     });
 
-    const accessToken = jwt.sign({
-      sub: user.id.toString(),
-      type: user.type,
-      baseId: user.baseId.toString(),
-      contractId: user.contractId.toString(),
-      firstLogin: user.firstLogin,
-    });
+    const accessToken = accessTokenCreator.execute(user);
 
     const project1 = await projectFactory.makeBqProject({
       baseId: base.id,

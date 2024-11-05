@@ -8,26 +8,32 @@ import { UserFactory } from "test/factories/make-user";
 import { MaterialFactory } from "test/factories/make-material";
 import { DatabaseModule } from "src/infra/database/database.module";
 import { ContractFactory } from "test/factories/make-contract";
+import { AccessTokenCreator } from "test/access-token-creator";
 
 describe("Fetch Materials (E2E)", () => {
   let app: INestApplication;
   let bigquery: BigQueryService;
-  let jwt: JwtService;
   let userFactory: UserFactory;
+  let accessTokenCreator: AccessTokenCreator;
   let materialFactory: MaterialFactory;
   let contractFactory: ContractFactory;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [UserFactory, MaterialFactory, ContractFactory],
+      providers: [
+        UserFactory,
+        AccessTokenCreator,
+        MaterialFactory,
+        ContractFactory,
+      ],
     }).compile();
 
     app = moduleRef.createNestApplication();
 
     bigquery = moduleRef.get(BigQueryService);
-    jwt = moduleRef.get(JwtService);
     userFactory = moduleRef.get(UserFactory);
+    accessTokenCreator = moduleRef.get(AccessTokenCreator);
     materialFactory = moduleRef.get(MaterialFactory);
     contractFactory = moduleRef.get(ContractFactory);
 
@@ -40,13 +46,7 @@ describe("Fetch Materials (E2E)", () => {
       contractId: contract.id,
     });
 
-    const accessToken = jwt.sign({
-      sub: user.id.toString(),
-      type: user.type,
-      baseId: user.baseId.toString(),
-      contractId: user.contractId.toString(),
-      firstLogin: user.firstLogin,
-    });
+    const accessToken = accessTokenCreator.execute(user);
 
     await materialFactory.makeBqMaterial({
       code: 123132,

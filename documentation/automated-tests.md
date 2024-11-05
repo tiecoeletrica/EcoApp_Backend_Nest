@@ -63,6 +63,7 @@ beforeAll(async () => {
 
   bigquery = moduleRef.get(BigQueryService);
   userFactory = moduleRef.get(UserFactory);
+    accessTokenCreator = moduleRef.get(AccessTokenCreator);
 
   await app.init();
 });

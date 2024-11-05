@@ -7,25 +7,26 @@ import { JwtService } from "@nestjs/jwt";
 import { UserFactory } from "test/factories/make-user";
 import { BaseFactory } from "test/factories/make-base";
 import { DatabaseModule } from "src/infra/database/database.module";
+import { AccessTokenCreator } from "test/access-token-creator";
 
 describe("Fetch Bases (E2E)", () => {
   let app: INestApplication;
   let bigquery: BigQueryService;
-  let jwt: JwtService;
   let userFactory: UserFactory;
+  let accessTokenCreator: AccessTokenCreator;
   let baseFactory: BaseFactory;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [UserFactory, BaseFactory],
+      providers: [UserFactory, AccessTokenCreator, BaseFactory],
     }).compile();
 
     app = moduleRef.createNestApplication();
 
     bigquery = moduleRef.get(BigQueryService);
-    jwt = moduleRef.get(JwtService);
     userFactory = moduleRef.get(UserFactory);
+    accessTokenCreator = moduleRef.get(AccessTokenCreator);
     baseFactory = moduleRef.get(BaseFactory);
 
     await app.init();
@@ -34,13 +35,7 @@ describe("Fetch Bases (E2E)", () => {
   test("[GET] /bases", async () => {
     const user = await userFactory.makeBqUser({});
 
-    const accessToken = jwt.sign({
-      sub: user.id.toString(),
-      type: user.type,
-      baseId: user.baseId.toString(),
-      contractId: user.contractId.toString(),
-      firstLogin: user.firstLogin,
-    });
+    const accessToken = accessTokenCreator.execute(user);
 
     await baseFactory.makeBqBase({});
     await baseFactory.makeBqBase({});

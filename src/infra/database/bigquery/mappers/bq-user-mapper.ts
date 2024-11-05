@@ -19,6 +19,7 @@ export class BqUserMapper {
           password: raw.password,
           type: raw.type,
           status: raw.status,
+          firstLogin: raw.firstLogin,
         },
         new UniqueEntityID(raw.id)
       );
@@ -33,6 +34,7 @@ export class BqUserMapper {
           password: raw.password,
           type: raw.type,
           status: raw.status,
+          firstLogin: raw.firstLogin,
         },
         new UniqueEntityID(raw.id)
       );
@@ -47,6 +49,7 @@ export class BqUserMapper {
           password: raw.password,
           type: raw.type,
           status: raw.status,
+          firstLogin: raw.firstLogin,
         },
         new UniqueEntityID(raw.id)
       );
@@ -61,6 +64,7 @@ export class BqUserMapper {
           password: raw.password,
           type: BqUserMapper.isUserType(raw.type) ? raw.type : "Almoxarife",
           status: raw.status,
+          firstLogin: raw.firstLogin,
         },
         new UniqueEntityID(raw.id)
       );

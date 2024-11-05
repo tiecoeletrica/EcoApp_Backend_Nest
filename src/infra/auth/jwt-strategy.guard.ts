@@ -11,6 +11,10 @@ const tokenPayloadSchema = z.object({
   type: z.string(),
   baseId: z.string().uuid(),
   contractId: z.string().uuid(),
+  firstLogin: z.boolean(),
+  cpf: z.string().regex(/^\d{11,}$/, "O CPF precisa ter 11 dígitos numéricos"),
+  name: z.string(),
+  email: z.string().email(),
 });
 
 export type UserPayload = z.infer<typeof tokenPayloadSchema>;

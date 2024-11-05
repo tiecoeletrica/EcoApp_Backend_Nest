@@ -11,12 +11,13 @@ import { BqMovimentationProps } from "src/infra/database/bigquery/schemas/movime
 import { ProjectFactory } from "test/factories/make-project";
 import { BaseFactory } from "test/factories/make-base";
 import { MaterialFactory } from "test/factories/make-material";
+import { AccessTokenCreator } from "test/access-token-creator";
 
 describe("Transfer Movimentation Between Projects (E2E)", () => {
   let app: INestApplication;
   let bigquery: BigQueryService;
-  let jwt: JwtService;
   let userFactory: UserFactory;
+  let accessTokenCreator: AccessTokenCreator;
   let movimentationFactory: MovimentationFactory;
   let projectFactory: ProjectFactory;
   let baseFactory: BaseFactory;
@@ -27,6 +28,7 @@ describe("Transfer Movimentation Between Projects (E2E)", () => {
       imports: [AppModule, DatabaseModule],
       providers: [
         UserFactory,
+        AccessTokenCreator,
         MovimentationFactory,
         MaterialFactory,
         BaseFactory,
@@ -37,8 +39,8 @@ describe("Transfer Movimentation Between Projects (E2E)", () => {
     app = moduleRef.createNestApplication();
 
     bigquery = moduleRef.get(BigQueryService);
-    jwt = moduleRef.get(JwtService);
     userFactory = moduleRef.get(UserFactory);
+    accessTokenCreator = moduleRef.get(AccessTokenCreator);
     movimentationFactory = moduleRef.get(MovimentationFactory);
     materialFactory = moduleRef.get(MaterialFactory);
     baseFactory = moduleRef.get(BaseFactory);
@@ -53,14 +55,8 @@ describe("Transfer Movimentation Between Projects (E2E)", () => {
       type: "Almoxarife",
       baseId: base.id,
     });
-    
-    const accessToken = jwt.sign({
-      sub: user.id.toString(),
-      type: user.type,
-      baseId: user.baseId.toString(),
-      contractId: user.contractId.toString(),
-      firstLogin: user.firstLogin,
-    });
+
+    const accessToken = accessTokenCreator.execute(user);
 
     const projectOut = await projectFactory.makeBqProject();
     const projectIn = await projectFactory.makeBqProject();

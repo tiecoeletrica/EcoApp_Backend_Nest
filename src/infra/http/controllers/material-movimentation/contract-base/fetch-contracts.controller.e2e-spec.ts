@@ -9,25 +9,26 @@ import { UserFactory } from "test/factories/make-user";
 import { ContractFactory } from "test/factories/make-contract";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { DatabaseModule } from "src/infra/database/database.module";
+import { AccessTokenCreator } from "test/access-token-creator";
 
 describe("Fetch Contracts (E2E)", () => {
   let app: INestApplication;
   let bigquery: BigQueryService;
-  let jwt: JwtService;
   let userFactory: UserFactory;
+  let accessTokenCreator: AccessTokenCreator;
   let contractFactory: ContractFactory;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [UserFactory, ContractFactory],
+      providers: [UserFactory, AccessTokenCreator, ContractFactory],
     }).compile();
 
     app = moduleRef.createNestApplication();
 
     bigquery = moduleRef.get(BigQueryService);
-    jwt = moduleRef.get(JwtService);
     userFactory = moduleRef.get(UserFactory);
+    accessTokenCreator = moduleRef.get(AccessTokenCreator);
     contractFactory = moduleRef.get(ContractFactory);
 
     await app.init();
@@ -36,13 +37,7 @@ describe("Fetch Contracts (E2E)", () => {
   test("[GET] /contracts", async () => {
     const user = await userFactory.makeBqUser({});
 
-    const accessToken = jwt.sign({
-      sub: user.id.toString(),
-      type: user.type,
-      baseId: user.baseId.toString(),
-      contractId: user.contractId.toString(),
-      firstLogin: user.firstLogin,
-    });
+    const accessToken = accessTokenCreator.execute(user);
     const contractId = randomUUID();
 
     await contractFactory.makeBqContract({});
