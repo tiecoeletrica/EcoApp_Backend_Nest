@@ -65,48 +65,4 @@ describe("Register Project (E2E)", () => {
     expect(response.statusCode).toBe(201);
     expect(projectDataBase.description).toEqual("MP-NUM-SEI-DAS-QUANTAS");
   });
-
-  test("[POST] /projects - array of projects", async () => {
-    const base = await baseFactory.makeBqBase();
-
-    const user = await userFactory.makeBqUser({
-      baseId: base.id,
-      type: "Administrador",
-    });
-
-    const accessToken = jwt.sign({
-      sub: user.id.toString(),
-      type: user.type,
-      baseId: user.baseId.toString(),
-      contractId: user.contractId.toString(),
-      firstLogin: user.firstLogin,
-    });
-
-    const response = await request(app.getHttpServer())
-      .post("/projects")
-      .set("Authorization", `Bearer ${accessToken}`)
-      .send([
-        {
-          project_number: "B-12345678",
-          description: "MP-NUM-SEI-DAS-QUANTAS",
-          type: "obra",
-          baseId: base.id.toString(),
-          city: "Ituí",
-        },
-        {
-          project_number: "B-1234567",
-          description: "MP-NUM-SEI-DAS-QUANTAS",
-          type: "obra",
-          baseId: base.id.toString(),
-          city: "Ituí",
-        },
-      ]);
-
-    const projectDataBase = await bigquery.project.select({
-      whereIn: { project_number: ["B-12345678", "B-1234567"] },
-    });
-
-    expect(response.statusCode).toBe(201);
-    expect(projectDataBase.length).toEqual(2);
-  });
 });

@@ -8,6 +8,7 @@ import { makeBase } from "test/factories/make-base";
 import { makeProject } from "test/factories/make-project";
 import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 import { makeContract } from "test/factories/make-contract";
+import { NotValidError } from "../errors/not-valid-error";
 
 let inMemoryContractRepository: InMemoryContractRepository;
 let inMemoryBaseRepository: InMemoryBaseRepository;
@@ -30,7 +31,7 @@ describe("Register list of projects", () => {
   });
 
   it("should be able to register a list projects", async () => {
-    const base = makeBase();
+    const base = makeBase({ baseName: "Base 1" });
     await inMemoryBaseRepository.create(base);
 
     const result = await sut.execute([
@@ -39,14 +40,14 @@ describe("Register list of projects", () => {
         description:
           "fazenda-num-sei-das-quantas-POV-onde-judas-perdeu-as-botas",
         type: "obra",
-        baseId: base.id.toString(),
+        baseName: "Base 1",
         city: "Lagedo do Tabocal",
       },
       {
         project_number: "B-10101005",
         description: "fazenda-num-sei-das-quantas",
         type: "obra",
-        baseId: base.id.toString(),
+        baseName: "Base 1",
         city: "Lagedo do Tabocal",
       },
     ]);
@@ -56,7 +57,7 @@ describe("Register list of projects", () => {
   });
 
   it("should not be able to register a project if a project_number of the list is already registered", async () => {
-    const base = makeBase();
+    const base = makeBase({ baseName: "Base 1" });
     await inMemoryBaseRepository.create(base);
 
     const project = makeProject({
@@ -71,14 +72,14 @@ describe("Register list of projects", () => {
         description:
           "fazenda-num-sei-das-quantas-POV-onde-judas-perdeu-as-botas",
         type: "obra",
-        baseId: base.id.toString(),
+        baseName: "Base 1",
         city: "Lagedo do Tabocal",
       },
       {
         project_number: "B-10101005",
         description: "fazenda-num-sei-das-quantas",
         type: "obra",
-        baseId: base.id.toString(),
+        baseName: "Base 1",
         city: "Lagedo do Tabocal",
       },
     ]);
@@ -87,8 +88,8 @@ describe("Register list of projects", () => {
     expect(result.value).toBeInstanceOf(ResourceAlreadyRegisteredError);
   });
 
-  it("should not be able to create a project if at least one baseId is not found", async () => {
-    const base = makeBase();
+  it("should not be able to create a project if at least one baseName is not found", async () => {
+    const base = makeBase({ baseName: "Base-1" });
     await inMemoryBaseRepository.create(base);
 
     const result = await sut.execute([
@@ -97,14 +98,14 @@ describe("Register list of projects", () => {
         description:
           "fazenda-num-sei-das-quantas-POV-onde-judas-perdeu-as-botas",
         type: "obra",
-        baseId: "base-that-does-not-exists",
+        baseName: "base-that-does-not-exists",
         city: "Lagedo do Tabocal",
       },
       {
         project_number: "B-10101005",
         description: "fazenda-num-sei-das-quantas",
         type: "obra",
-        baseId: base.id.toString(),
+        baseName: "Base 1",
         city: "Lagedo do Tabocal",
       },
     ]);
@@ -117,10 +118,10 @@ describe("Register list of projects", () => {
     const contract = makeContract();
     await inMemoryContractRepository.create(contract);
 
-    const base1 = makeBase({ contractId: contract.id });
+    const base1 = makeBase({ baseName: "Base 1", contractId: contract.id });
     await inMemoryBaseRepository.create(base1);
 
-    const base2 = makeBase({ contractId: contract.id });
+    const base2 = makeBase({ baseName: "Base 2" });
     await inMemoryBaseRepository.create(base2);
 
     const project = makeProject({
@@ -135,19 +136,19 @@ describe("Register list of projects", () => {
         description:
           "fazenda-num-sei-das-quantas-POV-onde-judas-perdeu-as-botas",
         type: "obra",
-        baseId: base2.id.toString(),
+        baseName: "Base 1",
         city: "Lagedo do Tabocal",
       },
       {
         project_number: "B-10101005",
         description: "fazenda-num-sei-das-quantas",
         type: "obra",
-        baseId: base2.id.toString(),
+        baseName: "Base 2",
         city: "Lagedo do Tabocal",
       },
     ]);
 
     expect(result.isLeft()).toBeTruthy();
-    expect(result.value).toBeInstanceOf(ResourceAlreadyRegisteredError);
+    expect(result.value).toBeInstanceOf(NotValidError);
   });
 });

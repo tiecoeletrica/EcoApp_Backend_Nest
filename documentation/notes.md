@@ -1,7 +1,7 @@
 # ChangeLog
 
-| Date       | Change                                                                |
-| :--------- | :-------------------------------------------------------------------- |
+|    Date    | Change                                                                |
+| :--------: | :-------------------------------------------------------------------- |
 | 30/10/2024 | filter by storekeeper name on movimentations history                  |
 | 30/10/2024 | review documentations                                                 |
 | 31/10/2024 | badges and summary on readme                                          |
@@ -12,6 +12,9 @@
 | 04/11/2024 | create first login parameter on users entities                        |
 | 04/11/2024 | projectId on fetch budget movimentation and fix date on insert by dev |
 | 04/11/2024 | edit by array on BigqueryMethods -> saveBulk                          |
+| 05/11/2024 | new presenter on movimentations-streaming to process less data        |
+| 05/11/2024 | accept baseName on register project by array                          |
+| 05/11/2024 | create controllers to register bulk of projects and materials         |
 
 # Technical debt
 
@@ -87,10 +90,12 @@
 - projectId on fetch budget movimentation and fix date on insert by dev [x]
 - review edit budget by material script [x]
 - edit by array on BigqueryMethods [x]
+- accept baseName on register project by array [x]
+- create controllers to register bulk of projects and materials [x]
 - create a away to migrate the schemas of "/src/infra/database/bigquery/schemas" from files to tables on bigquery []
 - on budgets-materials put show observation with replaced material []
 - create use cases to password recover []
-- accept base_name on register project by array []
+- send all user data on access token []
 
 # Test 1 file
 
@@ -117,6 +122,7 @@
   - Criei o InMemory... que é implementação do repositório para teste na camada de domínio
   - Criei os métodos necessários no repositório de teste
 - Criei o teste para validar todas as saídas do meu caso de uso
+- Adicionei as autorizações daquela nova entidade e/ou casos de uso [aqui](/src/core/role-authorization/)
 
 ### Infra
 

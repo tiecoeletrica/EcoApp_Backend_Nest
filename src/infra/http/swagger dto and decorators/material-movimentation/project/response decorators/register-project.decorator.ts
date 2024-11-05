@@ -15,7 +15,7 @@ export const RegisterProjectDecorator = () => {
       description: "Conflict Exception",
       schema: {
         example: {
-          message: "O email informado já foi cadastrado!",
+          message: "O projeto já foi cadastrado!",
           error: "Conflict",
           statusCode: 409,
         },

@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { Eihter, left, right } from "../../../../../core/either";
-import { UniqueEntityID } from "../../../../../core/entities/unique-entity-id";
 import { ProjectRepository } from "../../repositories/project-repository";
 import { ResourceNotFoundError } from "../errors/resource-not-found-error";
 import { Storekeeper } from "src/domain/material-movimentation/enterprise/entities/storekeeper";
@@ -10,17 +9,18 @@ import { BaseRepository } from "../../repositories/base-repository";
 import { Base } from "src/domain/material-movimentation/enterprise/entities/base";
 import { Estimator } from "src/domain/material-movimentation/enterprise/entities/estimator";
 import { ResourceAlreadyRegisteredError } from "../errors/resource-already-registered-error";
+import { NotValidError } from "../errors/not-valid-error";
 
 interface RegisterListOfProjectsUseCaseRequest {
   project_number: string;
   description: string;
   type: string;
-  baseId: string;
+  baseName: string;
   city: string;
 }
 
 type RegisterListOfProjectsResponse = Eihter<
-  ResourceAlreadyRegisteredError | ResourceNotFoundError,
+  ResourceAlreadyRegisteredError | ResourceNotFoundError | NotValidError,
   {
     projects: Project[];
   }
@@ -34,30 +34,37 @@ export class RegisterListOfProjectsUseCase {
   ) {}
 
   private project_numbers: string = "";
-  private contractId: string = "";
+  private bases: Base[] = [];
 
   async execute(
-    resquestUseCase: RegisterListOfProjectsUseCaseRequest[]
+    requestUseCase: RegisterListOfProjectsUseCaseRequest[]
   ): Promise<RegisterListOfProjectsResponse> {
     this.project_numbers = "";
-    this.contractId = "";
+    this.bases = [];
 
-    const { containsIdError, message } = await this.verifyResourcesId(
-      resquestUseCase
+    const { containsErrorType, message } = await this.verifyResourcesId(
+      requestUseCase
     );
 
-    if (containsIdError) {
-      if (!message.includes("Projetos"))
-        return left(new ResourceNotFoundError(message));
-      else return left(new ResourceAlreadyRegisteredError(message));
+    if (containsErrorType) {
+      switch (containsErrorType) {
+        case "project":
+          return left(new ResourceAlreadyRegisteredError(message));
+        case "base":
+          return left(new ResourceNotFoundError(message));
+        case "contract":
+          return left(new NotValidError(message));
+      }
     }
 
-    const projects = resquestUseCase.map((project) => {
+    const requestWithId = this.replaceBaseNameToBaseId(requestUseCase);
+
+    const projects = requestWithId.map((project) => {
       return Project.create({
         project_number: project.project_number,
         description: project.description,
         type: project.type,
-        baseId: new UniqueEntityID(project.baseId),
+        baseId: project.baseId,
         city: project.city,
       });
     });
@@ -68,29 +75,43 @@ export class RegisterListOfProjectsUseCase {
   }
 
   private async verifyResourcesId(
-    resquestUseCase: RegisterListOfProjectsUseCaseRequest[]
+    requestUseCase: RegisterListOfProjectsUseCaseRequest[]
   ) {
-    let containsIdError = false;
-    let message;
+    let containsErrorType: "base" | "contract" | "project" | undefined =
+      undefined;
+    let message: string = "";
 
-    if (!(await this.verifyIfIdsExist(resquestUseCase, "baseId"))) {
-      containsIdError = true;
-      message = "pelo menos um dos baseIds não encontrado";
+    if (!(await this.verifyIfExist(requestUseCase, "baseName"))) {
+      let nomesDasBases: string = ``;
+      this.bases.forEach((base, index) => {
+        nomesDasBases += base.baseName;
+        if (this.bases.length !== index) nomesDasBases += `, `;
+      });
+      containsErrorType = "base";
+      message = `Nome de base não encontrado. Somente as seguintes bases são aceitas: ${nomesDasBases}`;
+      return { containsErrorType, message };
     }
 
-    if (!(await this.verifyIfIdsExist(resquestUseCase, "project_number"))) {
-      containsIdError = true;
+    if (this.uniqueValues(this.bases, "contractId").length > 1) {
+      containsErrorType = "contract";
+      message = `Não é permitido registrar projetos de bases que não são do mesmo contrato`;
+      return { containsErrorType, message };
+    }
+
+    if (!(await this.verifyIfExist(requestUseCase, "project_number"))) {
+      containsErrorType = "project";
       message = `Projetos ${this.project_numbers} já cadastrados`;
+      return { containsErrorType, message };
     }
 
-    return { containsIdError, message };
+    return { containsErrorType, message };
   }
 
-  private async verifyIfIdsExist(
-    resquestUseCase: RegisterListOfProjectsUseCaseRequest[],
+  private async verifyIfExist(
+    requestUseCase: RegisterListOfProjectsUseCaseRequest[],
     key: keyof RegisterListOfProjectsUseCaseRequest
   ): Promise<boolean> {
-    const uniqueValuesArray = this.uniqueValues(resquestUseCase, key);
+    const uniqueValuesArray = this.uniqueValues(requestUseCase, key);
 
     let result:
       | Array<Estimator | Storekeeper>
@@ -100,37 +121,62 @@ export class RegisterListOfProjectsUseCase {
 
     switch (key) {
       case "project_number":
+        const contractId = this.getContractId(this.bases, requestUseCase);
         result = await this.projectRepository.findByProjectNumberAndContractIds(
           uniqueValuesArray,
-          this.contractId
+          contractId
         );
         result.map((project, index) => {
           this.project_numbers += `${project.project_number}`;
           if (index + 1 !== result.length) this.project_numbers += ", ";
         });
         break;
-      case "baseId":
-        result = await this.baseRepository.findByIds(uniqueValuesArray);
-        this.contractId = result[0].contractId.toString() ?? "";
+      case "baseName":
+        result = await this.baseRepository.findMany({ page: 1 });
+        this.bases = result;
         break;
       default:
         result = [];
         break;
     }
-    if (key === "baseId")
-      return uniqueValuesArray.length === result.length ? true : false;
+
+    if (key === "baseName") {
+      if (requestUseCase.length === 0) return true;
+      const allBaseNamesRegistered = new Set(
+        this.bases.map((base) => base.baseName)
+      );
+      return requestUseCase.every((request) =>
+        allBaseNamesRegistered.has(request.baseName)
+      );
+    }
     if (key === "project_number") return result.length === 0 ? true : false;
     else return false;
   }
 
-  private uniqueValues(
-    resquestUseCase: RegisterListOfProjectsUseCaseRequest[],
-    key: keyof RegisterListOfProjectsUseCaseRequest
-  ): string[] {
-    return [
-      ...new Set(
-        resquestUseCase.map((movimentation) => String(movimentation[key]))
-      ),
-    ];
+  private uniqueValues<T>(requestUseCase: T[], key: keyof T): string[] {
+    return [...new Set(requestUseCase.map((item) => String(item[key])))];
+  }
+
+  private replaceBaseNameToBaseId(
+    request: RegisterListOfProjectsUseCaseRequest[]
+  ) {
+    return request.map((req) => {
+      return {
+        project_number: req.project_number,
+        description: req.description,
+        type: req.type,
+        baseId: this.bases.find((base) => base.baseName === req.baseName)!.id,
+        city: req.city,
+      };
+    });
+  }
+
+  private getContractId(
+    bases: Base[],
+    request: RegisterListOfProjectsUseCaseRequest[]
+  ) {
+    return bases
+      .find((base) => request[0].baseName === base.baseName)!
+      .contractId.toString();
   }
 }

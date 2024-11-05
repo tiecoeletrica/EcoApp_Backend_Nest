@@ -90,7 +90,12 @@ export class RegisterUserUseCase {
     if (!this.isUserType(type)) return left(new WrongTypeError());
 
     const searchUser = await this.userRepository.findByEmail(email);
-    if (searchUser) return left(new ResourceAlreadyRegisteredError());
+    if (searchUser)
+      return left(
+        new ResourceAlreadyRegisteredError(
+          `O usuário com email '${searchUser.email}' já foi cadastrado`
+        )
+      );
 
     if (type === "Orçamentista")
       user = Estimator.create({

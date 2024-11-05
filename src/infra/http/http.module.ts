@@ -68,6 +68,8 @@ import { FetchProjectsBudgetsByMaterialsController } from "./controllers/materia
 import { FetchProjectsBudgetsByMaterialsUseCase } from "src/domain/material-movimentation/application/use-cases/budget/fetch-projects-of-budgets-by-meterials";
 import { EditBudgetsByMaterialUseCase } from "src/domain/material-movimentation/application/use-cases/budget/edit-budgets-by-material";
 import { EditBudgetsByMaterialController } from "./controllers/material-movimentation/budget/edit-budgets-by-material.controller";
+import { RegisterListOfProjectsController } from "./controllers/material-movimentation/project/register-list-of-projects.controller";
+import { RegisterListOfMaterialsController } from "./controllers/material-movimentation/material/register-list-of-materials.controller";
 
 @Module({
   imports: [DatabaseModule, CryptographyModule, DtoModule],
@@ -75,6 +77,7 @@ import { EditBudgetsByMaterialController } from "./controllers/material-moviment
     CreateAccountController,
     AuthenticateController,
     CreateMaterialController,
+    RegisterListOfMaterialsController,
     FetchMaterialController,
     FetchAllMaterialController,
     GetAccountByidController,
@@ -91,6 +94,7 @@ import { EditBudgetsByMaterialController } from "./controllers/material-moviment
     DeletePhysicalDocumentController,
     TransferMaterialController,
     RegisterProjectController,
+    RegisterListOfProjectsController,
     TransferMovimentationBetweenProjectsController,
     FetchMovimentationHistoryController,
     FetchBudgetMovimentationByProjectController,

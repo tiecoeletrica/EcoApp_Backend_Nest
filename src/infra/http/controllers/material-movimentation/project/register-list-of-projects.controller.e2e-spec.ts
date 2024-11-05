@@ -6,19 +6,19 @@ import { BigQueryService } from "src/infra/database/bigquery/bigquery.service";
 import { JwtService } from "@nestjs/jwt";
 import { UserFactory } from "test/factories/make-user";
 import { DatabaseModule } from "src/infra/database/database.module";
-import { ContractFactory } from "test/factories/make-contract";
+import { BaseFactory } from "test/factories/make-base";
 
-describe("Create Material (E2E)", () => {
+describe("Register Project Bulk (E2E)", () => {
   let app: INestApplication;
   let bigquery: BigQueryService;
   let jwt: JwtService;
   let userFactory: UserFactory;
-  let contractFactory: ContractFactory;
+  let baseFactory: BaseFactory;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [UserFactory, ContractFactory],
+      providers: [UserFactory, BaseFactory],
     }).compile();
 
     app = moduleRef.createNestApplication();
@@ -26,16 +26,17 @@ describe("Create Material (E2E)", () => {
     bigquery = moduleRef.get(BigQueryService);
     jwt = moduleRef.get(JwtService);
     userFactory = moduleRef.get(UserFactory);
-    contractFactory = moduleRef.get(ContractFactory);
+    baseFactory = moduleRef.get(BaseFactory);
 
     await app.init();
   });
 
-  test("[POST] /materials - unique material", async () => {
-    const contract = await contractFactory.makeBqContract({});
+  test("[POST] /projects-bulk", async () => {
+    const base = await baseFactory.makeBqBase({ baseName: "Base 1" });
+
     const user = await userFactory.makeBqUser({
+      baseId: base.id,
       type: "Administrador",
-      contractId: contract.id,
     });
 
     const accessToken = jwt.sign({
@@ -47,20 +48,35 @@ describe("Create Material (E2E)", () => {
     });
 
     const response = await request(app.getHttpServer())
-      .post("/materials")
+      .post("/projects-bulk")
       .set("Authorization", `Bearer ${accessToken}`)
-      .send({
-        code: 123132,
-        description: "material de teste",
-        type: "concreto",
-        unit: "CDA",
-      });
+      .send([
+        {
+          project_number: "B-12345678",
+          description: "MP-NUM-SEI-DAS-QUANTAS",
+          type: "obra",
+          baseName: "Base 1",
+          city: "Ituí",
+        },
+        {
+          project_number: "B-1234567",
+          description: "MP-NUM-SEI-DAS-QUANTAS",
+          type: "obra",
+          baseName: "Base 1",
+          city: "Ituí",
+        },
+      ]);
 
-    const [MaterialDataBase] = await bigquery.material.select({
-      where: { code: 123132 },
+    console.log(response.headers);
+    console.log(response.body);
+    console.log(response.text);
+    console.log(response.error);
+
+    const projectDataBase = await bigquery.project.select({
+      whereIn: { project_number: ["B-12345678", "B-1234567"] },
     });
 
     expect(response.statusCode).toBe(201);
-    expect(MaterialDataBase.description).toEqual("MATERIAL DE TESTE");
+    expect(projectDataBase.length).toEqual(2);
   });
 });

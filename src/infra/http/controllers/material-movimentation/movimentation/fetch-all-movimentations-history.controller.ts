@@ -10,7 +10,7 @@ import { z } from "zod";
 import { ZodValidationPipe } from "src/infra/http/pipes/zod-validation.pipe";
 import { FetchAllMovimentationHistoryUseCase } from "src/domain/material-movimentation/application/use-cases/movimentation/fetch-all-movimentations-history";
 import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
-import { MovimentationWithDetailsPresenter } from "src/infra/http/presenters/movimentation-with-details-presenter";
+import { MovimentationStreamingWithDetailsPresenter } from "src/infra/http/presenters/movimentation-streaming-with-details-presenter";
 import { ApiTags } from "@nestjs/swagger";
 import { FetchAllMovimentationHistoryDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/movimentation/response decorators/fetch-all-movimentations-history.decorator";
 import { FetchAllMovimentationHistoryQueryDto } from "src/infra/http/swagger dto and decorators/material-movimentation/movimentation/dto classes/fetch-all-movimentations-history.dto";
@@ -102,7 +102,7 @@ export class FetchAllMovimentationHistoryController {
       const movimentations = result.value.movimentations;
       movimentations.forEach((movimentation, index) => {
         const movimentationJson = JSON.stringify(
-          MovimentationWithDetailsPresenter.toHTTP(movimentation)
+          MovimentationStreamingWithDetailsPresenter.toHTTP(movimentation)
         );
         movimentationStream.push(movimentationJson);
         if (index < movimentations.length - 1) {
