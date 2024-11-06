@@ -169,53 +169,63 @@ export class BqMovimentationRepository implements MovimentationRepository {
     };
   }
 
-  async findManyAllHistoryWithDetails(
+  async *findManyAllHistoryWithDetailsStream(
     baseId: string,
     storekeeperIds?: string[],
     projectId?: string,
     materialId?: string,
     startDate?: Date,
     endDate?: Date
-  ): Promise<MovimentationWithDetails[]> {
-    const movimentations = await this.bigquery.movimentation.select({
-      where: { baseId, projectId, materialId },
-      whereIn: { userId: storekeeperIds },
-      greaterOrEqualThan: { createdAt: startDate },
-      lessOrEqualThan: { createdAt: endDate },
-      orderBy: { column: "createdAt", direction: "DESC" },
-      include: {
-        project: {
-          join: {
-            table: "project",
-            on: "movimentation.projectId = project.id",
-          },
-          relationType: "one-to-one",
-        },
-        base: {
-          join: {
-            table: "base",
-            on: "movimentation.baseId = base.id",
-          },
-          relationType: "one-to-one",
-        },
-        user: {
-          join: {
-            table: "user",
-            on: "movimentation.userId = user.id",
-          },
-          relationType: "one-to-one",
-        },
-        material: {
-          join: {
-            table: "material",
-            on: "movimentation.materialId = material.id",
-          },
-          relationType: "one-to-one",
-        },
-      },
-    });
+  ): AsyncGenerator<MovimentationWithDetails[]> {
+    let page = 0;
+    const pageCount = 20000; // ou qualquer número que faça sentido para o tamanho do chunk
 
-    return movimentations.map(BqMovimentationWithDetailsMapper.toDomain);
+    while (true) {
+      const movimentations = await this.bigquery.movimentation.select({
+        where: { baseId, projectId, materialId },
+        whereIn: { userId: storekeeperIds },
+        greaterOrEqualThan: { createdAt: startDate },
+        lessOrEqualThan: { createdAt: endDate },
+        limit: pageCount,
+        offset: pageCount * page,
+        orderBy: { column: "createdAt", direction: "DESC" },
+        include: {
+          project: {
+            join: {
+              table: "project",
+              on: "movimentation.projectId = project.id",
+            },
+            relationType: "one-to-one",
+          },
+          base: {
+            join: {
+              table: "base",
+              on: "movimentation.baseId = base.id",
+            },
+            relationType: "one-to-one",
+          },
+          user: {
+            join: {
+              table: "user",
+              on: "movimentation.userId = user.id",
+            },
+            relationType: "one-to-one",
+          },
+          material: {
+            join: {
+              table: "material",
+              on: "movimentation.materialId = material.id",
+            },
+            relationType: "one-to-one",
+          },
+        },
+      });
+
+      if (movimentations.length === 0) break;
+
+      yield movimentations.map(BqMovimentationWithDetailsMapper.toDomain);
+      page++;
+    }
   }
 
   async create(movimentations: Movimentation[]): Promise<void> {

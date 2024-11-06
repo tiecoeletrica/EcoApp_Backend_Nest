@@ -32,22 +32,28 @@ export class FetchAllMovimentationHistoryUseCase {
     private materialRepository: MaterialRepository
   ) {}
 
-  async execute({
+  async *execute({
     baseId,
     name,
     project_number,
     material_code,
     startDate,
     endDate,
-  }: FetchAllMovimentationHistoryUseCaseRequest): Promise<FetchAllMovimentationHistoryUseCaseResponse> {
+  }: FetchAllMovimentationHistoryUseCaseRequest): AsyncGenerator<
+    FetchAllMovimentationHistoryUseCaseResponse,
+    void,
+    unknown
+  > {
     let storekeeperIds;
     let projectId;
     let materialId;
 
     if (name) {
       const storekeepers = await this.userRepository.findManyByName(name);
-      if (!storekeepers)
-        return left(new ResourceNotFoundError(`Nome ${name} não cadastrado`));
+      if (!storekeepers) {
+        yield left(new ResourceNotFoundError(`Nome ${name} não cadastrado`));
+        return;
+      }
       storekeeperIds = storekeepers.map((storekeeper) =>
         storekeeper.id.toString()
       );
@@ -58,10 +64,12 @@ export class FetchAllMovimentationHistoryUseCase {
         await this.projectRepository.findByProjectNumberWithoutBase(
           project_number
         );
-      if (!project)
-        return left(
+      if (!project) {
+        yield left(
           new ResourceNotFoundError(`Projeto ${project_number} não cadastrado`)
         );
+        return;
+      }
       projectId = project.id.toString();
     }
 
@@ -69,30 +77,33 @@ export class FetchAllMovimentationHistoryUseCase {
       const material = await this.materialRepository.findByCodeWithoutContract(
         material_code
       );
-      if (!material)
-        return left(
+      if (!material) {
+        yield left(
           new ResourceNotFoundError(`Material ${material_code} não cadastrado`)
         );
+        return;
+      }
       materialId = material.id.toString();
     }
 
-    const movimentations =
-      await this.movimentationRepository.findManyAllHistoryWithDetails(
-        baseId,
-        storekeeperIds,
-        projectId,
-        materialId,
-        startDate,
-        endDate
-      );
+    for await (const movimentations of this.movimentationRepository.findManyAllHistoryWithDetailsStream(
+      baseId,
+      storekeeperIds,
+      projectId,
+      materialId,
+      startDate,
+      endDate
+    )) {
+      if (!movimentations.length) {
+        yield left(
+          new ResourceNotFoundError(
+            "Nenhuma movimentação encontrada com esses parâmetros"
+          )
+        );
+        return;
+      }
 
-    if (!movimentations.length)
-      return left(
-        new ResourceNotFoundError(
-          "Nenhuma movimentação encontrada com esses parâmetros"
-        )
-      );
-
-    return right({ movimentations });
+      yield right({ movimentations });
+    }
   }
 }
