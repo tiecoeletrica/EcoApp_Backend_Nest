@@ -98,23 +98,29 @@ describe("Fetch Movimentations History", () => {
       newMovimentation3,
     ]);
 
-    const result = await sut.execute({
+    for await (const result of sut.execute({
       baseId: "base-1",
-    });
-
-    expect(result.isRight()).toBeTruthy();
-    if (result.isRight())
-      expect(result.value.movimentations).toEqual([
-        expect.objectContaining({
-          props: expect.objectContaining({ createdAt: new Date(2024, 5, 19) }),
-        }),
-        expect.objectContaining({
-          props: expect.objectContaining({ createdAt: new Date(2024, 5, 17) }),
-        }),
-        expect.objectContaining({
-          props: expect.objectContaining({ createdAt: new Date(2024, 5, 16) }),
-        }),
-      ]);
+    })) {
+      expect(result.isRight()).toBeTruthy();
+      if (result.isRight())
+        expect(result.value.movimentations).toEqual([
+          expect.objectContaining({
+            props: expect.objectContaining({
+              createdAt: new Date(2024, 5, 19),
+            }),
+          }),
+          expect.objectContaining({
+            props: expect.objectContaining({
+              createdAt: new Date(2024, 5, 17),
+            }),
+          }),
+          expect.objectContaining({
+            props: expect.objectContaining({
+              createdAt: new Date(2024, 5, 16),
+            }),
+          }),
+        ]);
+    }
   });
 
   it("should be able to fetch all movimentations history", async () => {
@@ -148,11 +154,12 @@ describe("Fetch Movimentations History", () => {
       ]);
     }
 
-    const result = await sut.execute({
+    for await (const result of sut.execute({
       baseId: "base-1",
-    });
-    if (result.isRight()) {
-      expect(result.value.movimentations).toHaveLength(110);
+    })) {
+      if (result.isRight()) {
+        expect(result.value.movimentations).toHaveLength(110);
+      }
     }
   });
 
@@ -209,13 +216,13 @@ describe("Fetch Movimentations History", () => {
       newMovimentation3,
     ]);
 
-    const result = await sut.execute({
+    for await (const result of sut.execute({
       baseId: "base-1",
       project_number: "projeto-1",
-    });
-
-    expect(result.isRight()).toBeTruthy();
-    if (result.isRight()) expect(result.value.movimentations).toHaveLength(2);
+    })) {
+      expect(result.isRight()).toBeTruthy();
+      if (result.isRight()) expect(result.value.movimentations).toHaveLength(2);
+    }
   });
 
   it("should be able to fetch movimentations history by material_code", async () => {
@@ -265,13 +272,13 @@ describe("Fetch Movimentations History", () => {
       newMovimentation3,
     ]);
 
-    const result = await sut.execute({
+    for await (const result of sut.execute({
       baseId: "base-1",
       material_code: 321564,
-    });
-
-    expect(result.isRight()).toBeTruthy();
-    if (result.isRight()) expect(result.value.movimentations).toHaveLength(2);
+    })) {
+      expect(result.isRight()).toBeTruthy();
+      if (result.isRight()) expect(result.value.movimentations).toHaveLength(2);
+    }
   });
 
   it("should be able to fetch movimentations history by storekeeper's email", async () => {
@@ -324,13 +331,13 @@ describe("Fetch Movimentations History", () => {
       newMovimentation3,
     ]);
 
-    const result = await sut.execute({
+    for await (const result of sut.execute({
       baseId: "base-1",
       name: "João",
-    });
-
-    expect(result.isRight()).toBeTruthy();
-    if (result.isRight()) expect(result.value.movimentations).toHaveLength(2);
+    })) {
+      expect(result.isRight()).toBeTruthy();
+      if (result.isRight()) expect(result.value.movimentations).toHaveLength(2);
+    }
   });
 
   it("should be able to fetch movimentations history by a range of dates", async () => {
@@ -381,13 +388,13 @@ describe("Fetch Movimentations History", () => {
       newMovimentation3,
     ]);
 
-    const result = await sut.execute({
+    for await (const result of sut.execute({
       baseId: "base-1",
       startDate: new Date(2024, 5, 13),
       endDate: new Date(2024, 5, 16),
-    });
-
-    expect(result.isRight()).toBeTruthy();
-    if (result.isRight()) expect(result.value.movimentations).toHaveLength(2);
+    })) {
+      expect(result.isRight()).toBeTruthy();
+      if (result.isRight()) expect(result.value.movimentations).toHaveLength(2);
+    }
   });
 });

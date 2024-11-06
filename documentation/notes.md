@@ -17,6 +17,8 @@
 | 05/11/2024 | create controllers to register bulk of projects and materials         |
 | 05/11/2024 | create Access Token Creator for e2e tests                             |
 | 05/11/2024 | all user data on access token and fix edit password                   |
+| 06/11/2024 | fix edit user and register bulk of projects                           |
+| 06/11/2024 | real data stream on movimentations-streaming                          |
 
 # Technical debt
 
@@ -100,6 +102,7 @@
 - on budgets-materials put show observation with replaced material []
 - create use cases to password recover []
 - dont alow half numbers on EQUIPAMENTO materials []
+- use code from [here](https://dicasdeprogramacao.com.br/algoritmo-para-validar-cpf/#google_vignette) to validate CPF []
 
 # Test 1 file
 

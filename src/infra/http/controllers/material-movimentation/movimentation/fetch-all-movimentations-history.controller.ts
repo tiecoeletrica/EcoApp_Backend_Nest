@@ -68,26 +68,6 @@ export class FetchAllMovimentationHistoryController {
       );
     }
 
-    const result = await this.fetchAllMovimentationHistoryUseCase.execute({
-      baseId: user.baseId,
-      name,
-      project_number,
-      material_code,
-      startDate,
-      endDate: endDateAjusted,
-    });
-
-    if (result.isLeft()) {
-      const error = result.value;
-
-      switch (error.constructor) {
-        case ResourceNotFoundError:
-          throw new NotFoundException(error.message);
-        default:
-          throw new BadRequestException();
-      }
-    }
-
     response.setHeader("Content-Type", "application/json");
     response.setHeader("Transfer-Encoding", "chunked");
 
@@ -99,16 +79,42 @@ export class FetchAllMovimentationHistoryController {
 
     try {
       movimentationStream.push('{"movimentations":[');
-      const movimentations = result.value.movimentations;
-      movimentations.forEach((movimentation, index) => {
-        const movimentationJson = JSON.stringify(
-          MovimentationStreamingWithDetailsPresenter.toHTTP(movimentation)
-        );
-        movimentationStream.push(movimentationJson);
-        if (index < movimentations.length - 1) {
-          movimentationStream.push(",");
+      let isFirstChunk = true;
+
+      for await (const result of this.fetchAllMovimentationHistoryUseCase.execute(
+        {
+          baseId: user.baseId,
+          name,
+          project_number,
+          material_code,
+          startDate,
+          endDate: endDateAjusted,
         }
-      });
+      )) {
+        if (result.isLeft()) {
+          const error = result.value;
+          switch (error.constructor) {
+            case ResourceNotFoundError:
+              throw new NotFoundException(error.message);
+            default:
+              throw new BadRequestException();
+          }
+        }
+
+        const movimentationsChunk = result.value.movimentations;
+        movimentationsChunk.forEach((movimentation) => {
+          if (isFirstChunk) {
+            isFirstChunk = false;
+          } else {
+            movimentationStream.push(",");
+          }
+
+          const movimentationJson = JSON.stringify(
+            MovimentationStreamingWithDetailsPresenter.toHTTP(movimentation)
+          );
+          movimentationStream.push(movimentationJson);
+        });
+      }
 
       movimentationStream.push("]}");
       movimentationStream.push(null);

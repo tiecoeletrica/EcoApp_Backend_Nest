@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.13.0](https://github.com/tiecoeletrica/EcoApp_Backend_Nest/compare/v0.12.8...v0.13.0) (2024-11-06)
+
 ### [0.12.8](https://github.com/tiecoeletrica/EcoApp_Backend_Nest/compare/v0.12.7...v0.12.8) (2024-11-05)
 
 ### [0.12.7](https://github.com/tiecoeletrica/EcoApp_Backend_Nest/compare/v0.12.6...v0.12.7) (2024-11-05)
