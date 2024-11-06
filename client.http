@@ -128,7 +128,7 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-    "baseName": "Aparecida de Goiânia",
+    "baseName": "Uruaçu",
     "contractId": "a100663c-5a6d-4198-ad7b-1062afa0c4f4"
 }
 

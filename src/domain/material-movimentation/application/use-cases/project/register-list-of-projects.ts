@@ -92,7 +92,11 @@ export class RegisterListOfProjectsUseCase {
       return { containsErrorType, message };
     }
 
-    if (this.uniqueValues(this.bases, "contractId").length > 1) {
+    const uniqueBases = this.uniqueValues(requestUseCase, "baseName")
+      .map((baseName) => this.bases.find((base) => base.baseName === baseName))
+      .filter((base) => base !== undefined);
+
+    if (this.uniqueValues(uniqueBases, "contractId").length > 1) {
       containsErrorType = "contract";
       message = `Não é permitido registrar projetos de bases que não são do mesmo contrato`;
       return { containsErrorType, message };

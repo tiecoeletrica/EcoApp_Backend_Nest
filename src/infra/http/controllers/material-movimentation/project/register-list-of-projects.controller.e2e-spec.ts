@@ -62,11 +62,6 @@ describe("Register Project Bulk (E2E)", () => {
         },
       ]);
 
-    console.log(response.headers);
-    console.log(response.body);
-    console.log(response.text);
-    console.log(response.error);
-
     const projectDataBase = await bigquery.project.select({
       whereIn: { project_number: ["B-12345678", "B-1234567"] },
     });
