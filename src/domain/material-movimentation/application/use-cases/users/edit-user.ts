@@ -84,7 +84,7 @@ export class EditUserUseCase {
       if (baseContractCheck.isLeft()) return baseContractCheck;
     }
 
-    if (base) {
+    if (base && !contract) {
       const userBaseCheck = this.checkUserBase(user, base);
       if (userBaseCheck.isLeft()) return userBaseCheck;
     }

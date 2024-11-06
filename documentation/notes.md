@@ -99,6 +99,7 @@
 - create a away to migrate the schemas of "/src/infra/database/bigquery/schemas" from files to tables on bigquery []
 - on budgets-materials put show observation with replaced material []
 - create use cases to password recover []
+- dont alow half numbers on EQUIPAMENTO materials []
 
 # Test 1 file
 
