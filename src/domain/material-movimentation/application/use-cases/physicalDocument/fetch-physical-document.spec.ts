@@ -68,13 +68,13 @@ describe("Fetch PhysicalDocuments History", () => {
     if (result.isRight())
       expect(result.value.physicalDocuments).toEqual([
         expect.objectContaining({
-          props: expect.objectContaining({ identifier: 1 }),
+          props: expect.objectContaining({ identifier: 10 }),
         }),
         expect.objectContaining({
           props: expect.objectContaining({ identifier: 3 }),
         }),
         expect.objectContaining({
-          props: expect.objectContaining({ identifier: 10 }),
+          props: expect.objectContaining({ identifier: 1 }),
         }),
       ]);
   });

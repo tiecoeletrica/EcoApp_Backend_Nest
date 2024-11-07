@@ -62,7 +62,7 @@ export class BqPhysicalDocumentRepository
       where: { projectId, identifier },
       limit: pageCount,
       offset: pageCount * (page - 1),
-      orderBy: { column: "identifier", direction: "ASC" },
+      orderBy: { column: "identifier", direction: "DESC" },
     });
 
     return physicalDocuments.map(BqPhysicalDocumentMapper.toDomain);

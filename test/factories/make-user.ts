@@ -35,7 +35,7 @@ export function makeUser(
 
   const baseProps = {
     name: faker.person.firstName(),
-    cpf: faker.number.int({ min: 10000000000, max: 99999999999 }).toString(),
+    cpf: cpfGenerator(),
     email: faker.internet.email({ provider: "ecoeletrica.com.br" }),
     status: faker.helpers.arrayElement(status),
     password: faker.internet.password(),
@@ -109,3 +109,41 @@ const userEntities = [
   "Supervisor",
   "Administrator",
 ];
+
+function cpfGenerator(): string {
+  const fakeNumber = faker.number.int({ min: 100000000, max: 999999999 });
+
+  const firstDigit =
+    (fakeNumber
+      .toString()
+      .split("")
+      .map((item) => Number(item))
+      .reduce((accumulator, currentValue, index) => {
+        return accumulator + currentValue * (10 - index);
+      }, 0) *
+      10) %
+    11;
+
+  const secondDigit =
+    (fakeNumber
+      .toString()
+      .concat(firstDigit.toString())
+      .split("")
+      .map((item) => Number(item))
+      .reduce((accumulator, currentValue, index) => {
+        return accumulator + currentValue * (11 - index);
+      }, 0) *
+      10) %
+    11;
+
+  if (
+    fakeNumber
+      .toString()
+      .concat(firstDigit.toString(), secondDigit.toString())
+      .split("").length > 11
+  )
+    return cpfGenerator();
+  return fakeNumber
+    .toString()
+    .concat(firstDigit.toString(), secondDigit.toString());
+}

@@ -19,6 +19,10 @@
 | 05/11/2024 | all user data on access token and fix edit password                   |
 | 06/11/2024 | fix edit user and register bulk of projects                           |
 | 06/11/2024 | real data stream on movimentations-streaming                          |
+| 07/11/2024 | don`t allow half numbers on EQUIPAMENTO materials                     |
+| 07/11/2024 | sort data on budgets by all non zero budgets then by code             |
+| 07/11/2024 | order desc the fetch physical documents                               |
+| 07/11/2024 | created CPF generator and verification                                |
 
 # Technical debt
 
@@ -98,11 +102,13 @@
 - create controllers to register bulk of projects and materials [x]
 - create Access Token Creator for e2e tests [x]
 - send all user data on access token [x]
+- dont alow half numbers on EQUIPAMENTO materials [x]
+- sort data on budgets by all non zero budgets then by code [x]
+- order desc the fetch physical documents [x]
+- use code from [here](https://dicasdeprogramacao.com.br/algoritmo-para-validar-cpf/#google_vignette) to validate CPF [x]
 - create a away to migrate the schemas of "/src/infra/database/bigquery/schemas" from files to tables on bigquery []
 - on budgets-materials put show observation with replaced material []
-- create use cases to password recover []
-- dont alow half numbers on EQUIPAMENTO materials []
-- use code from [here](https://dicasdeprogramacao.com.br/algoritmo-para-validar-cpf/#google_vignette) to validate CPF []
+- budget streaming with new AsyncGenerator logic []
 
 # Test 1 file
 

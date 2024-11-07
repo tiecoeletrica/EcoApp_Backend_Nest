@@ -42,15 +42,25 @@ export class FetchBudgetByProjectNameUseCase {
         new ResourceNotFoundError(`Projeto ${project_number} não cadastrado`)
       );
 
-    const budgets = await this.budgetRepository.findByProjectWithDetails(
+    let budgets = await this.budgetRepository.findByProjectWithDetails(
       project.id.toString(),
       contractId
     );
+
+    budgets = this.putZeroBudgetsAtTheEnd(budgets);
 
     if (!budgets.length && !sendProjectId)
       return left(new ResourceNotFoundError("Orçamento não encontrado"));
     else if (sendProjectId)
       return right({ budgets, projectId: project.id.toString() });
     else return right({ budgets });
+  }
+
+  private putZeroBudgetsAtTheEnd(
+    budgets: BudgetWithDetails[]
+  ): BudgetWithDetails[] {
+    const nonZeroBudgets = budgets.filter((budget) => budget.value !== 0);
+    const zeroBudgets = budgets.filter((budget) => budget.value === 0);
+    return nonZeroBudgets.concat(zeroBudgets);
   }
 }

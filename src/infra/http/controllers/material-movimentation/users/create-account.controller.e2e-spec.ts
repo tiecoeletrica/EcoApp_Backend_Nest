@@ -59,7 +59,7 @@ describe("Create account (E2E)", () => {
         name: "Joao da Pilotinha",
         email: "joaopilotinha@ecoeletrica.com.br",
         password: "123456",
-        cpf: "00011122234",
+        cpf: "92587813840",
         status: "ativo",
         type: "Administrador",
         baseId: base.id.toString(),
