@@ -124,7 +124,7 @@ export class InMemoryPhysicalDocumentRepository
           baseId: physicalDocument.baseId,
         });
       })
-      .sort((a, b) => a.identifier - b.identifier)
+      .sort((a, b) => b.identifier - a.identifier)
       .slice((page - 1) * pageCount, page * pageCount);
 
     const total_count = this.items.length;

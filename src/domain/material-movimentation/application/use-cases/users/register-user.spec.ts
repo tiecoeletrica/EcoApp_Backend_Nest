@@ -47,7 +47,7 @@ describe("Create user", () => {
       authorType: "Administrador",
       name: "Rodrigo",
       email: "rodrigo@ecoeletrica.com.br",
-      cpf: "12345678901",
+      cpf: "92587813840",
       type: "Almoxarife",
       baseId: base.id.toString(),
       contractId: contract.id.toString(),
@@ -76,7 +76,7 @@ describe("Create user", () => {
       authorType: "Administrador",
       name: "Rodrigo",
       email: "rodrigo@ecoeletrica.com.br",
-      cpf: "12345678901",
+      cpf: "42133377581",
       type: "Orçamentista",
       baseId: base.id.toString(),
       contractId: contract.id.toString(),
@@ -98,7 +98,7 @@ describe("Create user", () => {
       authorType: "Administrador",
       name: "Rodrigo",
       email: "rodrigo@ecoeletrica.com.br",
-      cpf: "12345678901",
+      cpf: "51094627046",
       type: "administrador",
       baseId: "base-1",
       contractId: "contract-1",
@@ -120,7 +120,7 @@ describe("Create user", () => {
       authorType: "Administrador",
       name: "Rodrigo",
       email: "rodrigo@ecoeletrica.com.br",
-      cpf: "12345678901",
+      cpf: "52998224725",
       type: "Assistente",
       baseId: base.id.toString(),
       contractId: contract.id.toString(),
@@ -142,7 +142,7 @@ describe("Create user", () => {
       authorType: "Administrador",
       name: "Rodrigo",
       email: "rodrigo@ecoeletrica.com.br",
-      cpf: "12345678901",
+      cpf: "52998224725",
       type: "Almoxarife",
       baseId: base.id.toString(),
       contractId: contract.id.toString(),
@@ -164,7 +164,7 @@ describe("Create user", () => {
       authorType: "Almoxarife",
       name: "Rodrigo",
       email: "rodrigo@ecoeletrica.com.br",
-      cpf: "12345678901",
+      cpf: "52998224725",
       type: "Almoxarife",
       baseId: base.id.toString(),
       contractId: contract.id.toString(),
@@ -186,7 +186,7 @@ describe("Create user", () => {
       authorType: "Almoxarife Líder",
       name: "Rodrigo",
       email: "rodrigo@ecoeletrica.com.br",
-      cpf: "12345678901",
+      cpf: "52998224725",
       type: "Administrador",
       baseId: base.id.toString(),
       contractId: contract.id.toString(),
@@ -195,5 +195,27 @@ describe("Create user", () => {
 
     expect(result.isLeft()).toBeTruthy();
     expect(result.value).toBeInstanceOf(NotAllowedError);
+  });
+
+  it("should not be able to register a user with a invalid CPF", async () => {
+    const contract = makeContract();
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase({ contractId: contract.id });
+    await inMemoryBaseRepository.create(base);
+
+    const result = await sut.execute({
+      authorType: "Administrador",
+      name: "Rodrigo",
+      email: "rodrigo@ecoeletrica.com.br",
+      cpf: "52998224722",
+      type: "Administrador",
+      baseId: base.id.toString(),
+      contractId: contract.id.toString(),
+      password: "123456",
+    });
+
+    expect(result.isLeft()).toBeTruthy();
+    expect(result.value).toBeInstanceOf(NotValidError);
   });
 });

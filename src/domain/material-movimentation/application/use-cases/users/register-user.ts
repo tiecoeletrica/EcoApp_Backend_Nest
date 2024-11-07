@@ -73,6 +73,9 @@ export class RegisterUserUseCase {
         )
       );
 
+    if (this.verifyCpf(cpf))
+      return left(new NotValidError("O CPF informado não é válido"));
+
     const base = await this.baseRepository.findById(baseId);
     if (!base) return left(new ResourceNotFoundError("baseId não encontrado"));
 
@@ -151,5 +154,51 @@ export class RegisterUserUseCase {
       "Orçamentista",
       "Supervisor",
     ].includes(type as UserType);
+  }
+
+  private verifyCpf(cpf: string): boolean {
+    const arrayOfCpfNumbers = cpf.split("").map((item) => Number(item));
+
+    const firstGroupOfNumber = arrayOfCpfNumbers.slice(0, 9);
+    const secondGroupOfNumber = arrayOfCpfNumbers.slice(9, 11);
+
+    const firstDigitVerification = this.firstDigitVerification(
+      firstGroupOfNumber,
+      secondGroupOfNumber
+    );
+
+    const secondDigitVerification = this.secondDigitVerification(
+      firstGroupOfNumber,
+      secondGroupOfNumber
+    );
+
+    return firstDigitVerification || secondDigitVerification;
+  }
+
+  private firstDigitVerification(
+    firstGroupOfNumber: number[],
+    secondGroupOfNumber: number[]
+  ): boolean {
+    const digitsSum = firstGroupOfNumber.reduce(
+      (accumulator, currentValue, index) => {
+        return accumulator + currentValue * (10 - index);
+      },
+      0
+    );
+
+    return (digitsSum * 10) % 11 !== secondGroupOfNumber[0];
+  }
+
+  private secondDigitVerification(
+    firstGroupOfNumber: number[],
+    secondGroupOfNumber: number[]
+  ): boolean {
+    const digitsSum =
+      firstGroupOfNumber.reduce((accumulator, currentValue, index) => {
+        return accumulator + currentValue * (11 - index);
+      }, 0) +
+      secondGroupOfNumber[0] * 2;
+
+    return (digitsSum * 10) % 11 !== secondGroupOfNumber[1];
   }
 }

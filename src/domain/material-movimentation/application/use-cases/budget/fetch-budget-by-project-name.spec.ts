@@ -261,4 +261,69 @@ describe("Get Budget by project", () => {
     if (result.isRight())
       expect(result.value.projectId).toEqual(project.id.toString());
   });
+
+  it("should be able to get an array of budgets where zero budgets are at the end of the array", async () => {
+    // entity creation for details
+    const contract = makeContract();
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase({ contractId: contract.id });
+    await inMemoryBaseRepository.create(base);
+
+    const estimator = makeUser({ contractId: contract.id, baseId: base.id });
+    await inMemoryUserRepository.create(estimator);
+
+    const material = makeMaterial({ contractId: contract.id });
+    await inMemoryMaterialRepository.create(material);
+
+    const project = makeProject({
+      project_number: "B-10101010",
+      baseId: base.id,
+    });
+    await inMemoryProjectRepository.create(project);
+
+    const newBudget1 = makeBudget({
+      projectId: project.id,
+      value: 5,
+      contractId: contract.id,
+      materialId: material.id,
+      estimatorId: estimator.id,
+    });
+    const newBudget2 = makeBudget({
+      projectId: project.id,
+      contractId: contract.id,
+      materialId: material.id,
+      estimatorId: estimator.id,
+      value: 0,
+    });
+    const newBudget3 = makeBudget({
+      projectId: project.id,
+      contractId: contract.id,
+      materialId: material.id,
+      estimatorId: estimator.id,
+      value: 3,
+    });
+
+    await inMemoryBudgetRepository.create([newBudget1, newBudget2, newBudget3]);
+
+    const result = await sut.execute({
+      project_number: "B-10101010",
+      contractId: contract.id.toString(),
+    });
+
+    expect(result.isRight()).toBeTruthy();
+    if (result.isRight()) {
+      expect(result.value.budgets).toEqual([
+        expect.objectContaining({
+          value: 5,
+        }),
+        expect.objectContaining({
+          value: 3,
+        }),
+        expect.objectContaining({
+          value: 0,
+        }),
+      ]);
+    }
+  });
 });

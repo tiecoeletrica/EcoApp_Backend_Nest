@@ -16,6 +16,7 @@ import { Estimator } from "src/domain/material-movimentation/enterprise/entities
 import { NotValidError } from "../errors/not-valid-error";
 import { Supervisor } from "src/domain/material-movimentation/enterprise/entities/supervisor";
 import { Administrator } from "src/domain/material-movimentation/enterprise/entities/administrator";
+import { UserEntities } from "src/core/types/user-type";
 
 interface TransferMaterialUseCaseRequest {
   storekeeperId: string;
@@ -135,11 +136,7 @@ export class TransferMaterialUseCase {
       key
     );
 
-    let result:
-      | Array<Estimator | Storekeeper | Supervisor | Administrator>
-      | Material[]
-      | Project[]
-      | Base[] = [];
+    let result: Array<UserEntities> | Material[] | Project[] | Base[] = [];
 
     switch (key) {
       case "storekeeperId":
@@ -190,6 +187,10 @@ export class TransferMaterialUseCase {
       if (material && material.type === "EQUIPAMENTO") {
         const ciaCount = (request.observation.match(/CIA/gi) || []).length;
 
+        if (!Number.isInteger(request.value)) {
+          containsEquipmentWithoutDetails = true;
+          messageEquipment += `O material ${material.code} é um equipamento e o valor movimentado tem que ser um valor inteiro.`;
+        }
         if (ciaCount !== Math.abs(request.value)) {
           containsEquipmentWithoutDetails = true;
           messageEquipment += `O material ${
