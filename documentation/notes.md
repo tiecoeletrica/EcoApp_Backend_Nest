@@ -21,8 +21,10 @@
 | 06/11/2024 | real data stream on movimentations-streaming                          |
 | 07/11/2024 | don`t allow half numbers on EQUIPAMENTO materials                     |
 | 07/11/2024 | sort data on budgets by all non zero budgets then by code             |
-| 07/11/2024 | order desc the fetch physical documents                               |
 | 07/11/2024 | created CPF generator and verification                                |
+| 08/11/2024 | order desc the fetch physical documents                               |
+| 08/11/2024 | update README badges                                                  |
+| 08/11/2024 | email with toLowerCase and project_number with toUpperCase            |
 
 # Technical debt
 

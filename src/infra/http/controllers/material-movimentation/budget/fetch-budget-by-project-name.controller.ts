@@ -20,7 +20,7 @@ import { UseCases } from "src/core/role-authorization/use-cases.enum";
 
 const fetchBudgetByProjectNameQuerySchema = z
   .object({
-    project_number: z.string(),
+    project_number: z.string().toUpperCase(),
     sendProjectId: z.string().optional().transform(Boolean),
   })
   .required();

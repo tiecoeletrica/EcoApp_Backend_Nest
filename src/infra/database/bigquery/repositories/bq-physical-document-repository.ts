@@ -86,7 +86,7 @@ export class BqPhysicalDocumentRepository
         limit: pageCount,
         offset: pageCount * (page - 1),
         count_results: true,
-        orderBy: { column: "identifier", direction: "ASC" },
+        orderBy: { column: "identifier", direction: "DESC" },
         include: {
           project: {
             join: {

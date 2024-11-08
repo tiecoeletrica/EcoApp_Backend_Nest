@@ -25,7 +25,7 @@ import { NotAllowedError } from "src/domain/material-movimentation/application/u
 
 const createAccountBodyDto = z.object({
   name: z.string(),
-  email: z.string().email(),
+  email: z.string().toLowerCase().email(),
   password: z.string().min(6),
   cpf: z.string().regex(/^\d{11,}$/, "O CPF precisa ter 11 dígitos numéricos"),
   type: z.string(),

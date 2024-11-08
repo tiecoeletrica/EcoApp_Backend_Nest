@@ -18,7 +18,7 @@ import { UseCases } from "src/core/role-authorization/use-cases.enum";
 import { RoleAuth } from "src/infra/auth/role-auth.decorator";
 
 const identifierAttributionBodySchema = z.object({
-  project_number: z.string(),
+  project_number: z.string().toUpperCase(),
   identifier: z.number().min(1).max(1000),
 });
 

@@ -26,7 +26,7 @@ const fetchMovimentationHistoryBodySchema = z.object({
     .transform(Number)
     .pipe(z.number().min(1)),
   name: z.string().optional(),
-  project_number: z.string().optional(),
+  project_number: z.string().toUpperCase().optional(),
   material_code: z
     .string()
     .optional()
