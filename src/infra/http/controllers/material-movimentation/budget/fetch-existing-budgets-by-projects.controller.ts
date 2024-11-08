@@ -46,22 +46,6 @@ export class FetchExistingBudgetByProjectsController {
   ) {
     const { projectIds } = body;
 
-    const result = await this.fetchExistingBudgetByProjectssUseCase.execute({
-      projectIds,
-      contractId: user.contractId,
-    });
-
-    if (result.isLeft()) {
-      const error = result.value;
-
-      switch (error.constructor) {
-        case ResourceNotFoundError:
-          throw new NotFoundException(error.message);
-        default:
-          throw new BadRequestException();
-      }
-    }
-
     response.setHeader("Content-Type", "application/json");
     response.setHeader("Transfer-Encoding", "chunked");
 
@@ -73,17 +57,38 @@ export class FetchExistingBudgetByProjectsController {
 
     try {
       budgetStream.push('{"budgets":[');
+      let isFirstChunk = true;
 
-      const budgets = result.value.budgets;
-      budgets.forEach((budget, index) => {
-        const budgetJson = JSON.stringify(
-          BudgetWithDetailsPresenter.toHTTP(budget)
-        );
-        budgetStream.push(budgetJson);
-        if (index < budgets.length - 1) {
-          budgetStream.push(",");
+      for await (const result of this.fetchExistingBudgetByProjectssUseCase.execute(
+        {
+          projectIds,
+          contractId: user.contractId,
         }
-      });
+      )) {
+        if (result.isLeft()) {
+          const error = result.value;
+          switch (error.constructor) {
+            case ResourceNotFoundError:
+              throw new NotFoundException(error.message);
+            default:
+              throw new BadRequestException();
+          }
+        }
+
+        const budgetsChunk = result.value.budgets;
+        budgetsChunk.forEach((movimentation) => {
+          if (isFirstChunk) {
+            isFirstChunk = false;
+          } else {
+            budgetStream.push(",");
+          }
+
+          const movimentationJson = JSON.stringify(
+            BudgetWithDetailsPresenter.toHTTP(movimentation)
+          );
+          budgetStream.push(movimentationJson);
+        });
+      }
 
       budgetStream.push("]}");
       budgetStream.push(null);

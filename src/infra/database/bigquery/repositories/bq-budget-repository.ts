@@ -97,54 +97,64 @@ export class BqBudgetRepository implements BudgetRepository {
     return budgets.map(BqBudgetMapper.toDomain);
   }
 
-  async findByProjectIdsWithDetails(
+  async *findByProjectIdsWithDetails(
     projectids: string[],
     contractId: string
-  ): Promise<BudgetWithDetails[]> {
-    const budgets = await this.bigquery.budget.select({
-      distinct: true,
-      whereIn: { projectId: projectids },
-      where: { contractId },
-      include: {
-        project: {
-          join: {
-            table: "project",
-            on: "budget.projectId = project.id",
-          },
-          relationType: "one-to-one",
-        },
-        contract: {
-          join: {
-            table: "contract",
-            on: "budget.contractId = contract.id",
-          },
-          relationType: "one-to-one",
-        },
-        user: {
-          join: {
-            table: "user",
-            on: "budget.userId = user.id OR budget.updatedAuthorId = user.id",
-          },
-          relationType: "one-to-one",
-        },
-        material: {
-          join: {
-            table: "material",
-            on: "budget.materialId = material.id",
-          },
-          relationType: "one-to-one",
-        },
-        updatedAuthor: {
-          join: {
-            table: "user",
-            on: "budget.updatedAuthorId = user.id",
-          },
-          relationType: "one-to-one",
-        },
-      },
-    });
+  ): AsyncGenerator<BudgetWithDetails[]> {
+    let page = 0;
+    const pageCount = 20000;
 
-    return budgets.map(BqBudgetWithDetailsMapper.toDomain);
+    while (true) {
+      const budgets = await this.bigquery.budget.select({
+        distinct: true,
+        whereIn: { projectId: projectids },
+        where: { contractId },
+        limit: pageCount,
+        offset: pageCount * page,
+        include: {
+          project: {
+            join: {
+              table: "project",
+              on: "budget.projectId = project.id",
+            },
+            relationType: "one-to-one",
+          },
+          contract: {
+            join: {
+              table: "contract",
+              on: "budget.contractId = contract.id",
+            },
+            relationType: "one-to-one",
+          },
+          user: {
+            join: {
+              table: "user",
+              on: "budget.userId = user.id OR budget.updatedAuthorId = user.id",
+            },
+            relationType: "one-to-one",
+          },
+          material: {
+            join: {
+              table: "material",
+              on: "budget.materialId = material.id",
+            },
+            relationType: "one-to-one",
+          },
+          updatedAuthor: {
+            join: {
+              table: "user",
+              on: "budget.updatedAuthorId = user.id",
+            },
+            relationType: "one-to-one",
+          },
+        },
+      });
+
+      if (budgets.length === 0) break;
+
+      yield budgets.map(BqBudgetWithDetailsMapper.toDomain);
+      page++;
+    }
   }
 
   async findManyByProjectMaterial(

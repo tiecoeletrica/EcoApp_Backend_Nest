@@ -81,7 +81,7 @@ describe("Fetch Movimentation and Budget By Project Name (E2E)", () => {
     const accessToken = accessTokenCreator.execute(user);
 
     const project = await projectFactory.makeBqProject({
-      project_number: "B-teste",
+      project_number: "B-TESTE",
       baseId: base.id,
     });
 

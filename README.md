@@ -1,6 +1,6 @@
 # Nest EcoApp
 
-![Versão](https://img.shields.io/github/package-json/v/tiecoeletrica/EcoApp_Backend_Nest) ![NpmBadge](https://img.shields.io/npm/v/npm.svg?logo=npm) ![NodeBadge](https://img.shields.io/npm/v/node.svg?logo=nodedotjs&label=node) ![NestBadge](https://img.shields.io/npm/v/@nestjs/common.svg?logo=nestjs&label=NestJs) ![VitestBadge](https://img.shields.io/npm/v/vitest.svg?logo=vitest&label=vitest)
+![Versão](https://img.shields.io/github/package-json/v/tiecoeletrica/EcoApp_Backend_Nest?logo=git) ![NpmBadge](https://img.shields.io/npm/v/npm.svg?logo=npm) ![NodeBadge](https://img.shields.io/npm/v/node.svg?logo=nodedotjs&label=node) ![NestBadge](https://img.shields.io/npm/v/@nestjs/common.svg?logo=nestjs&label=NestJs) ![VitestBadge](https://img.shields.io/npm/v/vitest.svg?logo=vitest&label=vitest)
 
 ## Sumário
 

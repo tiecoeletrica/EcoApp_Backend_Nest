@@ -19,7 +19,7 @@ export abstract class BudgetRepository {
   abstract findByProjectIdsWithDetails(
     projectids: string[],
     contractId: string
-  ): Promise<BudgetWithDetails[]>;
+  ): AsyncGenerator<BudgetWithDetails[]>;
   abstract findManyByProjectMaterial(
     projectids: string[],
     contractId: string,

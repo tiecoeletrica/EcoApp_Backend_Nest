@@ -117,62 +117,71 @@ export class InMemoryBudgetRepository implements BudgetRepository {
     return budgets;
   }
 
-  async findByProjectIdsWithDetails(
+  async *findByProjectIdsWithDetails(
     projectids: string[],
     contractId: string
-  ): Promise<BudgetWithDetails[]> {
-    const budgets = this.items
-      .filter(
-        (budget) =>
-          projectids.includes(budget.projectId.toString()) &&
-          budget.contractId.toString() === contractId
-      )
-      .map((budget) => {
-        const estimator = this.userRepository.items.find(
-          (estimator) => estimator.id === budget.estimatorId
-        );
-        if (!estimator) {
-          throw new Error(`estimator ${budget.estimatorId} does not exist.`);
-        }
-        const author = this.userRepository.items.find(
-          (estimator) => estimator.id === budget.updatedAuthorId
-        );
-        if (!author && budget.updatedAuthorId) {
-          throw new Error(`author ${budget.updatedAuthorId} does not exist.`);
-        }
-        const project = this.projectRepository.items.find(
-          (project) => project.id === budget.projectId
-        );
-        if (!project) {
-          throw new Error(`project ${budget.projectId} does not exist.`);
-        }
-        const contract = this.contractRepository.items.find(
-          (contract) => contract.id === budget.contractId
-        );
-        if (!contract) {
-          throw new Error(`contract ${budget.contractId} does not exist.`);
-        }
-        const material = this.materialRepository.items.find(
-          (material) => material.id === budget.materialId
-        );
-        if (!material) {
-          throw new Error(`material ${budget.materialId} does not exist.`);
-        }
+  ): AsyncGenerator<BudgetWithDetails[]> {
+    let page = 0;
+    const pageCount = 100;
 
-        return BudgetWithDetails.create({
-          budgetId: budget.id,
-          value: budget.value,
-          createdAt: budget.createdAt,
-          estimator,
-          material,
-          project,
-          contract,
-          updatedAuthor: author,
-          updatedAt: budget.updatedAt,
+    while (true) {
+      const budgets = this.items
+        .filter(
+          (budget) =>
+            projectids.includes(budget.projectId.toString()) &&
+            budget.contractId.toString() === contractId
+        )
+        .slice((page - 1) * pageCount, page * pageCount)
+        .map((budget) => {
+          const estimator = this.userRepository.items.find(
+            (estimator) => estimator.id === budget.estimatorId
+          );
+          if (!estimator) {
+            throw new Error(`estimator ${budget.estimatorId} does not exist.`);
+          }
+          const author = this.userRepository.items.find(
+            (estimator) => estimator.id === budget.updatedAuthorId
+          );
+          if (!author && budget.updatedAuthorId) {
+            throw new Error(`author ${budget.updatedAuthorId} does not exist.`);
+          }
+          const project = this.projectRepository.items.find(
+            (project) => project.id === budget.projectId
+          );
+          if (!project) {
+            throw new Error(`project ${budget.projectId} does not exist.`);
+          }
+          const contract = this.contractRepository.items.find(
+            (contract) => contract.id === budget.contractId
+          );
+          if (!contract) {
+            throw new Error(`contract ${budget.contractId} does not exist.`);
+          }
+          const material = this.materialRepository.items.find(
+            (material) => material.id === budget.materialId
+          );
+          if (!material) {
+            throw new Error(`material ${budget.materialId} does not exist.`);
+          }
+
+          return BudgetWithDetails.create({
+            budgetId: budget.id,
+            value: budget.value,
+            createdAt: budget.createdAt,
+            estimator,
+            material,
+            project,
+            contract,
+            updatedAuthor: author,
+            updatedAt: budget.updatedAt,
+          });
         });
-      });
 
-    return budgets;
+      if (budgets.length === 0) break;
+
+      yield budgets;
+      page++;
+    }
   }
 
   async findManyByProjectMaterial(
