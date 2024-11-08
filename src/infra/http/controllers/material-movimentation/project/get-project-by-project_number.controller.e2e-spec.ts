@@ -55,19 +55,19 @@ describe("Fetch Movimentation History (E2E)", () => {
     const accessToken = accessTokenCreator.execute(user);
 
     await projectFactory.makeBqProject({
-      project_number: "B-test-project",
+      project_number: "B-TEST-PROJECT",
       baseId: base.id,
     });
 
     const response = await request(app.getHttpServer())
-      .get(`/projects?project_number=B-test-project`)
+      .get(`/projects?project_number=B-TEST-PROJECT`)
       .set("Authorization", `Bearer ${accessToken}`)
       .send();
 
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual({
       project: expect.objectContaining({
-        project_number: "B-test-project",
+        project_number: "B-TEST-PROJECT",
       }),
     });
   });

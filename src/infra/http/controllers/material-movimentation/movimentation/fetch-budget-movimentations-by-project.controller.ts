@@ -24,9 +24,9 @@ import { RoleAuth } from "src/infra/auth/role-auth.decorator";
 import { UseCases } from "src/core/role-authorization/use-cases.enum";
 
 const fetchBudgetMovimentationByProjectQuerySchema = z.object({
-  project_number: z.string(),
+  project_number: z.string().toUpperCase(),
   physicalDocument: z.string().optional().transform(Boolean),
-  projectIn: z.string().optional(),
+  projectIn: z.string().toUpperCase().optional(),
   sendProjectId: z.string().optional().transform(Boolean),
 });
 

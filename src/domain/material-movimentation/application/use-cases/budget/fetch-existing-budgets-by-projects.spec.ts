@@ -110,14 +110,14 @@ describe("Get existing budgets by projectIds", () => {
       newBudget4,
     ]);
 
-    const result = await sut.execute({
+    for await (const result of sut.execute({
       projectIds: [project1.id.toString(), project2.id.toString()],
       contractId: contract.id.toString(),
-    });
-
-    expect(result.isRight()).toBeTruthy();
-    if (result.isRight()) {
-      expect(result.value.budgets).toHaveLength(3);
+    })) {
+      expect(result.isRight()).toBeTruthy();
+      if (result.isRight()) {
+        expect(result.value.budgets).toHaveLength(3);
+      }
     }
   });
 
@@ -186,12 +186,12 @@ describe("Get existing budgets by projectIds", () => {
       newBudget4,
     ]);
 
-    const result = await sut.execute({
+    for await (const result of sut.execute({
       projectIds: ["project-id-1", "project-id-2"],
       contractId: contract.id.toString(),
-    });
-
-    expect(result.isLeft()).toBeTruthy();
-    expect(result.value).toBeInstanceOf(ResourceNotFoundError);
+    })) {
+      expect(result.isLeft()).toBeTruthy();
+      expect(result.value).toBeInstanceOf(ResourceNotFoundError);
+    }
   });
 });

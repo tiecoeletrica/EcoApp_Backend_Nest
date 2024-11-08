@@ -178,7 +178,7 @@ export class BqMovimentationRepository implements MovimentationRepository {
     endDate?: Date
   ): AsyncGenerator<MovimentationWithDetails[]> {
     let page = 0;
-    const pageCount = 20000; // ou qualquer número que faça sentido para o tamanho do chunk
+    const pageCount = 20000;
 
     while (true) {
       const movimentations = await this.bigquery.movimentation.select({

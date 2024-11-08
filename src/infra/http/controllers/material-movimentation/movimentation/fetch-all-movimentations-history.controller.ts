@@ -23,7 +23,7 @@ import { UseCases } from "src/core/role-authorization/use-cases.enum";
 
 const fetchAllMovimentationHistoryBodySchema = z.object({
   name: z.string().optional(),
-  project_number: z.string().optional(),
+  project_number: z.string().toUpperCase().optional(),
   material_code: z
     .string()
     .optional()

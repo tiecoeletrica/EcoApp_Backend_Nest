@@ -16,7 +16,7 @@ import { JwtService } from "@nestjs/jwt";
 
 const authenticateBodySchema = z
   .object({
-    email: z.string().email(),
+    email: z.string().toLowerCase().email(),
     password: z.string(),
   })
   .required();
@@ -55,7 +55,7 @@ export class AuthenticateController {
 
     const { accessToken } = result.value;
 
-    const decodedToken = this.jwtService.decode(accessToken)
+    const decodedToken = this.jwtService.decode(accessToken);
     await this.tokenInvalidationService.invalidateUserTokens(decodedToken.sub);
 
     return { access_token: accessToken };

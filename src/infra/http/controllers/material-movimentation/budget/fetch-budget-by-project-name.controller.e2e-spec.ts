@@ -69,7 +69,7 @@ describe("Fetch and Budget By Project Name (E2E)", () => {
     });
 
     const project = await projectFactory.makeBqProject({
-      project_number: "B-teste",
+      project_number: "B-TESTE",
       baseId: base.id,
     });
 

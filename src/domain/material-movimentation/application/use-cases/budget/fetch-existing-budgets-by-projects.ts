@@ -20,18 +20,24 @@ type FetchExistingBudgetByProjectsUseCaseResponse = Eihter<
 export class FetchExistingBudgetByProjectsUseCase {
   constructor(private budgetRepository: BudgetRepository) {}
 
-  async execute({
+  async *execute({
     projectIds,
     contractId,
-  }: FetchExistingBudgetByProjectsUseCaseRequest): Promise<FetchExistingBudgetByProjectsUseCaseResponse> {
-    const budgets = await this.budgetRepository.findByProjectIdsWithDetails(
+  }: FetchExistingBudgetByProjectsUseCaseRequest): AsyncGenerator<
+    FetchExistingBudgetByProjectsUseCaseResponse,
+    void,
+    unknown
+  > {
+    for await (const budgets of this.budgetRepository.findByProjectIdsWithDetails(
       projectIds,
       contractId
-    );
+    )) {
+      if (!budgets.length)
+        yield left(
+          new ResourceNotFoundError("Nenhum orçamento não encontrado")
+        );
 
-    if (!budgets.length)
-      return left(new ResourceNotFoundError("Nenhum orçamento não encontrado"));
-
-    return right({ budgets });
+      yield right({ budgets });
+    }
   }
 }

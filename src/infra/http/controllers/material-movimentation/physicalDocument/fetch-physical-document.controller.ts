@@ -25,7 +25,7 @@ const fetchPhysicalDocumentsQuerySchema = z.object({
     .default("1")
     .transform(Number)
     .pipe(z.number().min(1)),
-  project_number: z.string().optional(),
+  project_number: z.string().toUpperCase().optional(),
   identifier: z
     .string()
     .transform(Number)

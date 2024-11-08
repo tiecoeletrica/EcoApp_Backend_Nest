@@ -14,7 +14,7 @@ export function makeProject(
 ) {
   const project = Project.create(
     {
-      project_number: faker.lorem.word(),
+      project_number: faker.lorem.word().toUpperCase(),
       description: faker.lorem.sentence(),
       type: faker.helpers.arrayElement(types),
       baseId: new UniqueEntityID(),

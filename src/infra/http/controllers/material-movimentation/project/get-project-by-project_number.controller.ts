@@ -19,7 +19,7 @@ import { UseCases } from "src/core/role-authorization/use-cases.enum";
 import { RoleAuth } from "src/infra/auth/role-auth.decorator";
 
 const getProjectByProjectNumberQuerySchema = z.object({
-  project_number: z.string().min(6),
+  project_number: z.string().toUpperCase().min(6),
 });
 
 @ApiTags("project")
