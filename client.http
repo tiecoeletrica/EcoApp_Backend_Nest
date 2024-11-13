@@ -86,7 +86,7 @@ Authorization: Bearer {{authToken}}
 ###
 
 # @name delete_user_by_id
-DELETE  {{baseURL}}/accounts/08eed696-4c62-4e9a-97cf-fad97cb80700
+DELETE  {{baseURL}}/accounts/cb6af78c-4207-4549-8111-7a28eeca73d4
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
@@ -95,6 +95,7 @@ Authorization: Bearer {{authToken}}
 
 # @name fetch_account
 GET {{baseURL}}/accounts
+?name=teste
 # ?baseId=dbe82710-e5e8-449a-ba49-471b356f808d
 Content-Type: application/json
 Authorization: Bearer {{authToken}}

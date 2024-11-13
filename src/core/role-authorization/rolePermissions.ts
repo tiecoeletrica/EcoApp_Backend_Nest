@@ -106,6 +106,7 @@ export const rolePermissions = {
     UseCases.FetchAllMaterialUseCase,
     UseCases.AuthenticateUserUseCase,
     UseCases.GetUserByIdUseCase,
+    UseCases.EditUserUseCase,
     UseCases.FetchContractUseCase,
     UseCases.FetchBaseUseCase,
     UseCases.FetchMovimentationHistoryUseCase,
