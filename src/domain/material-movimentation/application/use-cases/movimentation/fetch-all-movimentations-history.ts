@@ -6,6 +6,7 @@ import { MovimentationWithDetails } from "src/domain/material-movimentation/ente
 import { ProjectRepository } from "../../repositories/project-repository";
 import { UserRepository } from "../../repositories/user-repository";
 import { MaterialRepository } from "../../repositories/material-repository";
+import { BaseRepository } from "../../repositories/base-repository";
 
 interface FetchAllMovimentationHistoryUseCaseRequest {
   baseId: string;
@@ -29,7 +30,8 @@ export class FetchAllMovimentationHistoryUseCase {
     private movimentationRepository: MovimentationRepository,
     private projectRepository: ProjectRepository,
     private userRepository: UserRepository,
-    private materialRepository: MaterialRepository
+    private materialRepository: MaterialRepository,
+    private baseRepository: BaseRepository
   ) {}
 
   async *execute({
@@ -48,6 +50,14 @@ export class FetchAllMovimentationHistoryUseCase {
     let projectId;
     let materialId;
 
+    const base = await this.baseRepository.findById(baseId);
+    if (!base) {
+      yield left(
+        new ResourceNotFoundError(`Base de id "${baseId}" não encontrado`)
+      );
+      return;
+    }
+
     if (name) {
       const storekeepers = await this.userRepository.findManyByName(name);
       if (!storekeepers) {
@@ -61,8 +71,9 @@ export class FetchAllMovimentationHistoryUseCase {
 
     if (project_number) {
       const project =
-        await this.projectRepository.findByProjectNumberWithoutBase(
-          project_number
+        await this.projectRepository.findByProjectNumberAndContractId(
+          project_number,
+          base.contractId.toString()
         );
       if (!project) {
         yield left(
@@ -74,8 +85,9 @@ export class FetchAllMovimentationHistoryUseCase {
     }
 
     if (material_code) {
-      const material = await this.materialRepository.findByCodeWithoutContract(
-        material_code
+      const material = await this.materialRepository.findByCode(
+        material_code,
+        base.contractId.toString()
       );
       if (!material) {
         yield left(

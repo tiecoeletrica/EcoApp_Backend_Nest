@@ -7,6 +7,7 @@ import { ProjectRepository } from "../../repositories/project-repository";
 import { UserRepository } from "../../repositories/user-repository";
 import { MaterialRepository } from "../../repositories/material-repository";
 import { PaginationParamsResponse } from "src/core/repositories/pagination-params";
+import { BaseRepository } from "../../repositories/base-repository";
 
 interface FetchMovimentationHistoryUseCaseRequest {
   page: number;
@@ -32,7 +33,8 @@ export class FetchMovimentationHistoryUseCase {
     private movimentationRepository: MovimentationRepository,
     private projectRepository: ProjectRepository,
     private userRepository: UserRepository,
-    private materialRepository: MaterialRepository
+    private materialRepository: MaterialRepository,
+    private baseRepository: BaseRepository
   ) {}
 
   async execute({
@@ -48,6 +50,12 @@ export class FetchMovimentationHistoryUseCase {
     let projectId;
     let materialId;
 
+    const base = await this.baseRepository.findById(baseId);
+    if (!base)
+      return left(
+        new ResourceNotFoundError(`Base de id "${baseId}" não encontrado`)
+      );
+
     if (name) {
       const storekeepers = await this.userRepository.findManyByName(name);
       if (storekeepers.length < 1)
@@ -59,8 +67,9 @@ export class FetchMovimentationHistoryUseCase {
 
     if (project_number) {
       const project =
-        await this.projectRepository.findByProjectNumberWithoutBase(
-          project_number
+        await this.projectRepository.findByProjectNumberAndContractId(
+          project_number,
+          base.contractId.toString()
         );
       if (!project)
         return left(
@@ -72,8 +81,9 @@ export class FetchMovimentationHistoryUseCase {
     }
 
     if (material_code) {
-      const material = await this.materialRepository.findByCodeWithoutContract(
-        material_code
+      const material = await this.materialRepository.findByCode(
+        material_code,
+        base.contractId.toString()
       );
       if (!material)
         return left(
@@ -83,6 +93,14 @@ export class FetchMovimentationHistoryUseCase {
         );
       materialId = material.id.toString();
     }
+    console.log(
+      baseId,
+      storekeeperIds,
+      projectId,
+      materialId,
+      startDate,
+      endDate
+    );
 
     const { movimentations, pagination } =
       await this.movimentationRepository.findManyHistoryWithDetails(
