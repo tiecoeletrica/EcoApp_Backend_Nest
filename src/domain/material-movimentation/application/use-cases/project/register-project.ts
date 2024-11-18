@@ -3,9 +3,9 @@ import { Eihter, left, right } from "../../../../../core/either";
 import { UniqueEntityID } from "../../../../../core/entities/unique-entity-id";
 import { Project } from "../../../enterprise/entities/project";
 import { ProjectRepository } from "../../repositories/project-repository";
-import { ResourceAlreadyRegisteredError } from "../errors/resource-already-registered-error";
+import { ResourceAlreadyRegisteredError } from "../../../../../core/errors/errors/resource-already-registered-error";
 import { BaseRepository } from "../../repositories/base-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 
 interface RegisterProjectUseCaseRequest {
   project_number: string;

@@ -3,9 +3,9 @@ import { Eihter, left, right } from "../../../../../core/either";
 import { UniqueEntityID } from "../../../../../core/entities/unique-entity-id";
 import { Material } from "../../../enterprise/entities/material";
 import { MaterialRepository } from "../../repositories/material-repository";
-import { ResourceAlreadyRegisteredError } from "../errors/resource-already-registered-error";
+import { ResourceAlreadyRegisteredError } from "../../../../../core/errors/errors/resource-already-registered-error";
 import { ContractRepository } from "../../repositories/contract-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 
 interface CreateMaterialUseCaseRequest {
   code: number;

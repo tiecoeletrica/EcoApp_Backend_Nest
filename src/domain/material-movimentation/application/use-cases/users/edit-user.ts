@@ -2,15 +2,15 @@ import { Injectable } from "@nestjs/common";
 import { Eihter, left, right } from "../../../../../core/either";
 import { UniqueEntityID } from "../../../../../core/entities/unique-entity-id";
 import { UserRepository } from "../../repositories/user-repository";
-import { NotAllowedError } from "../errors/not-allowed-error";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { NotAllowedError } from "../../../../../core/errors/errors/not-allowed-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 import { HashGenerator } from "../../cryptography/hash-generator";
 import { BaseRepository } from "../../repositories/base-repository";
 import { UserEntities, UserType } from "src/core/types/user-type";
 import { Base } from "src/domain/material-movimentation/enterprise/entities/base";
 import { ContractRepository } from "../../repositories/contract-repository";
 import { Contract } from "src/domain/material-movimentation/enterprise/entities/contract";
-import { NotValidError } from "../errors/not-valid-error";
+import { NotValidError } from "../../../../../core/errors/errors/not-valid-error";
 
 interface EditUserUseCaseRequest {
   userId: string;

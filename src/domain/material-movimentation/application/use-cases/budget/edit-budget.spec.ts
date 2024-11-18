@@ -10,7 +10,7 @@ import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { makeUser } from "test/factories/make-user";
 import { makeMaterial } from "test/factories/make-material";
 import { makeBase } from "test/factories/make-base";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 import { EditBudgetUseCase } from "./edit-budget";
 import { makeContract } from "test/factories/make-contract";
 import { makeBudget } from "test/factories/make-budget";

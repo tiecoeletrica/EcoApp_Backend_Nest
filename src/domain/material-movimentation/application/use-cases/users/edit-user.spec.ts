@@ -8,8 +8,8 @@ import { InMemoryBaseRepository } from "test/repositories/in-memory-base-reposit
 import { InMemoryContractRepository } from "test/repositories/in-memory-contract-repository";
 import { makeBase } from "test/factories/make-base";
 import { makeContract } from "test/factories/make-contract";
-import { NotAllowedError } from "../errors/not-allowed-error";
-import { NotValidError } from "../errors/not-valid-error";
+import { NotAllowedError } from "../../../../../core/errors/errors/not-allowed-error";
+import { NotValidError } from "../../../../../core/errors/errors/not-valid-error";
 
 let inMemoryContractRepository: InMemoryContractRepository;
 let inMemoryBaseRepository: InMemoryBaseRepository;

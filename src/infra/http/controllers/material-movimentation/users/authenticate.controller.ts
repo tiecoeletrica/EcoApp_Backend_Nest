@@ -7,7 +7,7 @@ import { Body, Controller, HttpCode, Post } from "@nestjs/common";
 import { z } from "zod";
 import { ZodValidationPipe } from "src/infra/http/pipes/zod-validation.pipe";
 import { AuthenticateUserUseCase } from "src/domain/material-movimentation/application/use-cases/users/authenticate-user";
-import { WrogCredentialsError } from "src/domain/material-movimentation/application/use-cases/errors/wrong-credentials";
+import { WrogCredentialsError } from "src/core/errors/errors/wrong-credentials";
 import { Public } from "../../../../auth/public.guard";
 import { ApiTags } from "@nestjs/swagger";
 import { AuthenticateBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/users/dto classes/authenticate.dto";

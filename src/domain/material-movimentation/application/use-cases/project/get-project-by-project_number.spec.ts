@@ -6,7 +6,7 @@ import { makeContract } from "test/factories/make-contract";
 import { makeBase } from "test/factories/make-base";
 import { makeProject } from "test/factories/make-project";
 import { GetProjectByProjectNumberUseCase } from "./get-project-by-project_number";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 
 let inMemoryBaseRepository: InMemoryBaseRepository;
 let inMemoryProjectRepository: InMemoryProjectRepository;

@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { Eihter, left, right } from "../../../../../core/either";
 import { BudgetRepository } from "../../repositories/budget-repository";
 import { ProjectRepository } from "../../repositories/project-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 import { Project } from "src/domain/material-movimentation/enterprise/entities/project";
 import { Budget } from "src/domain/material-movimentation/enterprise/entities/budget";
 

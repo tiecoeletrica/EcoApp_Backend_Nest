@@ -4,17 +4,17 @@ import { UniqueEntityID } from "../../../../../core/entities/unique-entity-id";
 import { HashGenerator } from "../../cryptography/hash-generator";
 import { UserRepository } from "../../repositories/user-repository";
 import { BaseRepository } from "../../repositories/base-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 import { UserEntities, UserType } from "src/core/types/user-type";
-import { WrongTypeError } from "../errors/wrong-type";
+import { WrongTypeError } from "../../../../../core/errors/errors/wrong-type";
 import { Storekeeper } from "src/domain/material-movimentation/enterprise/entities/storekeeper";
 import { Estimator } from "src/domain/material-movimentation/enterprise/entities/estimator";
 import { ContractRepository } from "../../repositories/contract-repository";
-import { NotValidError } from "../errors/not-valid-error";
-import { ResourceAlreadyRegisteredError } from "../errors/resource-already-registered-error";
+import { NotValidError } from "../../../../../core/errors/errors/not-valid-error";
+import { ResourceAlreadyRegisteredError } from "../../../../../core/errors/errors/resource-already-registered-error";
 import { Supervisor } from "src/domain/material-movimentation/enterprise/entities/supervisor";
 import { Administrator } from "src/domain/material-movimentation/enterprise/entities/administrator";
-import { NotAllowedError } from "../errors/not-allowed-error";
+import { NotAllowedError } from "../../../../../core/errors/errors/not-allowed-error";
 
 interface RegisterUserUseCaseRequest {
   authorType: string;

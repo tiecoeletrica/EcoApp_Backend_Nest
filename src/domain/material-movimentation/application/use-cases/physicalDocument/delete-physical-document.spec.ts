@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { DeletePhysicalDocumentUseCase } from "./delete-physical-document";
 import { InMemoryPhysicalDocumentRepository } from "../../../../../../test/repositories/in-memory-physical-document-repository";
 import { makePhysicalDocument } from "../../../../../../test/factories/make-physical-document";
-import { NotAllowedError } from "../errors/not-allowed-error";
+import { NotAllowedError } from "../../../../../core/errors/errors/not-allowed-error";
 import { InMemoryProjectRepository } from "test/repositories/in-memory-project-repository";
 import { InMemoryBaseRepository } from "test/repositories/in-memory-base-repository";
 import { InMemoryContractRepository } from "test/repositories/in-memory-contract-repository";

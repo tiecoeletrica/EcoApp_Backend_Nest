@@ -6,7 +6,7 @@ import { CurrentUser } from "src/infra/auth/current-user.decorator";
 import { UserPayload } from "src/infra/auth/jwt-strategy.guard";
 import { RegisterBudgetUseCase } from "src/domain/material-movimentation/application/use-cases/budget/register-budget";
 import { ApiBody, ApiTags } from "@nestjs/swagger";
-import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
+import { ResourceNotFoundError } from "src/core/errors/errors/resource-not-found-error";
 import { RegisterBudgetDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/response decorators/register-budget.decorator";
 import { RegisterBudgetBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/dto classes/register-budget.dto";
 import { RoleAuth } from "src/infra/auth/role-auth.decorator";

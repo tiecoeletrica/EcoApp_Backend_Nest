@@ -9,7 +9,7 @@ import { z } from "zod";
 import { ZodValidationPipe } from "src/infra/http/pipes/zod-validation.pipe";
 import { FetchMaterialUseCase } from "src/domain/material-movimentation/application/use-cases/material/fetch-material";
 import { MaterialPresenter } from "../../../presenters/material-presenter";
-import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
+import { ResourceNotFoundError } from "src/core/errors/errors/resource-not-found-error";
 import { ApiTags } from "@nestjs/swagger";
 import { FetchMaterialDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/material/response decorators/fetch-materials.decorator";
 import { FetchMaterialQueryDto } from "src/infra/http/swagger dto and decorators/material-movimentation/material/dto classes/fetch-materials.dto";

@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { Eihter, left, right } from "../../../../../core/either";
 import { Material } from "../../../enterprise/entities/material";
 import { MaterialRepository } from "../../repositories/material-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 
 interface FetchAllMaterialUseCaseRequest {
   type?: string;

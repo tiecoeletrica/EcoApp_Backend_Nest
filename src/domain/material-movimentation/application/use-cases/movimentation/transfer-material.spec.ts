@@ -11,8 +11,8 @@ import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { makeUser } from "test/factories/make-user";
 import { makeMaterial } from "test/factories/make-material";
 import { makeBase } from "test/factories/make-base";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
-import { NotValidError } from "../errors/not-valid-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
+import { NotValidError } from "../../../../../core/errors/errors/not-valid-error";
 
 let inMemoryContractRepository: InMemoryContractRepository;
 let inMemoryBaseRepository: InMemoryBaseRepository;

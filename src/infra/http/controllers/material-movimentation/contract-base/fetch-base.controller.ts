@@ -8,7 +8,7 @@ import { Controller, HttpCode } from "@nestjs/common";
 import { z } from "zod";
 import { ZodValidationPipe } from "src/infra/http/pipes/zod-validation.pipe";
 import { FetchBaseUseCase } from "src/domain/material-movimentation/application/use-cases/contract-base/fetch-base";
-import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
+import { ResourceNotFoundError } from "src/core/errors/errors/resource-not-found-error";
 import { BasePresenter } from "src/infra/http/presenters/base-presenter";
 import { ApiTags } from "@nestjs/swagger";
 import { FetchBaseDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/contract-base/response decorators/fetch-base.decorator";

@@ -9,7 +9,7 @@ import { Controller, HttpCode } from "@nestjs/common";
 import { z } from "zod";
 import { ZodValidationPipe } from "src/infra/http/pipes/zod-validation.pipe";
 import { FetchAllMovimentationHistoryUseCase } from "src/domain/material-movimentation/application/use-cases/movimentation/fetch-all-movimentations-history";
-import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
+import { ResourceNotFoundError } from "src/core/errors/errors/resource-not-found-error";
 import { MovimentationStreamingWithDetailsPresenter } from "src/infra/http/presenters/movimentation-streaming-with-details-presenter";
 import { ApiTags } from "@nestjs/swagger";
 import { FetchAllMovimentationHistoryDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/movimentation/response decorators/fetch-all-movimentations-history.decorator";

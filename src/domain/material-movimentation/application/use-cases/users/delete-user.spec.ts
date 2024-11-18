@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { DeleteUserUseCase } from "./delete-user";
 import { InMemoryUserRepository } from "../../../../../../test/repositories/in-memory-user-repository";
 import { makeUser } from "../../../../../../test/factories/make-user";
-import { NotAllowedError } from "../errors/not-allowed-error";
+import { NotAllowedError } from "../../../../../core/errors/errors/not-allowed-error";
 import { InMemoryContractRepository } from "test/repositories/in-memory-contract-repository";
 import { InMemoryBaseRepository } from "test/repositories/in-memory-base-repository";
 

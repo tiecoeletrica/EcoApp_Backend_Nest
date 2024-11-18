@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Eihter, left, right } from "../../../../../core/either";
 import { PhysicalDocumentRepository } from "../../repositories/physical-document-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 
 interface DeletePhysicalDocumentUseCaseRequest {
   physicalDocumentId: string;

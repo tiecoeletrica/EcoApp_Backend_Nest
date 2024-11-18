@@ -6,7 +6,7 @@ import { CurrentUser } from "src/infra/auth/current-user.decorator";
 import { UserPayload } from "src/infra/auth/jwt-strategy.guard";
 import { EditBudgetsByMaterialUseCase } from "src/domain/material-movimentation/application/use-cases/budget/edit-budgets-by-material";
 import { ApiTags } from "@nestjs/swagger";
-import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
+import { ResourceNotFoundError } from "src/core/errors/errors/resource-not-found-error";
 import { EditBudgetsByMaterialDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/response decorators/edit-budgets-by-material.decorator";
 import { EditBudgetsByMaterialBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/budget/dto classes/edit-budgets-by-material.dto";
 import { ProjectPresenter } from "src/infra/http/presenters/preject-presenter";

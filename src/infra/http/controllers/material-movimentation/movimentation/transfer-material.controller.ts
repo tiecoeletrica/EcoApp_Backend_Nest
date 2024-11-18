@@ -6,10 +6,10 @@ import { CurrentUser } from "src/infra/auth/current-user.decorator";
 import { UserPayload } from "src/infra/auth/jwt-strategy.guard";
 import { TransferMaterialUseCase } from "src/domain/material-movimentation/application/use-cases/movimentation/transfer-material";
 import { ApiBody, ApiTags } from "@nestjs/swagger";
-import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
+import { ResourceNotFoundError } from "src/core/errors/errors/resource-not-found-error";
 import { TransferMaterialDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/movimentation/response decorators/transfer-material.decorator";
 import { TransferMaterialBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/movimentation/dto classes/transfer-material.dto";
-import { NotValidError } from "src/domain/material-movimentation/application/use-cases/errors/not-valid-error";
+import { NotValidError } from "src/core/errors/errors/not-valid-error";
 import { UseCases } from "src/core/role-authorization/use-cases.enum";
 import { RoleAuth } from "src/infra/auth/role-auth.decorator";
 

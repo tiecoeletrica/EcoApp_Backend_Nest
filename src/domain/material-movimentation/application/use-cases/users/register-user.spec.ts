@@ -4,12 +4,12 @@ import { FakeHasher } from "test/cryptography/fake-hasher";
 import { InMemoryBaseRepository } from "test/repositories/in-memory-base-repository";
 import { InMemoryContractRepository } from "test/repositories/in-memory-contract-repository";
 import { makeBase } from "test/factories/make-base";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
-import { WrongTypeError } from "../errors/wrong-type";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
+import { WrongTypeError } from "../../../../../core/errors/errors/wrong-type";
 import { RegisterUserUseCase } from "./register-user";
 import { makeContract } from "test/factories/make-contract";
-import { NotValidError } from "../errors/not-valid-error";
-import { NotAllowedError } from "../errors/not-allowed-error";
+import { NotValidError } from "../../../../../core/errors/errors/not-valid-error";
+import { NotAllowedError } from "../../../../../core/errors/errors/not-allowed-error";
 
 let inMemoryUserRepository: InMemoryUserRepository;
 let inMemoryContractRepository: InMemoryContractRepository;

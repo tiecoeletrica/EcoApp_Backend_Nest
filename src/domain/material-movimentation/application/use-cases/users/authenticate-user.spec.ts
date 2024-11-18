@@ -3,7 +3,7 @@ import { InMemoryUserRepository } from "../../../../../../test/repositories/in-m
 import { FakeHasher } from "test/cryptography/fake-hasher";
 import { FakeEncrypter } from "test/cryptography/fake-encrypter";
 import { AuthenticateUserUseCase } from "./authenticate-user";
-import { WrogCredentialsError } from "../errors/wrong-credentials";
+import { WrogCredentialsError } from "../../../../../core/errors/errors/wrong-credentials";
 import { InMemoryContractRepository } from "test/repositories/in-memory-contract-repository";
 import { InMemoryBaseRepository } from "test/repositories/in-memory-base-repository";
 import { makeUser } from "test/factories/make-user";

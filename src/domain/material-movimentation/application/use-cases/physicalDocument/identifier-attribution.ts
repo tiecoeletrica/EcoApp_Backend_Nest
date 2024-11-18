@@ -2,9 +2,9 @@ import { Injectable } from "@nestjs/common";
 import { Eihter, left, right } from "../../../../../core/either";
 import { PhysicalDocument } from "../../../enterprise/entities/physical-document";
 import { PhysicalDocumentRepository } from "../../repositories/physical-document-repository";
-import { ResourceAlreadyRegisteredError } from "../errors/resource-already-registered-error";
+import { ResourceAlreadyRegisteredError } from "../../../../../core/errors/errors/resource-already-registered-error";
 import { ProjectRepository } from "../../repositories/project-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 
 interface IdentifierAttributionUseCaseRequest {

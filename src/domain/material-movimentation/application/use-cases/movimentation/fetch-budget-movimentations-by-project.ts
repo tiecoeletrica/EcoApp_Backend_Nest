@@ -3,7 +3,7 @@ import { Eihter, left, right } from "../../../../../core/either";
 import { BudgetRepository } from "../../repositories/budget-repository";
 import { MovimentationRepository } from "../../repositories/movimentation-repository";
 import { ProjectRepository } from "../../repositories/project-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 import { MovimentationWithDetails } from "src/domain/material-movimentation/enterprise/entities/value-objects/movimentation-with-details";
 import { BudgetWithDetails } from "src/domain/material-movimentation/enterprise/entities/value-objects/budget-with-details";
 import { BaseRepository } from "../../repositories/base-repository";

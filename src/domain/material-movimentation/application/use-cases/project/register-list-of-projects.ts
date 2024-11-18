@@ -1,15 +1,15 @@
 import { Injectable } from "@nestjs/common";
 import { Eihter, left, right } from "../../../../../core/either";
 import { ProjectRepository } from "../../repositories/project-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 import { Storekeeper } from "src/domain/material-movimentation/enterprise/entities/storekeeper";
 import { Material } from "src/domain/material-movimentation/enterprise/entities/material";
 import { Project } from "src/domain/material-movimentation/enterprise/entities/project";
 import { BaseRepository } from "../../repositories/base-repository";
 import { Base } from "src/domain/material-movimentation/enterprise/entities/base";
 import { Estimator } from "src/domain/material-movimentation/enterprise/entities/estimator";
-import { ResourceAlreadyRegisteredError } from "../errors/resource-already-registered-error";
-import { NotValidError } from "../errors/not-valid-error";
+import { ResourceAlreadyRegisteredError } from "../../../../../core/errors/errors/resource-already-registered-error";
+import { NotValidError } from "../../../../../core/errors/errors/not-valid-error";
 
 interface RegisterListOfProjectsUseCaseRequest {
   project_number: string;

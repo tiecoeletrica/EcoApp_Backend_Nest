@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { Eihter, left, right } from "../../../../../core/either";
 import { Encrypter } from "../../cryptography/encrypter";
 import { HashComparer } from "../../cryptography/hash-comperer";
-import { WrogCredentialsError } from "../errors/wrong-credentials";
+import { WrogCredentialsError } from "../../../../../core/errors/errors/wrong-credentials";
 import { UserRepository } from "../../repositories/user-repository";
 
 interface AuthenticateUserUseCaseRequest {

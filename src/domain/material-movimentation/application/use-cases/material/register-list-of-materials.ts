@@ -2,10 +2,10 @@ import { Injectable } from "@nestjs/common";
 import { Eihter, left, right } from "../../../../../core/either";
 import { UniqueEntityID } from "../../../../../core/entities/unique-entity-id";
 import { MaterialRepository } from "../../repositories/material-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 import { Material } from "src/domain/material-movimentation/enterprise/entities/material";
 import { ContractRepository } from "../../repositories/contract-repository";
-import { ResourceAlreadyRegisteredError } from "../errors/resource-already-registered-error";
+import { ResourceAlreadyRegisteredError } from "../../../../../core/errors/errors/resource-already-registered-error";
 import { Contract } from "src/domain/material-movimentation/enterprise/entities/contract";
 
 interface RegisterListOfMaterialsUseCaseRequest {

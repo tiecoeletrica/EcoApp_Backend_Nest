@@ -10,7 +10,7 @@ import { InMemoryContractRepository } from "test/repositories/in-memory-contract
 import { makeContract } from "test/factories/make-contract";
 import { InMemoryBaseRepository } from "test/repositories/in-memory-base-repository";
 import { makeBase } from "test/factories/make-base";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 
 let inMemoryMaterialRepository: InMemoryMaterialRepository;
 let inMemoryProjectRepository: InMemoryProjectRepository;

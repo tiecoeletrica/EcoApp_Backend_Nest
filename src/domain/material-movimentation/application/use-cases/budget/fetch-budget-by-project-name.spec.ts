@@ -12,7 +12,7 @@ import { makeUser } from "test/factories/make-user";
 import { makeMaterial } from "test/factories/make-material";
 import { InMemoryBaseRepository } from "test/repositories/in-memory-base-repository";
 import { makeBase } from "test/factories/make-base";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 
 let inMemoryMaterialRepository: InMemoryMaterialRepository;
 let inMemoryProjectRepository: InMemoryProjectRepository;
