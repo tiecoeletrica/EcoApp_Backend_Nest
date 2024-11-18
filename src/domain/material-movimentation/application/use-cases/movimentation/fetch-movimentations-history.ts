@@ -93,14 +93,6 @@ export class FetchMovimentationHistoryUseCase {
         );
       materialId = material.id.toString();
     }
-    console.log(
-      baseId,
-      storekeeperIds,
-      projectId,
-      materialId,
-      startDate,
-      endDate
-    );
 
     const { movimentations, pagination } =
       await this.movimentationRepository.findManyHistoryWithDetails(

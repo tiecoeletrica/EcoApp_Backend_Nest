@@ -26,6 +26,9 @@
 | 08/11/2024 | update README badges                                                  |
 | 08/11/2024 | email with toLowerCase and project_number with toUpperCase            |
 | 08/11/2024 | real data stream on fetch all existing budgetes                       |
+| 13/11/2024 | fIx edit user by supervisor                                           |
+| 14/11/2024 | fix filters on fetch movimentations and all movimentations            |
+| 18/11/2024 | test bases only for 'Administradores'                                 |
 
 # Technical debt
 

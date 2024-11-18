@@ -14,6 +14,8 @@ import { ApiTags } from "@nestjs/swagger";
 import { FetchBaseDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/contract-base/response decorators/fetch-base.decorator";
 import { RoleAuth } from "src/infra/auth/role-auth.decorator";
 import { UseCases } from "src/core/role-authorization/use-cases.enum";
+import { UserPayload } from "src/infra/auth/jwt-strategy.guard";
+import { CurrentUser } from "src/infra/auth/current-user.decorator";
 
 const pageQueryParamSchema = z
   .string()
@@ -35,9 +37,13 @@ export class FetchBaseController {
   @HttpCode(200)
   @FetchBaseDecorator()
   @RoleAuth(UseCases.FetchBaseUseCase)
-  async handle(@Query("page", queryValidationPipe) page: PageQueryParamSchema) {
+  async handle(
+    @Query("page", queryValidationPipe) page: PageQueryParamSchema,
+    @CurrentUser() user: UserPayload
+  ) {
     const result = await this.fetchBaseUseCase.execute({
       page,
+      userType: user.type,
     });
 
     if (result.isLeft()) {

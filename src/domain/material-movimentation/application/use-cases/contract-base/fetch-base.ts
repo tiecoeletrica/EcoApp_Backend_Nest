@@ -7,6 +7,7 @@ import { PaginationParamsResponse } from "src/core/repositories/pagination-param
 
 interface FetchBaseUseCaseRequest {
   page: number;
+  userType: string;
 }
 
 type FetchBaseUseCaseResponse = Eihter<
@@ -23,6 +24,7 @@ export class FetchBaseUseCase {
 
   async execute({
     page,
+    userType,
   }: FetchBaseUseCaseRequest): Promise<FetchBaseUseCaseResponse> {
     const { bases, pagination } =
       await this.baseRepository.findManyWithContract({
@@ -31,6 +33,16 @@ export class FetchBaseUseCase {
 
     if (!bases.length)
       return left(new ResourceNotFoundError("Pesquisa sem resultados"));
+
+    if (userType !== "Administrador")
+      return right({
+        bases: bases.filter(
+          (base) =>
+            base.contract.id.toString() !==
+            "8525856b-9d1f-47be-819c-8b11157db384"
+        ),
+        pagination,
+      });
 
     return right({ bases, pagination });
   }
