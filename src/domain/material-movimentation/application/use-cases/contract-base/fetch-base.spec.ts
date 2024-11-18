@@ -4,6 +4,7 @@ import { InMemoryBaseRepository } from "../../../../../../test/repositories/in-m
 import { makeBase } from "../../../../../../test/factories/make-base";
 import { InMemoryContractRepository } from "test/repositories/in-memory-contract-repository";
 import { makeContract } from "test/factories/make-contract";
+import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 
 let inMemoryContractRepository: InMemoryContractRepository;
 let inMemoryBaseRepository: InMemoryBaseRepository;
@@ -18,7 +19,7 @@ describe("Fetch Bases History", () => {
     sut = new FetchBaseUseCase(inMemoryBaseRepository);
   });
 
-  it("should be able to fetch physical documents history sorting by baseName", async () => {
+  it("should be able to fetch bases sorting by baseName", async () => {
     const contract = makeContract({ contractName: "Centro-Oeste" });
 
     inMemoryContractRepository.create(contract);
@@ -42,6 +43,7 @@ describe("Fetch Bases History", () => {
 
     const result = await sut.execute({
       page: 1,
+      userType: "Administrador",
     });
 
     expect(result.isRight()).toBeTruthy();
@@ -81,6 +83,7 @@ describe("Fetch Bases History", () => {
 
     const result = await sut.execute({
       page: 2,
+      userType: "Administrador",
     });
     if (result.isRight()) {
       expect(result.value.bases).toHaveLength(5);
@@ -90,5 +93,55 @@ describe("Fetch Bases History", () => {
         lastPage: 2,
       });
     }
+  });
+
+  it("should not be able to fetch test bases if user is not 'Administrador'", async () => {
+    const contract = makeContract({ contractName: "Centro-Oeste" });
+    inMemoryContractRepository.create(contract);
+
+    const contractTest = makeContract(
+      { contractName: "Contrato Teste" },
+      new UniqueEntityID("8525856b-9d1f-47be-819c-8b11157db384")
+    );
+    inMemoryContractRepository.create(contractTest);
+
+    const newBase1 = makeBase({
+      baseName: "Conquista",
+      contractId: contract.id,
+    });
+    const newBase2 = makeBase({
+      baseName: "Petrolina",
+      contractId: contract.id,
+    });
+    const newBase3 = makeBase({
+      baseName: "Itaberaba",
+      contractId: contractTest.id,
+    });
+
+    await inMemoryBaseRepository.create(newBase1);
+    await inMemoryBaseRepository.create(newBase2);
+    await inMemoryBaseRepository.create(newBase3);
+
+    const result = await sut.execute({
+      page: 1,
+      userType: "Almoxarife",
+    });
+
+    expect(result.isRight()).toBeTruthy();
+    if (result.isRight())
+      expect(result.value.bases).toEqual([
+        expect.objectContaining({
+          props: expect.objectContaining({
+            baseName: "Conquista",
+            contract: expect.objectContaining({ contractName: "Centro-Oeste" }),
+          }),
+        }),
+        expect.objectContaining({
+          props: expect.objectContaining({
+            baseName: "Petrolina",
+            contract: expect.objectContaining({ contractName: "Centro-Oeste" }),
+          }),
+        }),
+      ]);
   });
 });

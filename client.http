@@ -109,7 +109,7 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-    "contractName": "Goiânia Goiás"
+    "contractName": "Contrato de Testes"
 }
 
 
@@ -129,8 +129,8 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-    "baseName": "Uruaçu",
-    "contractId": "a100663c-5a6d-4198-ad7b-1062afa0c4f4"
+    "baseName": "Base de Testes 2",
+    "contractId": "8525856b-9d1f-47be-819c-8b11157db384"
 }
 
 
