@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { Eihter, left, right } from "../../../../../core/either";
 import { BudgetRepository } from "../../repositories/budget-repository";
 import { ProjectRepository } from "../../repositories/project-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 import { Project } from "src/domain/material-movimentation/enterprise/entities/project";
 import { Budget } from "src/domain/material-movimentation/enterprise/entities/budget";
 import { MaterialRepository } from "../../repositories/material-repository";
@@ -66,7 +66,22 @@ export class FetchProjectsBudgetsByMaterialsUseCase {
 
     const uniqueProjectIds = this.uniqueValues(budgets, "projectId");
 
-    const projects = await this.projectRepository.findByIds(uniqueProjectIds);
+    const projectIdsWithAllMaterials = this.filterProjectsWithAllMaterials(
+      uniqueProjectIds,
+      budgets,
+      materialIds
+    );
+
+    if (!projectIdsWithAllMaterials.length)
+      return left(
+        new ResourceNotFoundError(
+          "Nenhum orçamento encontrado com todos os materiais informados"
+        )
+      );
+
+    const projects = await this.projectRepository.findByIds(
+      projectIdsWithAllMaterials
+    );
 
     const foundProjects = this.createProjectAndIdArray(projects);
 
@@ -84,6 +99,26 @@ export class FetchProjectsBudgetsByMaterialsUseCase {
     });
 
     return Object.values(uniqueFoundProjects);
+  }
+
+  private filterProjectsWithAllMaterials(
+    uniqueProjectIds: string[],
+    budgets: Budget[],
+    materialIds: string[]
+  ): string[] {
+    return uniqueProjectIds.filter((projectId) => {
+      const projectIdbudgets = budgets.filter(
+        (budget) =>
+          budget.projectId.toString() === projectId &&
+          materialIds.includes(budget.materialId.toString())
+      );
+
+      return materialIds.every((materialId) =>
+        projectIdbudgets.find(
+          (budget) => budget.materialId.toString() === materialId
+        )
+      );
+    });
   }
 
   private uniqueValues(budgets: Budget[], key: keyof Budget): string[] {

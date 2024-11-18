@@ -10,7 +10,7 @@ import { InMemoryContractRepository } from "test/repositories/in-memory-contract
 import { makeContract } from "test/factories/make-contract";
 import { InMemoryBaseRepository } from "test/repositories/in-memory-base-repository";
 import { makeBase } from "test/factories/make-base";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 import { makeMaterial } from "test/factories/make-material";
 
 let inMemoryMaterialRepository: InMemoryMaterialRepository;
@@ -90,17 +90,34 @@ describe("Get projects of budgets by material codes", () => {
       materialId: material1.id,
     });
     const newBudget2 = makeBudget({
-      projectId: project2.id,
+      projectId: project1.id,
+      value: 5,
       contractId: contract.id,
       materialId: material2.id,
     });
     const newBudget3 = makeBudget({
+      projectId: project2.id,
+      contractId: contract.id,
+      materialId: material2.id,
+    });
+    const newBudget4 = makeBudget({
+      projectId: project2.id,
+      contractId: contract.id,
+      materialId: material1.id,
+    });
+    const newBudget5 = makeBudget({
       projectId: project3.id,
       contractId: contract.id,
       materialId: material3.id,
     });
 
-    await inMemoryBudgetRepository.create([newBudget1, newBudget2, newBudget3]);
+    await inMemoryBudgetRepository.create([
+      newBudget1,
+      newBudget2,
+      newBudget3,
+      newBudget4,
+      newBudget5,
+    ]);
 
     const result = await sut.execute({
       material_codes: [123456, 654321],

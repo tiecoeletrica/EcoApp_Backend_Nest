@@ -6,7 +6,7 @@ import { BudgetRepository } from "../../repositories/budget-repository";
 import { UserRepository } from "../../repositories/user-repository";
 import { MaterialRepository } from "../../repositories/material-repository";
 import { ProjectRepository } from "../../repositories/project-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 import { Project } from "src/domain/material-movimentation/enterprise/entities/project";
 import { Material } from "src/domain/material-movimentation/enterprise/entities/material";
 import { UserEntities } from "src/core/types/user-type";

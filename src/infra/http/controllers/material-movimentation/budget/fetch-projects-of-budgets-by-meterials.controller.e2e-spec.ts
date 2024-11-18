@@ -100,6 +100,16 @@ describe("Fetch Projects of Budget By Materials (E2E)", () => {
       materialId: material2.id,
     });
     await budgetFactory.makeBqBudget({
+      projectId: project1.id,
+      contractId: contract.id,
+      materialId: material2.id,
+    });
+    await budgetFactory.makeBqBudget({
+      projectId: project2.id,
+      contractId: contract.id,
+      materialId: material1.id,
+    });
+    await budgetFactory.makeBqBudget({
       projectId: project2.id,
       contractId: contract.id,
     });

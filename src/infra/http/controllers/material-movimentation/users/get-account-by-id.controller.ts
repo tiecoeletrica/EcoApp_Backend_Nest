@@ -5,7 +5,7 @@ import {
   Param,
 } from "@nestjs/common";
 import { Controller, HttpCode } from "@nestjs/common";
-import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
+import { ResourceNotFoundError } from "src/core/errors/errors/resource-not-found-error";
 import { ApiTags } from "@nestjs/swagger";
 import { GetAccountByidDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/users/response decorators/get-account-by-id.decorator";
 import { UserWithBaseContractPresenter } from "src/infra/http/presenters/user-with-base-contract-presenter";

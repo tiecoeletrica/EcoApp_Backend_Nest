@@ -9,9 +9,9 @@ import {
 import { Controller, HttpCode } from "@nestjs/common";
 import { CurrentUser } from "src/infra/auth/current-user.decorator";
 import { UserPayload } from "src/infra/auth/jwt-strategy.guard";
-import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
+import { ResourceNotFoundError } from "src/core/errors/errors/resource-not-found-error";
 import { ApiTags } from "@nestjs/swagger";
-import { NotAllowedError } from "src/domain/material-movimentation/application/use-cases/errors/not-allowed-error";
+import { NotAllowedError } from "src/core/errors/errors/not-allowed-error";
 import { EditAccountDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/users/response decorators/edit-account.decorator";
 import { DeleteUserUseCase } from "src/domain/material-movimentation/application/use-cases/users/delete-user";
 import { UseCases } from "src/core/role-authorization/use-cases.enum";

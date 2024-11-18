@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { Eihter, left, right } from "../../../../../core/either";
 import { Contract } from "../../../enterprise/entities/contract";
 import { ContractRepository } from "../../repositories/contract-repository";
-import { ResourceAlreadyRegisteredError } from "../errors/resource-already-registered-error";
+import { ResourceAlreadyRegisteredError } from "../../../../../core/errors/errors/resource-already-registered-error";
 
 interface RegisterContractUseCaseRequest {
   contractName: string;

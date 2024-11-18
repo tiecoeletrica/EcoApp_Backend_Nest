@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { RegisterListOfMaterialsUseCase } from "./register-list-of-materials";
 import { InMemoryMaterialRepository } from "../../../../../../test/repositories/in-memory-material-repository";
-import { ResourceAlreadyRegisteredError } from "../errors/resource-already-registered-error";
+import { ResourceAlreadyRegisteredError } from "../../../../../core/errors/errors/resource-already-registered-error";
 import { InMemoryContractRepository } from "test/repositories/in-memory-contract-repository";
 import { makeContract } from "test/factories/make-contract";
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 import { makeMaterial } from "test/factories/make-material";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 
 let inMemoryContractRepository: InMemoryContractRepository;
 let inMemoryMaterialRepository: InMemoryMaterialRepository;

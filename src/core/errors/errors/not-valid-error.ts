@@ -1,4 +1,4 @@
-import { UseCaseError } from "../../../../../core/errors/use-case-error";
+import { UseCaseError } from "../use-case-error";
 
 export class NotValidError extends Error implements UseCaseError {
   constructor(

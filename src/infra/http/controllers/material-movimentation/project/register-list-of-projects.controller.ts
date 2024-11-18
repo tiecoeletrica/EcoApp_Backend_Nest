@@ -6,14 +6,14 @@ import {
 import { Body, Controller, HttpCode, Post } from "@nestjs/common";
 import { z } from "zod";
 import { ZodValidationPipe } from "src/infra/http/pipes/zod-validation.pipe";
-import { ResourceAlreadyRegisteredError } from "src/domain/material-movimentation/application/use-cases/errors/resource-already-registered-error";
+import { ResourceAlreadyRegisteredError } from "src/core/errors/errors/resource-already-registered-error";
 import { ApiBody, ApiTags } from "@nestjs/swagger";
-import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
+import { ResourceNotFoundError } from "src/core/errors/errors/resource-not-found-error";
 import { RegisterProjectDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/project/response decorators/register-project.decorator";
 import { RegisterListOfProjectsUseCase } from "src/domain/material-movimentation/application/use-cases/project/register-list-of-projects";
 import { UseCases } from "src/core/role-authorization/use-cases.enum";
 import { RoleAuth } from "src/infra/auth/role-auth.decorator";
-import { NotValidError } from "src/domain/material-movimentation/application/use-cases/errors/not-valid-error";
+import { NotValidError } from "src/core/errors/errors/not-valid-error";
 import { RegisterListOfProjectsBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/project/dto classes/register-list-of-projects.dto";
 
 const registerProjectBodySchema = z.array(

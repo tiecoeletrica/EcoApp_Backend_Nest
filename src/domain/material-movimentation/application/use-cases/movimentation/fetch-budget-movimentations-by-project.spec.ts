@@ -6,7 +6,7 @@ import { InMemoryProjectRepository } from "../../../../../../test/repositories/i
 import { InMemoryBudgetRepository } from "../../../../../../test/repositories/in-memory-budget-repository";
 import { FetchBudgetMovimentationByProjectUseCase } from "./fetch-budget-movimentations-by-project";
 import { makeProject } from "../../../../../../test/factories/make-project";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 import { InMemoryBaseRepository } from "test/repositories/in-memory-base-repository";
 import { InMemoryMaterialRepository } from "test/repositories/in-memory-material-repository";
 import { InMemoryUserRepository } from "test/repositories/in-memory-user-repository";

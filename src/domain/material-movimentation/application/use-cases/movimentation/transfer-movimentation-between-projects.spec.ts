@@ -3,7 +3,7 @@ import { TransferMovimentationBetweenProjectsUseCase } from "./transfer-moviment
 import { InMemoryMovimentationRepository } from "../../../../../../test/repositories/in-memory-movimentation-repository";
 import { makeMovimentation } from "../../../../../../test/factories/make-movimentation";
 import { UniqueEntityID } from "../../../../../core/entities/unique-entity-id";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 import { InMemoryContractRepository } from "test/repositories/in-memory-contract-repository";
 import { InMemoryBaseRepository } from "test/repositories/in-memory-base-repository";
 import { InMemoryUserRepository } from "test/repositories/in-memory-user-repository";

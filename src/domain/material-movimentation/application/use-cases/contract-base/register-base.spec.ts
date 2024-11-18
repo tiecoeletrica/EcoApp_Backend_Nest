@@ -2,11 +2,11 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { RegisterBaseUseCase } from "./register-base";
 import { InMemoryBaseRepository } from "test/repositories/in-memory-base-repository";
 import { UniqueEntityID } from "../../../../../core/entities/unique-entity-id";
-import { ResourceAlreadyRegisteredError } from "../errors/resource-already-registered-error";
+import { ResourceAlreadyRegisteredError } from "../../../../../core/errors/errors/resource-already-registered-error";
 import { InMemoryContractRepository } from "test/repositories/in-memory-contract-repository";
 import { makeContract } from "test/factories/make-contract";
 import { makeBase } from "test/factories/make-base";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 
 let inMemoryContractRepository: InMemoryContractRepository;
 let inMemoryBaseRepository: InMemoryBaseRepository;

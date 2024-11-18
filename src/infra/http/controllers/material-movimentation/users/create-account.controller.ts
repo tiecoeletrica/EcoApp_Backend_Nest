@@ -9,19 +9,19 @@ import {
 import { Body, Controller, HttpCode, Post } from "@nestjs/common";
 import { z } from "zod";
 import { ZodValidationPipe } from "src/infra/http/pipes/zod-validation.pipe";
-import { ResourceAlreadyRegisteredError } from "src/domain/material-movimentation/application/use-cases/errors/resource-already-registered-error";
+import { ResourceAlreadyRegisteredError } from "src/core/errors/errors/resource-already-registered-error";
 import { ApiTags } from "@nestjs/swagger";
-import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
+import { ResourceNotFoundError } from "src/core/errors/errors/resource-not-found-error";
 import { CreateAccountDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/users/response decorators/create-account.decorator";
 import { CreateAccountBodyDto } from "src/infra/http/swagger dto and decorators/material-movimentation/users/dto classes/create-account.dto";
-import { WrongTypeError } from "src/domain/material-movimentation/application/use-cases/errors/wrong-type";
+import { WrongTypeError } from "src/core/errors/errors/wrong-type";
 import { RegisterUserUseCase } from "src/domain/material-movimentation/application/use-cases/users/register-user";
-import { NotValidError } from "src/domain/material-movimentation/application/use-cases/errors/not-valid-error";
+import { NotValidError } from "src/core/errors/errors/not-valid-error";
 import { UseCases } from "src/core/role-authorization/use-cases.enum";
 import { RoleAuth } from "src/infra/auth/role-auth.decorator";
 import { UserPayload } from "src/infra/auth/jwt-strategy.guard";
 import { CurrentUser } from "src/infra/auth/current-user.decorator";
-import { NotAllowedError } from "src/domain/material-movimentation/application/use-cases/errors/not-allowed-error";
+import { NotAllowedError } from "src/core/errors/errors/not-allowed-error";
 
 const createAccountBodyDto = z.object({
   name: z.string(),

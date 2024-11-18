@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { RegisterContractUseCase } from "./register-contract";
 import { InMemoryContractRepository } from "../../../../../../test/repositories/in-memory-contract-repository";
-import { ResourceAlreadyRegisteredError } from "../errors/resource-already-registered-error";
+import { ResourceAlreadyRegisteredError } from "../../../../../core/errors/errors/resource-already-registered-error";
 
 let inMemoryContractRepository: InMemoryContractRepository;
 let sut: RegisterContractUseCase;

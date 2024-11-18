@@ -1,14 +1,14 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { RegisterListOfProjectsUseCase } from "./register-list-of-projects";
 import { InMemoryProjectRepository } from "../../../../../../test/repositories/in-memory-project-repository";
-import { ResourceAlreadyRegisteredError } from "../errors/resource-already-registered-error";
+import { ResourceAlreadyRegisteredError } from "../../../../../core/errors/errors/resource-already-registered-error";
 import { InMemoryBaseRepository } from "test/repositories/in-memory-base-repository";
 import { InMemoryContractRepository } from "test/repositories/in-memory-contract-repository";
 import { makeBase } from "test/factories/make-base";
 import { makeProject } from "test/factories/make-project";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 import { makeContract } from "test/factories/make-contract";
-import { NotValidError } from "../errors/not-valid-error";
+import { NotValidError } from "../../../../../core/errors/errors/not-valid-error";
 
 let inMemoryContractRepository: InMemoryContractRepository;
 let inMemoryBaseRepository: InMemoryBaseRepository;

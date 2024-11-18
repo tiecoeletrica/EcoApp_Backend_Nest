@@ -83,6 +83,7 @@ export const rolePermissions = {
   ],
   [Role.Orçamentista]: [
     UseCases.CreateMaterialUseCase,
+    UseCases.RegisterListOfMaterialsUseCase,
     UseCases.FetchMaterialUseCase,
     UseCases.FetchAllMaterialUseCase,
     UseCases.AuthenticateUserUseCase,
@@ -94,6 +95,7 @@ export const rolePermissions = {
     UseCases.FetchBudgetByProjectNameUseCase,
     UseCases.GetProjectByProjectNumberUseCase,
     UseCases.RegisterProjectUseCase,
+    UseCases.RegisterListOfProjectsUseCase,
     UseCases.RegisterBudgetUseCase,
     UseCases.EditBudgetUseCase,
     UseCases.FetchOnlyProjectsOfBudgetsUseCase,

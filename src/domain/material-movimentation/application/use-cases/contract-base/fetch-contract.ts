@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { Eihter, left, right } from "../../../../../core/either";
 import { Contract } from "../../../enterprise/entities/contract";
 import { ContractRepository } from "../../repositories/contract-repository";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 import { PaginationParamsResponse } from "src/core/repositories/pagination-params";
 
 interface FetchContractUseCaseRequest {

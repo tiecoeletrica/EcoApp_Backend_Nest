@@ -17,7 +17,7 @@ import { FetchExistingBudgetByProjectsBodyDto } from "src/infra/http/swagger dto
 import { BudgetWithDetailsPresenter } from "src/infra/http/presenters/budget-with-details";
 import type { Response } from "express";
 import { Readable } from "stream";
-import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
+import { ResourceNotFoundError } from "src/core/errors/errors/resource-not-found-error";
 import { RoleAuth } from "src/infra/auth/role-auth.decorator";
 import { UseCases } from "src/core/role-authorization/use-cases.enum";
 

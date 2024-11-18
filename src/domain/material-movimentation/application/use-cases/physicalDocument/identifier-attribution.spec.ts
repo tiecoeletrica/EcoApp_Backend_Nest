@@ -4,8 +4,8 @@ import { InMemoryPhysicalDocumentRepository } from "../../../../../../test/repos
 import { InMemoryProjectRepository } from "test/repositories/in-memory-project-repository";
 import { makeProject } from "test/factories/make-project";
 import { makePhysicalDocument } from "test/factories/make-physical-document";
-import { ResourceAlreadyRegisteredError } from "../errors/resource-already-registered-error";
-import { ResourceNotFoundError } from "../errors/resource-not-found-error";
+import { ResourceAlreadyRegisteredError } from "../../../../../core/errors/errors/resource-already-registered-error";
+import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 import { InMemoryContractRepository } from "test/repositories/in-memory-contract-repository";
 import { InMemoryBaseRepository } from "test/repositories/in-memory-base-repository";
 import { makeBase } from "test/factories/make-base";

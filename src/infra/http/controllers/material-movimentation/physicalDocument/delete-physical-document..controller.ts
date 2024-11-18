@@ -7,7 +7,7 @@ import {
 import { Controller, HttpCode } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { UseCases } from "src/core/role-authorization/use-cases.enum";
-import { ResourceNotFoundError } from "src/domain/material-movimentation/application/use-cases/errors/resource-not-found-error";
+import { ResourceNotFoundError } from "src/core/errors/errors/resource-not-found-error";
 import { DeletePhysicalDocumentUseCase } from "src/domain/material-movimentation/application/use-cases/physicalDocument/delete-physical-document";
 import { RoleAuth } from "src/infra/auth/role-auth.decorator";
 import { DeletePhysicalDocumentDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/physicalDocument/response decorators/delete-physical-document.decorator";
