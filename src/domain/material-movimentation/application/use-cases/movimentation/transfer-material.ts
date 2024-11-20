@@ -7,15 +7,11 @@ import { UserRepository } from "../../repositories/user-repository";
 import { MaterialRepository } from "../../repositories/material-repository";
 import { ProjectRepository } from "../../repositories/project-repository";
 import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
-import { Storekeeper } from "src/domain/material-movimentation/enterprise/entities/storekeeper";
 import { Material } from "src/domain/material-movimentation/enterprise/entities/material";
 import { Project } from "src/domain/material-movimentation/enterprise/entities/project";
 import { BaseRepository } from "../../repositories/base-repository";
 import { Base } from "src/domain/material-movimentation/enterprise/entities/base";
-import { Estimator } from "src/domain/material-movimentation/enterprise/entities/estimator";
 import { NotValidError } from "../../../../../core/errors/errors/not-valid-error";
-import { Supervisor } from "src/domain/material-movimentation/enterprise/entities/supervisor";
-import { Administrator } from "src/domain/material-movimentation/enterprise/entities/administrator";
 import { UserEntities } from "src/core/types/user-type";
 
 interface TransferMaterialUseCaseRequest {
@@ -56,11 +52,11 @@ export class TransferMaterialUseCase {
 
     if (containsIdError) return left(new ResourceNotFoundError(message));
 
-    const { containsEquipmentWithoutDetails, messageEquipment } =
-      this.verifyEquipmentDetails(transferMaterialUseCaseRequest);
+    // const { containsEquipmentWithoutDetails, messageEquipment } =
+    //   this.verifyEquipmentDetails(transferMaterialUseCaseRequest);
 
-    if (containsEquipmentWithoutDetails)
-      return left(new NotValidError(messageEquipment));
+    // if (containsEquipmentWithoutDetails)
+    //   return left(new NotValidError(messageEquipment));
 
     const movimentations = transferMaterialUseCaseRequest.map(
       (movimentation) => {
