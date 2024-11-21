@@ -24,8 +24,8 @@ export class RequestLoggerMiddleware implements NestMiddleware {
 
     console.log(
       `[${new Date().toISOString()}] ${req.method} ${req.originalUrl}
-      User ID: ${userId}
-      Body: ${JSON.stringify(req.body, null, 2)}`
+      User ID: ${userId}`
+      // Body: ${JSON.stringify(req.body, null, 2)}`
     );
 
     const start = Date.now();

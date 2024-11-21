@@ -52,11 +52,11 @@ export class TransferMaterialUseCase {
 
     if (containsIdError) return left(new ResourceNotFoundError(message));
 
-    // const { containsEquipmentWithoutDetails, messageEquipment } =
-    //   this.verifyEquipmentDetails(transferMaterialUseCaseRequest);
+    const { containsEquipmentWithoutDetails, messageEquipment } =
+      this.verifyEquipmentDetails(transferMaterialUseCaseRequest);
 
-    // if (containsEquipmentWithoutDetails)
-    //   return left(new NotValidError(messageEquipment));
+    if (containsEquipmentWithoutDetails)
+      return left(new NotValidError(messageEquipment));
 
     const movimentations = transferMaterialUseCaseRequest.map(
       (movimentation) => {

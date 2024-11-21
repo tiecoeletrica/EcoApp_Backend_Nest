@@ -39,6 +39,7 @@ export const rolePermissions = {
   ],
   [Role.AlmoxarifeLider]: [
     UseCases.CreateMaterialUseCase,
+    UseCases.RegisterListOfMaterialsUseCase,
     UseCases.FetchMaterialUseCase,
     UseCases.FetchAllMaterialUseCase,
     UseCases.AuthenticateUserUseCase,
@@ -53,6 +54,7 @@ export const rolePermissions = {
     UseCases.DeletePhysicalDocumentUseCase,
     UseCases.TransferMaterialUseCase,
     UseCases.RegisterProjectUseCase,
+    UseCases.RegisterListOfProjectsUseCase,
     UseCases.TransferMovimentationBetweenProjectsUseCase,
     UseCases.FetchMovimentationHistoryUseCase,
     UseCases.FetchBudgetMovimentationByProjectUseCase,
@@ -102,6 +104,7 @@ export const rolePermissions = {
     UseCases.FetchExistingBudgetByProjectsUseCase,
     UseCases.FetchProjectsBudgetsByMaterialsUseCase,
     UseCases.EditBudgetsByMaterialUseCase,
+    UseCases.FetchBudgetMovimentationByProjectUseCase,
   ],
   [Role.Supervisor]: [
     UseCases.FetchMaterialUseCase,
