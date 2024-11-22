@@ -4,6 +4,8 @@ import { Optional } from "../../../../core/types/optional";
 
 export interface PhysicalDocumentProps {
   projectId: UniqueEntityID;
+  projectKitId?: UniqueEntityID;
+  projectMeterId?: UniqueEntityID;
   identifier: number;
   unitized: boolean;
   baseId: UniqueEntityID;
@@ -12,6 +14,14 @@ export interface PhysicalDocumentProps {
 export class PhysicalDocument extends Entity<PhysicalDocumentProps> {
   get projectId() {
     return this.props.projectId;
+  }
+
+  get projectKitId() {
+    return this.props.projectKitId;
+  }
+
+  get projectMeterId() {
+    return this.props.projectMeterId;
   }
 
   get identifier() {
@@ -24,6 +34,14 @@ export class PhysicalDocument extends Entity<PhysicalDocumentProps> {
 
   set projectId(projectId: UniqueEntityID) {
     this.props.projectId = projectId;
+  }
+
+  set projectKitId(projectKitId: UniqueEntityID | undefined) {
+    this.props.projectKitId = projectKitId;
+  }
+
+  set projectMeterId(projectMeterId: UniqueEntityID | undefined) {
+    this.props.projectMeterId = projectMeterId;
   }
 
   get baseId() {

@@ -22,7 +22,9 @@ export class InMemoryPhysicalDocumentRepository
     const physicaldocument = this.items.filter(
       (item) =>
         (item.identifier === identifier ||
-          item.projectId.toString() === projectId) &&
+          item.projectId.toString() === projectId ||
+          item.projectKitId?.toString() === projectId ||
+          item.projectMeterId?.toString() === projectId) &&
         item.baseId.toString() === baseId
     );
 

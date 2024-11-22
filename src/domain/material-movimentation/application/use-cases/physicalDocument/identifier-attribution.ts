@@ -11,6 +11,7 @@ interface IdentifierAttributionUseCaseRequest {
   project_number: string;
   identifier: number;
   baseId: string;
+  contractId: string;
 }
 
 type IdentifierAttributionResponse = Eihter<
@@ -31,10 +32,14 @@ export class IdentifierAttributionUseCase {
     project_number,
     identifier,
     baseId,
+    contractId,
   }: IdentifierAttributionUseCaseRequest): Promise<IdentifierAttributionResponse> {
-    const project = await this.projectRepository.findByProjectNumberWithoutBase(
-      project_number
-    );
+    const project =
+      await this.projectRepository.findByProjectNumberAndContractId(
+        project_number,
+        contractId
+      );
+
     if (!project)
       return left(
         new ResourceNotFoundError(
@@ -49,9 +54,20 @@ export class IdentifierAttributionUseCase {
         baseId
       );
 
-    const isIdentifierUsed = physicaldocumentSearch.find(
-      (item) => item.identifier === identifier && item.unitized === false
-    );
+    const isIdentifierUsed = physicaldocumentSearch.find((item) => {
+      let projectTypeInUse: boolean = false;
+
+      switch (project.type.toUpperCase()) {
+        case "OBRA":
+          projectTypeInUse = item.projectId === project.id;
+        case "KIT":
+          projectTypeInUse = item.projectKitId === project.id;
+        case "MEDIDOR":
+          projectTypeInUse = item.projectMeterId === project.id; // CONTINUAR DAQUI
+      }
+
+      return item.identifier === identifier && item.unitized === false;
+    });
 
     if (isIdentifierUsed)
       return left(
