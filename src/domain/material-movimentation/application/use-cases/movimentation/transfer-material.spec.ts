@@ -132,7 +132,7 @@ describe("Transfer Material", () => {
     expect(result.value).toBeInstanceOf(NotValidError);
   });
 
-  it("should not be able to transfer a material there is no informed CIAs on observation", async () => {
+  it("should not be able to transfer a equipment material if there is no informed CIAs on observation", async () => {
     const project = makeProject({}, new UniqueEntityID("1"));
     await inMemoryProjectRepository.create(project);
 
@@ -161,5 +161,36 @@ describe("Transfer Material", () => {
 
     expect(result.isLeft()).toBe(true);
     expect(result.value).toBeInstanceOf(NotValidError);
+  });
+
+  it("should be able to transfer a equipment material if there is no informed CIAs on observation and if validation is skiped ", async () => {
+    const project = makeProject({}, new UniqueEntityID("1"));
+    await inMemoryProjectRepository.create(project);
+
+    const material = makeMaterial(
+      { type: "EQUIPAMENTO" },
+      new UniqueEntityID("4")
+    );
+    await inMemoryMaterialRepository.create(material);
+
+    const base = makeBase({}, new UniqueEntityID("ID-BASE-VCA"));
+    await inMemoryBaseRepository.create(base);
+
+    const storekeeper = makeUser({ baseId: base.id }, new UniqueEntityID("5"));
+    await inMemoryUserRepository.create(storekeeper);
+
+    const result = await sut.execute([
+      {
+        projectId: "1",
+        materialId: "4",
+        storekeeperId: "5",
+        observation: "",
+        baseId: "ID-BASE-VCA",
+        value: 1.5,
+        ignoreValidations: true,
+      },
+    ]);
+
+    expect(result.isRight()).toBe(true);
   });
 });

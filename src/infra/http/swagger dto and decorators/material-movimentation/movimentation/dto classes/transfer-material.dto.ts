@@ -30,4 +30,10 @@ export class TransferMaterialBodyDto {
     required: false,
   })
   createdAt!: Date;
+  @ApiProperty({
+    example: true,
+    description: "if true, ignore equipment validations",
+    required: false,
+  })
+  ignoreValidations!: boolean;
 }

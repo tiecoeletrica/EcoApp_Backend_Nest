@@ -32,6 +32,7 @@
 | 18/11/2024 | FetchProjectsBudgetsByMaterials return only projects with all searched materials |
 | 18/11/2024 | changed user case erros folder from domain to core                               |
 | 18/11/2024 | Estimator can register bulks of projects and materials                           |
+| 22/11/2024 | ignoreValidations on transfer materials                                          |
 
 # Technical debt
 

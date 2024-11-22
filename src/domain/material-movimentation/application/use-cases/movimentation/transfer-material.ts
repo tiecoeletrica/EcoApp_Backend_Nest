@@ -22,6 +22,7 @@ interface TransferMaterialUseCaseRequest {
   baseId: string;
   value: number;
   createdAt?: Date;
+  ignoreValidations?: boolean;
 }
 
 type TransferMaterialResponse = Eihter<
@@ -180,7 +181,11 @@ export class TransferMaterialUseCase {
         (material) => material.id.toString() === request.materialId
       );
 
-      if (material && material.type === "EQUIPAMENTO") {
+      if (
+        material &&
+        material.type === "EQUIPAMENTO" &&
+        !request.ignoreValidations
+      ) {
         const ciaCount = (request.observation.match(/CIA/gi) || []).length;
 
         if (!Number.isInteger(request.value)) {

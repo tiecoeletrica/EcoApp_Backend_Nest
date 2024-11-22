@@ -24,6 +24,7 @@ const transferMaterialBodySchema = z.array(
         .string()
         .optional()
         .transform((value) => (value ? new Date(value) : undefined)),
+      ignoreValidations: z.string().optional().transform(Boolean),
     })
     .required()
 );
@@ -58,6 +59,7 @@ export class TransferMaterialController {
           baseId: user.baseId,
           value: item.value,
           createdAt: item.createdAt,
+          ignoreValidations: item.ignoreValidations,
         };
       })
     );
