@@ -8,6 +8,8 @@ export interface PhysicalDocumentWithProjectProps {
   unitized: boolean;
   project: Project;
   baseId: UniqueEntityID;
+  projectKit?: Project;
+  projectMeter?: Project;
 }
 
 export class PhysicalDocumentWithProject extends ValueObject<PhysicalDocumentWithProjectProps> {
@@ -25,6 +27,12 @@ export class PhysicalDocumentWithProject extends ValueObject<PhysicalDocumentWit
   }
   get project() {
     return this.props.project;
+  }
+  get projectKit() {
+    return this.props.projectKit;
+  }
+  get projectMeter() {
+    return this.props.projectMeter;
   }
 
   static create(props: PhysicalDocumentWithProjectProps) {

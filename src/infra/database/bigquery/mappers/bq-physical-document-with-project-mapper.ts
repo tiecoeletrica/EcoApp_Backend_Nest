@@ -20,6 +20,20 @@ export class BqPhysicalDocumentWithProjectMapper {
         },
         new UniqueEntityID(raw.project?.id)
       ),
+      projectKit: Project.create({
+        baseId: new UniqueEntityID(raw.projectKit?.baseId),
+        city: raw.projectKit?.city ?? "",
+        description: raw.projectKit?.description ?? "",
+        project_number: raw.projectKit?.project_number ?? "",
+        type: raw.projectKit?.type ?? "",
+      }),
+      projectMeter: Project.create({
+        baseId: new UniqueEntityID(raw.projectMeter?.baseId),
+        city: raw.projectMeter?.city ?? "",
+        description: raw.projectMeter?.description ?? "",
+        project_number: raw.projectMeter?.project_number ?? "",
+        type: raw.projectMeter?.type ?? "",
+      }),
     });
   }
 }

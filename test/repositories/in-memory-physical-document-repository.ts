@@ -78,7 +78,9 @@ export class InMemoryPhysicalDocumentRepository
     baseId: string,
     identifier?: number,
     projectId?: string,
-    unitized?: boolean
+    unitized?: boolean,
+    projectKitId?: string,
+    projectMeterId?: string
   ): Promise<{
     physicalDocuments: PhysicalDocumentWithProject[];
     pagination: PaginationParamsResponse;
@@ -99,6 +101,16 @@ export class InMemoryPhysicalDocumentRepository
       )
       .filter(
         (physicaldocument) =>
+          !projectKitId ||
+          physicaldocument.projectKitId?.toString() === projectKitId
+      )
+      .filter(
+        (physicaldocument) =>
+          !projectMeterId ||
+          physicaldocument.projectMeterId?.toString() === projectMeterId
+      )
+      .filter(
+        (physicaldocument) =>
           !unitized || physicaldocument.unitized === unitized
       )
       .filter((physicaldocument) => {
@@ -109,6 +121,8 @@ export class InMemoryPhysicalDocumentRepository
         return projects.includes(physicaldocument.projectId.toString());
       })
       .map((physicalDocument) => {
+        let projectKit, projectMeter;
+
         const project = this.projectRepository.items.find(
           (project) => project.id === physicalDocument.projectId
         );
@@ -118,12 +132,36 @@ export class InMemoryPhysicalDocumentRepository
             `project ${physicalDocument.projectId} does not exist.`
           );
 
+        if (physicalDocument.projectKitId) {
+          projectKit = this.projectRepository.items.find(
+            (project) => project.id === physicalDocument.projectKitId
+          );
+
+          if (!projectKit)
+            throw new Error(
+              `projectKit ${physicalDocument.projectId} does not exist.`
+            );
+        }
+
+        if (physicalDocument.projectMeterId) {
+          projectMeter = this.projectRepository.items.find(
+            (project) => project.id === physicalDocument.projectMeterId
+          );
+
+          if (!projectMeter)
+            throw new Error(
+              `projectMeter ${physicalDocument.projectId} does not exist.`
+            );
+        }
+
         return PhysicalDocumentWithProject.create({
           physicalDocumentId: physicalDocument.id,
           identifier: physicalDocument.identifier,
           unitized: physicalDocument.unitized,
           project,
           baseId: physicalDocument.baseId,
+          projectKit,
+          projectMeter,
         });
       })
       .sort((a, b) => b.identifier - a.identifier)

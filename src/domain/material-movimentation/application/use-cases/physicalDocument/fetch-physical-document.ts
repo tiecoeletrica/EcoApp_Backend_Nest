@@ -10,6 +10,7 @@ import { PaginationParamsResponse } from "src/core/repositories/pagination-param
 interface FetchPhysicalDocumentUseCaseRequest {
   page: number;
   baseId: string;
+  contractId: string;
   project_number?: string;
   identifier?: number;
   unitized?: boolean;
@@ -33,6 +34,7 @@ export class FetchPhysicalDocumentUseCase {
   async execute({
     page,
     baseId,
+    contractId,
     identifier,
     project_number,
     unitized,
@@ -40,11 +42,16 @@ export class FetchPhysicalDocumentUseCase {
     let project: Project | null = null;
 
     if (project_number) {
-      project = await this.projectRepository.findByProjectNumberWithoutBase(
-        project_number
+      project = await this.projectRepository.findByProjectNumberAndContractId(
+        project_number,
+        contractId
       );
       if (!project)
-        return left(new ResourceNotFoundError("Projeto não encontrado"));
+        return left(
+          new ResourceNotFoundError(
+            `O projeto ${project_number} não foi encontrado`
+          )
+        );
     }
 
     const { physicalDocuments, pagination } =
@@ -54,8 +61,17 @@ export class FetchPhysicalDocumentUseCase {
         },
         baseId,
         identifier,
-        project === null ? undefined : project?.id.toString(),
-        unitized
+        project === null ||
+          ["KIT", "MEDIDOR"].includes(project.type.toUpperCase())
+          ? undefined
+          : project?.id.toString(),
+        unitized,
+        project === null || project.type.toUpperCase() !== "KIT"
+          ? undefined
+          : project?.id.toString(),
+        project === null || project.type.toUpperCase() !== "MEDIDOR"
+          ? undefined
+          : project?.id.toString()
       );
 
     if (!physicalDocuments.length)

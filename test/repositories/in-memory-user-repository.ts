@@ -52,6 +52,7 @@ export class InMemoryUserRepository implements UserRepository {
       contract,
       status: user.status,
       password: user.password,
+      firstLogin: user.firstLogin,
     });
   }
 
@@ -103,6 +104,7 @@ export class InMemoryUserRepository implements UserRepository {
           contract,
           status: user.status,
           password: user.password,
+          firstLogin: user.firstLogin,
         });
       });
 

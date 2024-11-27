@@ -32,6 +32,10 @@ export class PhysicalDocument extends Entity<PhysicalDocumentProps> {
     return this.props.unitized;
   }
 
+  get baseId() {
+    return this.props.baseId;
+  }
+
   set projectId(projectId: UniqueEntityID) {
     this.props.projectId = projectId;
   }
@@ -42,10 +46,6 @@ export class PhysicalDocument extends Entity<PhysicalDocumentProps> {
 
   set projectMeterId(projectMeterId: UniqueEntityID | undefined) {
     this.props.projectMeterId = projectMeterId;
-  }
-
-  get baseId() {
-    return this.props.baseId;
   }
 
   set baseId(baseId: UniqueEntityID) {

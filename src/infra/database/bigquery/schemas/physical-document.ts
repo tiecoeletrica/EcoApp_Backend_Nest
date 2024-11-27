@@ -7,11 +7,15 @@ const tableId = "physical_document";
 export interface BqPhysicalDocumentProps {
   id?: string;
   projectId: string;
+  projectKitId?: string;
+  projectMeterId?: string;
   identifier: number;
   unitized: boolean;
   baseId: string;
 
   project?: BqProjectProps;
+  projectKit?: BqProjectProps;
+  projectMeter?: BqProjectProps;
 }
 
 @Injectable()

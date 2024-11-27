@@ -33,6 +33,7 @@
 | 18/11/2024 | changed user case erros folder from domain to core                               |
 | 18/11/2024 | Estimator can register bulks of projects and materials                           |
 | 22/11/2024 | ignoreValidations on transfer materials                                          |
+| 27/11/2024 | physical document with kit project and meter project                             |
 
 # Technical debt
 

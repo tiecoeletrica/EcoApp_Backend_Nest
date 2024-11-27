@@ -7,6 +7,7 @@ import { makeProject } from "test/factories/make-project";
 import { InMemoryBaseRepository } from "test/repositories/in-memory-base-repository";
 import { InMemoryContractRepository } from "test/repositories/in-memory-contract-repository";
 import { makeBase } from "test/factories/make-base";
+import { makeContract } from "test/factories/make-contract";
 
 let inMemoryContractRepository: InMemoryContractRepository;
 let inMemoryBaseRepository: InMemoryBaseRepository;
@@ -33,26 +34,35 @@ describe("Fetch PhysicalDocuments History", () => {
   });
 
   it("should be able to fetch physical documents history sorting by identifier", async () => {
-    const base = makeBase();
+    const contract = makeContract();
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase({ contractId: contract.id });
     await inMemoryBaseRepository.create(base);
 
-    const project = makeProject({ baseId: base.id });
+    const project = makeProject({ baseId: base.id, type: "Obra" });
     await inMemoryProjectRepository.create(project);
 
     const newPhysicalDocument1 = makePhysicalDocument({
       identifier: 3,
       projectId: project.id,
       baseId: base.id,
+      projectKitId: undefined,
+      projectMeterId: undefined,
     });
     const newPhysicalDocument2 = makePhysicalDocument({
       identifier: 10,
       projectId: project.id,
       baseId: base.id,
+      projectKitId: undefined,
+      projectMeterId: undefined,
     });
     const newPhysicalDocument3 = makePhysicalDocument({
       identifier: 1,
       projectId: project.id,
       baseId: base.id,
+      projectKitId: undefined,
+      projectMeterId: undefined,
     });
 
     await inMemoryPhysicalDocumentRepository.create(newPhysicalDocument1);
@@ -62,6 +72,7 @@ describe("Fetch PhysicalDocuments History", () => {
     const result = await sut.execute({
       page: 1,
       baseId: base.id.toString(),
+      contractId: contract.id.toString(),
     });
 
     expect(result.isRight()).toBeTruthy();
@@ -80,21 +91,30 @@ describe("Fetch PhysicalDocuments History", () => {
   });
 
   it("should be able to fetch paginated physicalDocuments history", async () => {
-    const base = makeBase();
+    const contract = makeContract();
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase({ contractId: contract.id });
     await inMemoryBaseRepository.create(base);
 
-    const project = makeProject({ baseId: base.id });
+    const project = makeProject({ baseId: base.id, type: "Obra" });
     await inMemoryProjectRepository.create(project);
 
     for (let i = 1; i <= 45; i++) {
       await inMemoryPhysicalDocumentRepository.create(
-        makePhysicalDocument({ projectId: project.id, baseId: base.id })
+        makePhysicalDocument({
+          projectId: project.id,
+          baseId: base.id,
+          projectKitId: undefined,
+          projectMeterId: undefined,
+        })
       );
     }
 
     const result = await sut.execute({
       baseId: base.id.toString(),
       page: 2,
+      contractId: contract.id.toString(),
     });
     if (result.isRight()) {
       expect(result.value.physicalDocuments).toHaveLength(5);
@@ -107,12 +127,16 @@ describe("Fetch PhysicalDocuments History", () => {
   });
 
   it("should be able to fetch physicalDocuments history by project", async () => {
-    const base = makeBase();
+    const contract = makeContract();
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase({ contractId: contract.id });
     await inMemoryBaseRepository.create(base);
 
     const project1 = await makeProject({
       project_number: "B-1234567",
       baseId: base.id,
+      type: "Obra",
     });
     inMemoryProjectRepository.create(project1);
 
@@ -122,13 +146,19 @@ describe("Fetch PhysicalDocuments History", () => {
     const newPhysicalDocument1 = makePhysicalDocument({
       projectId: project1.id,
       baseId: base.id,
+      projectKitId: undefined,
+      projectMeterId: undefined,
     });
     const newPhysicalDocument2 = makePhysicalDocument({
       projectId: project1.id,
       baseId: base.id,
+      projectKitId: undefined,
+      projectMeterId: undefined,
     });
     const newPhysicalDocument3 = makePhysicalDocument({
       projectId: project2.id,
+      projectKitId: undefined,
+      projectMeterId: undefined,
     });
 
     await inMemoryPhysicalDocumentRepository.create(newPhysicalDocument1);
@@ -139,6 +169,7 @@ describe("Fetch PhysicalDocuments History", () => {
       baseId: base.id.toString(),
       page: 1,
       project_number: "B-1234567",
+      contractId: contract.id.toString(),
     });
 
     expect(result.isRight()).toBeTruthy();
@@ -147,27 +178,37 @@ describe("Fetch PhysicalDocuments History", () => {
   });
 
   it("should not be able to fetch physicalDocuments history of another base", async () => {
-    const base = makeBase();
+    const contract = makeContract();
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase({ contractId: contract.id });
     await inMemoryBaseRepository.create(base);
 
     const project1 = await makeProject({
       project_number: "B-1234567",
       baseId: base.id,
+      type: "Obra",
     });
     inMemoryProjectRepository.create(project1);
 
-    const project2 = await makeProject();
+    const project2 = await makeProject({ type: "Obra" });
     inMemoryProjectRepository.create(project2);
 
     const newPhysicalDocument1 = makePhysicalDocument({
       projectId: project1.id,
       baseId: base.id,
+      projectKitId: undefined,
+      projectMeterId: undefined,
     });
     const newPhysicalDocument2 = makePhysicalDocument({
       projectId: project1.id,
+      projectKitId: undefined,
+      projectMeterId: undefined,
     });
     const newPhysicalDocument3 = makePhysicalDocument({
       projectId: project2.id,
+      projectKitId: undefined,
+      projectMeterId: undefined,
     });
 
     await inMemoryPhysicalDocumentRepository.create(newPhysicalDocument1);
@@ -177,6 +218,7 @@ describe("Fetch PhysicalDocuments History", () => {
     const result = await sut.execute({
       baseId: base.id.toString(),
       page: 1,
+      contractId: contract.id.toString(),
     });
 
     expect(result.isRight()).toBeTruthy();
@@ -185,10 +227,13 @@ describe("Fetch PhysicalDocuments History", () => {
   });
 
   it("should be able to fetch physicalDocuments history by identifier", async () => {
-    const base = makeBase();
+    const contract = makeContract();
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase({ contractId: contract.id });
     await inMemoryBaseRepository.create(base);
 
-    const project = makeProject({ baseId: base.id });
+    const project = makeProject({ baseId: base.id, type: "Obra" });
     await inMemoryProjectRepository.create(project);
 
     const newPhysicalDocument1 = makePhysicalDocument({
@@ -196,18 +241,24 @@ describe("Fetch PhysicalDocuments History", () => {
       identifier: 10,
       projectId: project.id,
       baseId: base.id,
+      projectKitId: undefined,
+      projectMeterId: undefined,
     });
     const newPhysicalDocument2 = makePhysicalDocument({
       unitized: false,
       identifier: 5,
       projectId: project.id,
       baseId: base.id,
+      projectKitId: undefined,
+      projectMeterId: undefined,
     });
     const newPhysicalDocument3 = makePhysicalDocument({
       unitized: true,
       identifier: 10,
       projectId: project.id,
       baseId: base.id,
+      projectKitId: undefined,
+      projectMeterId: undefined,
     });
 
     await inMemoryPhysicalDocumentRepository.create(newPhysicalDocument1);
@@ -218,6 +269,7 @@ describe("Fetch PhysicalDocuments History", () => {
       baseId: base.id.toString(),
       page: 1,
       identifier: 10,
+      contractId: contract.id.toString(),
     });
 
     expect(result.isRight()).toBeTruthy();
@@ -226,10 +278,13 @@ describe("Fetch PhysicalDocuments History", () => {
   });
 
   it("should be able to fetch physicalDocuments history by unitized", async () => {
-    const base = makeBase();
+    const contract = makeContract();
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase({ contractId: contract.id });
     await inMemoryBaseRepository.create(base);
 
-    const project = makeProject({ baseId: base.id });
+    const project = makeProject({ baseId: base.id, type: "Obra" });
     await inMemoryProjectRepository.create(project);
 
     const newPhysicalDocument1 = makePhysicalDocument({
@@ -237,18 +292,24 @@ describe("Fetch PhysicalDocuments History", () => {
       identifier: 10,
       projectId: project.id,
       baseId: base.id,
+      projectKitId: undefined,
+      projectMeterId: undefined,
     });
     const newPhysicalDocument2 = makePhysicalDocument({
       unitized: false,
       identifier: 5,
       projectId: project.id,
       baseId: base.id,
+      projectKitId: undefined,
+      projectMeterId: undefined,
     });
     const newPhysicalDocument3 = makePhysicalDocument({
       unitized: true,
       identifier: 10,
       projectId: project.id,
       baseId: base.id,
+      projectKitId: undefined,
+      projectMeterId: undefined,
     });
 
     await inMemoryPhysicalDocumentRepository.create(newPhysicalDocument1);
@@ -259,6 +320,97 @@ describe("Fetch PhysicalDocuments History", () => {
       baseId: base.id.toString(),
       page: 1,
       unitized: true,
+      contractId: contract.id.toString(),
+    });
+
+    expect(result.isRight()).toBeTruthy();
+    if (result.isRight())
+      expect(result.value.physicalDocuments).toHaveLength(1);
+  });
+
+  it("should be able to fetch physicalDocuments history by Kit project", async () => {
+    const contract = makeContract();
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase({ contractId: contract.id });
+    await inMemoryBaseRepository.create(base);
+
+    const project1 = await makeProject({
+      project_number: "B-1234567",
+      baseId: base.id,
+      type: "Kit",
+    });
+    inMemoryProjectRepository.create(project1);
+
+    const project2 = await makeProject({ baseId: base.id, type: "Obra" });
+    inMemoryProjectRepository.create(project2);
+
+    const newPhysicalDocument1 = makePhysicalDocument({
+      projectId: project2.id,
+      baseId: base.id,
+      projectKitId: project1.id,
+      projectMeterId: undefined,
+    });
+    const newPhysicalDocument2 = makePhysicalDocument({
+      projectId: project1.id,
+      baseId: base.id,
+      projectKitId: undefined,
+      projectMeterId: undefined,
+    });
+
+    await inMemoryPhysicalDocumentRepository.create(newPhysicalDocument1);
+    await inMemoryPhysicalDocumentRepository.create(newPhysicalDocument2);
+
+    const result = await sut.execute({
+      baseId: base.id.toString(),
+      page: 1,
+      project_number: "B-1234567",
+      contractId: contract.id.toString(),
+    });
+
+    expect(result.isRight()).toBeTruthy();
+    if (result.isRight())
+      expect(result.value.physicalDocuments).toHaveLength(1);
+  });
+
+  it("should be able to fetch physicalDocuments history by Meter project", async () => {
+    const contract = makeContract();
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase({ contractId: contract.id });
+    await inMemoryBaseRepository.create(base);
+
+    const project1 = await makeProject({
+      project_number: "B-1234567",
+      baseId: base.id,
+      type: "Medidor",
+    });
+    inMemoryProjectRepository.create(project1);
+
+    const project2 = await makeProject({ baseId: base.id, type: "Obra" });
+    inMemoryProjectRepository.create(project2);
+
+    const newPhysicalDocument1 = makePhysicalDocument({
+      projectId: project2.id,
+      baseId: base.id,
+      projectKitId: undefined,
+      projectMeterId: project1.id,
+    });
+    const newPhysicalDocument2 = makePhysicalDocument({
+      projectId: project1.id,
+      baseId: base.id,
+      projectKitId: undefined,
+      projectMeterId: undefined,
+    });
+
+    await inMemoryPhysicalDocumentRepository.create(newPhysicalDocument1);
+    await inMemoryPhysicalDocumentRepository.create(newPhysicalDocument2);
+
+    const result = await sut.execute({
+      baseId: base.id.toString(),
+      page: 1,
+      project_number: "B-1234567",
+      contractId: contract.id.toString(),
     });
 
     expect(result.isRight()).toBeTruthy();

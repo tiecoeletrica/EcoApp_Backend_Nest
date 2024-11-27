@@ -10,6 +10,14 @@ export class PhysicalDocumentWithProjectPresenter {
         id: physicaldocument.project.id.toString(),
         project_number: physicaldocument.project.project_number,
       },
+      projectKit: {
+        id: physicaldocument.projectKit?.id.toString(),
+        project_number: physicaldocument.projectKit?.project_number,
+      },
+      projectMeter: {
+        id: physicaldocument.projectMeter?.id.toString(),
+        project_number: physicaldocument.projectMeter?.project_number,
+      },
     };
   }
 }

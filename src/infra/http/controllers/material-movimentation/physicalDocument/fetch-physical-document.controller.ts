@@ -63,6 +63,7 @@ export class FetchPhysicalDocumentsController {
       identifier,
       project_number,
       unitized,
+      contractId: user.contractId,
     });
 
     if (result.isLeft()) {

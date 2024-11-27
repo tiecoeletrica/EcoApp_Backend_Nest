@@ -42,6 +42,7 @@ export class IdentifierAttributionController {
       project_number,
       identifier,
       baseId: user.baseId,
+      contractId: user.contractId,
     });
 
     if (result.isLeft()) {
