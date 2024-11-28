@@ -250,4 +250,121 @@ describe("Fetch budgets and Movimentations by project", () => {
     expect(result.isLeft()).toBeTruthy();
     expect(result.value).toBeInstanceOf(ResourceNotFoundError);
   });
+
+  it("should be able to fetch budgets and movimentations by project filtering by first and last registers", async () => {
+    const firstDate = new Date();
+    const sleep = (ms: number) =>
+      new Promise((resolve) => setTimeout(resolve, ms));
+
+    await sleep(100);
+
+    const lastDate = new Date();
+
+    const contract = makeContract();
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase({ contractId: contract.id });
+    await inMemoryBaseRepository.create(base);
+
+    const storekeeper = makeUser({ baseId: base.id });
+    await inMemoryUserRepository.create(storekeeper);
+
+    const estimator = makeUser({ contractId: contract.id });
+    await inMemoryUserRepository.create(estimator);
+
+    const material1 = makeMaterial({ code: 1, contractId: contract.id });
+    await inMemoryMaterialRepository.create(material1);
+    const material2 = makeMaterial({ code: 2, contractId: contract.id });
+    await inMemoryMaterialRepository.create(material2);
+    const material3 = makeMaterial({ code: 3, contractId: contract.id });
+    await inMemoryMaterialRepository.create(material3);
+
+    const newProject = makeProject({
+      project_number: "Obra-teste",
+      baseId: base.id,
+      firstBudegtRegister: lastDate,
+      firstMovimentationRegister: lastDate,
+    });
+    await inMemoryProjectRepository.create(newProject);
+
+    const newMovimentation1 = makeMovimentation({
+      projectId: newProject.id,
+      baseId: base.id,
+      materialId: material1.id,
+      storekeeperId: storekeeper.id,
+      createdAt: lastDate,
+    });
+    const newMovimentation2 = makeMovimentation({
+      projectId: newProject.id,
+      baseId: base.id,
+      materialId: material2.id,
+      storekeeperId: storekeeper.id,
+      createdAt: lastDate,
+    });
+    const newMovimentation3 = makeMovimentation({
+      projectId: newProject.id,
+      baseId: base.id,
+      materialId: material3.id,
+      storekeeperId: storekeeper.id,
+      createdAt: firstDate,
+    });
+
+    await inMemoryMovimentationRepository.create([
+      newMovimentation1,
+      newMovimentation2,
+      newMovimentation3,
+    ]);
+
+    const newBudget1 = makeBudget({
+      projectId: newProject.id,
+      contractId: contract.id,
+      materialId: material1.id,
+      estimatorId: estimator.id,
+      createdAt: lastDate,
+    });
+    const newBudget2 = makeBudget({
+      projectId: newProject.id,
+      contractId: contract.id,
+      materialId: material3.id,
+      estimatorId: estimator.id,
+      createdAt: lastDate,
+    });
+    const newBudget3 = makeBudget({
+      projectId: newProject.id,
+      contractId: contract.id,
+      materialId: material2.id,
+      estimatorId: estimator.id,
+      createdAt: firstDate,
+    });
+
+    await inMemoryBudgetRepository.create([newBudget1, newBudget2, newBudget3]);
+
+    const result = await sut.execute({
+      project_number: "Obra-teste",
+      baseId: base.id.toString(),
+    });
+
+    expect(result.isRight()).toBeTruthy();
+    if (result.isRight()) {
+      expect(result.value.movimentations).toHaveLength(2);
+      expect(result.value.movimentations).toEqual([
+        expect.objectContaining({
+          material: expect.objectContaining({ code: 1 }),
+        }),
+        expect.objectContaining({
+          material: expect.objectContaining({ code: 2 }),
+        }),
+      ]);
+
+      expect(result.value.budgets).toHaveLength(2);
+      expect(result.value.budgets).toEqual([
+        expect.objectContaining({
+          material: expect.objectContaining({ code: 1 }),
+        }),
+        expect.objectContaining({
+          material: expect.objectContaining({ code: 3 }),
+        }),
+      ]);
+    }
+  });
 });

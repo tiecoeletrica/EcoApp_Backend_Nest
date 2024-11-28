@@ -104,4 +104,14 @@ export class InMemoryProjectRepository implements ProjectRepository {
     if (project instanceof Project) this.items.push(project);
     else project.map((item) => this.items.push(item));
   }
+
+  async saveBulk(projects: Project[]) {
+    projects.forEach((project) => {
+      const itemIndex = this.items.findIndex(
+        (item) => item.id.toString() === project.id.toString()
+      );
+
+      this.items[itemIndex] = project;
+    });
+  }
 }

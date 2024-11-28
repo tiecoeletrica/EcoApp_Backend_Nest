@@ -41,7 +41,9 @@ export class InMemoryMovimentationRepository
   async findByProjectWithDetails(
     projectid: string,
     baseId: string,
-    materialId?: string
+    materialId?: string,
+    inicialDate?: Date,
+    endDate?: Date
   ): Promise<MovimentationWithDetails[]> {
     const movimentations = this.items
       .filter(
@@ -53,6 +55,11 @@ export class InMemoryMovimentationRepository
         (movimentation) =>
           !materialId || movimentation.materialId.toString() === materialId
       )
+      .filter(
+        (movimentation) =>
+          !inicialDate || movimentation.createdAt >= inicialDate
+      )
+      .filter((movimentation) => !endDate || movimentation.createdAt <= endDate)
       .map((movimentation) => {
         const storekeeper = this.userRepository.items.find(
           (storekeeper) => storekeeper.id === movimentation.storekeeperId

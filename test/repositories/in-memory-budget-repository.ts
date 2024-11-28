@@ -34,7 +34,9 @@ export class InMemoryBudgetRepository implements BudgetRepository {
 
   async findByProjectWithDetails(
     projectid: string,
-    contractId: string
+    contractId: string,
+    inicialDate?: Date,
+    endDate?: Date
   ): Promise<BudgetWithDetails[]> {
     const budgets = this.items
       .filter(
@@ -42,6 +44,8 @@ export class InMemoryBudgetRepository implements BudgetRepository {
           budget.projectId.toString() === projectid &&
           budget.contractId.toString() === contractId
       )
+      .filter((budget) => !inicialDate || budget.createdAt >= inicialDate)
+      .filter((budget) => !endDate || budget.createdAt <= endDate)
       .map((budget) => {
         const estimator = this.userRepository.items.find(
           (estimator) => estimator.id === budget.estimatorId

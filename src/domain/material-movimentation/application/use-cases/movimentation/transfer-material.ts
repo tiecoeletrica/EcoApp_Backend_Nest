@@ -43,10 +43,14 @@ export class TransferMaterialUseCase {
   ) {}
 
   private materials: Material[] = [];
+  private projects: Project[] = [];
 
   async execute(
     transferMaterialUseCaseRequest: TransferMaterialUseCaseRequest[]
   ): Promise<TransferMaterialResponse> {
+    this.materials = [];
+    this.projects = [];
+
     const { containsIdError, message } = await this.verifyResourcesId(
       transferMaterialUseCaseRequest
     );
@@ -74,6 +78,8 @@ export class TransferMaterialUseCase {
     );
 
     await this.movimentationRepository.create(movimentations);
+
+    await this.registerDateOnProject(movimentations);
 
     return right({ movimentations });
   }
@@ -145,6 +151,7 @@ export class TransferMaterialUseCase {
         break;
       case "projectId":
         result = await this.projectRepository.findByIds(uniqueValuesArray);
+        this.projects = result;
         break;
       case "baseId":
         result = await this.baseRepository.findByIds(uniqueValuesArray);
@@ -204,5 +211,36 @@ export class TransferMaterialUseCase {
     });
 
     return { containsEquipmentWithoutDetails, messageEquipment };
+  }
+
+  private async registerDateOnProject(
+    movimentations: Movimentation[]
+  ): Promise<void> {
+    const updatedProjects = this.projects.map((project) => {
+      const movimentationMaxDate = new Date(
+        Math.max(
+          ...movimentations
+            .filter((movimentation) => (movimentation.projectId = project.id))
+            .map((movimentation) => movimentation.createdAt.getTime())
+        )
+      );
+
+      const movimentationMinDate = new Date(
+        Math.min(
+          ...movimentations
+            .filter((movimentation) => (movimentation.projectId = project.id))
+            .map((movimentation) => movimentation.createdAt.getTime())
+        )
+      );
+
+      if (project.firstMovimentationRegister) {
+        project.lastMovimentationRegister = movimentationMaxDate;
+      } else {
+        project.firstMovimentationRegister = movimentationMinDate;
+        project.lastMovimentationRegister = movimentationMaxDate;
+      }
+      return project;
+    });
+    await this.projectRepository.saveBulk(updatedProjects);
   }
 }

@@ -64,10 +64,7 @@ describe("Transfer Material between projects", () => {
     const base = makeBase({}, new UniqueEntityID("ID-BASE-VCA"));
     await inMemoryBaseRepository.create(base);
 
-    const storekeeper = makeUser(
-      { baseId: base.id },
-      new UniqueEntityID("5")
-    );
+    const storekeeper = makeUser({ baseId: base.id }, new UniqueEntityID("5"));
     await inMemoryUserRepository.create(storekeeper);
 
     const movimentation = makeMovimentation({
@@ -116,10 +113,7 @@ describe("Transfer Material between projects", () => {
     const base = makeBase({}, new UniqueEntityID("ID-BASE-VCA"));
     await inMemoryBaseRepository.create(base);
 
-    const storekeeper = makeUser(
-      { baseId: base.id },
-      new UniqueEntityID("5")
-    );
+    const storekeeper = makeUser({ baseId: base.id }, new UniqueEntityID("5"));
     await inMemoryUserRepository.create(storekeeper);
 
     const movimentation = makeMovimentation({
@@ -173,5 +167,72 @@ describe("Transfer Material between projects", () => {
 
     expect(result.isLeft()).toBeTruthy();
     expect(result.value).toBeInstanceOf(ResourceNotFoundError);
+  });
+
+  it("should be able to transfer a material between projects", async () => {
+    const startDate = new Date();
+
+    // sleep for startDate to be different from createdAt
+    const sleep = (ms: number) =>
+      new Promise((resolve) => setTimeout(resolve, ms));
+
+    await sleep(100);
+
+    const projectOut = makeProject(
+      { firstMovimentationRegister: startDate },
+      new UniqueEntityID("Projeto-origem")
+    );
+    await inMemoryProjectRepository.create(projectOut);
+
+    const projectIn = makeProject({}, new UniqueEntityID("Projeto-destino"));
+    await inMemoryProjectRepository.create(projectIn);
+
+    const material = makeMaterial({}, new UniqueEntityID("Material-teste"));
+    await inMemoryMaterialRepository.create(material);
+
+    const base = makeBase({}, new UniqueEntityID("ID-BASE-VCA"));
+    await inMemoryBaseRepository.create(base);
+
+    const storekeeper = makeUser({ baseId: base.id }, new UniqueEntityID("5"));
+    await inMemoryUserRepository.create(storekeeper);
+
+    const movimentation = makeMovimentation({
+      projectId: projectOut.id,
+      materialId: material.id,
+      baseId: base.id,
+      storekeeperId: storekeeper.id,
+      value: 5,
+    });
+
+    await inMemoryMovimentationRepository.create([movimentation]);
+
+    const result = await sut.execute([
+      {
+        projectIdOut: "Projeto-origem",
+        projectIdIn: "Projeto-destino",
+        materialId: "Material-teste",
+        storekeeperId: "5",
+        observation: "transferencia para terminar obra prioritária",
+        baseId: "ID-BASE-VCA",
+        value: 4,
+      },
+    ]);
+
+    expect(result.isRight()).toBe(true);
+    if (result.isRight()) {
+      expect(
+        inMemoryProjectRepository.items[0].firstMovimentationRegister
+      ).toEqual(startDate);
+      expect(
+        inMemoryProjectRepository.items[0].lastMovimentationRegister
+      ).toEqual(inMemoryMovimentationRepository.items[1].createdAt);
+
+      expect(
+        inMemoryProjectRepository.items[1].firstMovimentationRegister
+      ).toEqual(inMemoryMovimentationRepository.items[2].createdAt);
+      expect(
+        inMemoryProjectRepository.items[1].lastMovimentationRegister
+      ).toEqual(inMemoryMovimentationRepository.items[2].createdAt);
+    }
   });
 });

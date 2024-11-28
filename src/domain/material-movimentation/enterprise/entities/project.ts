@@ -7,6 +7,10 @@ export interface ProjectProps {
   type: string;
   baseId: UniqueEntityID;
   city: string;
+  firstMovimentationRegister?: Date;
+  lastMovimentationRegister?: Date;
+  firstBudegtRegister?: Date;
+  lastBudegtRegister?: Date;
 }
 
 export class Project extends Entity<ProjectProps> {
@@ -26,8 +30,40 @@ export class Project extends Entity<ProjectProps> {
     return this.props.baseId;
   }
 
+  get firstMovimentationRegister() {
+    return this.props.firstMovimentationRegister;
+  }
+
+  get lastMovimentationRegister() {
+    return this.props.lastMovimentationRegister;
+  }
+
+  get firstBudegtRegister() {
+    return this.props.firstBudegtRegister;
+  }
+
+  get lastBudegtRegister() {
+    return this.props.lastBudegtRegister;
+  }
+
   set baseId(baseId: UniqueEntityID) {
     this.props.baseId = baseId;
+  }
+
+  set firstMovimentationRegister(firstMovimentationRegister: Date | undefined) {
+    this.props.firstMovimentationRegister = firstMovimentationRegister;
+  }
+
+  set lastMovimentationRegister(lastMovimentationRegister: Date | undefined) {
+    this.props.lastMovimentationRegister = lastMovimentationRegister;
+  }
+
+  set firstBudegtRegister(firstBudegtRegister: Date | undefined) {
+    this.props.firstBudegtRegister = firstBudegtRegister;
+  }
+
+  set lastBudegtRegister(lastBudegtRegister: Date | undefined) {
+    this.props.lastBudegtRegister = lastBudegtRegister;
   }
 
   set description(description: string | null | undefined) {
