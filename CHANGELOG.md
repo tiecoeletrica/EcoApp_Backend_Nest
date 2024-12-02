@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/tiecoeletrica/EcoApp_Backend_Nest/compare/v1.2.0...v1.3.0) (2024-12-02)
+
+
+### Features
+
+* movimentation with partition on search ([da4e555](https://github.com/tiecoeletrica/EcoApp_Backend_Nest/commit/da4e555de80cd61ebedd2838d3efb2ab39f3013f))
+
 ## [1.2.0](https://github.com/tiecoeletrica/EcoApp_Backend_Nest/compare/v1.1.0...v1.2.0) (2024-11-27)
 
 ## [1.1.0](https://github.com/tiecoeletrica/EcoApp_Backend_Nest/compare/v1.0.3...v1.1.0) (2024-11-22)
