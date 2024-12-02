@@ -38,7 +38,7 @@ describe("Get only projects of exsiting budgets by project", () => {
       inMemoryUserRepository,
       inMemoryMaterialRepository,
       inMemoryProjectRepository,
-      inMemoryContractRepository,
+      inMemoryContractRepository
     );
     sut = new FetchOnlyProjectsOfBudgetsUseCase(
       inMemoryBudgetRepository,
@@ -195,5 +195,86 @@ describe("Get only projects of exsiting budgets by project", () => {
 
     expect(result.isLeft()).toBeTruthy();
     expect(result.value).toBeInstanceOf(ResourceNotFoundError);
+  });
+
+  it("should be able to get an array of found projects by an array of project_number filtering by projects dates", async () => {
+    const firstDate = new Date();
+    const sleep = (ms: number) =>
+      new Promise((resolve) => setTimeout(resolve, ms));
+
+    await sleep(100);
+
+    const lastDate = new Date();
+
+    const contract = makeContract();
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase({ contractId: contract.id });
+    await inMemoryBaseRepository.create(base);
+
+    const project1 = makeProject({
+      project_number: "B-123456",
+      baseId: base.id,
+      firstBudgetRegister: lastDate,
+      firstMovimentationRegister: lastDate,
+    });
+    await inMemoryProjectRepository.create(project1);
+
+    const project2 = makeProject({
+      project_number: "B-1234567",
+      baseId: base.id,
+      firstBudgetRegister: lastDate,
+      firstMovimentationRegister: lastDate,
+    });
+    await inMemoryProjectRepository.create(project2);
+
+    const project3 = makeProject({
+      project_number: "B-12345678",
+      baseId: base.id,
+      firstBudgetRegister: lastDate,
+      firstMovimentationRegister: lastDate,
+    });
+    await inMemoryProjectRepository.create(project3);
+
+    const newBudget1 = makeBudget({
+      projectId: project1.id,
+      value: 5,
+      contractId: contract.id,
+      createdAt: lastDate,
+    });
+    const newBudget2 = makeBudget({
+      projectId: project2.id,
+      contractId: contract.id,
+      createdAt: lastDate,
+    });
+    const newBudget3 = makeBudget({
+      projectId: project3.id,
+      contractId: contract.id,
+      createdAt: firstDate,
+    });
+
+    await inMemoryBudgetRepository.create([newBudget1, newBudget2, newBudget3]);
+
+    const result = await sut.execute({
+      project_numbers: ["B-123456", "B-1234567", "B-12345678"],
+      contractId: contract.id.toString(),
+    });
+
+    expect(result.isRight()).toBeTruthy();
+    if (result.isRight()) {
+      expect(result.value.foundProjects).toHaveLength(2);
+      expect(result.value.foundProjects).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: project1.id.toString(),
+            project_number: "B-123456",
+          }),
+          expect.objectContaining({
+            id: project2.id.toString(),
+            project_number: "B-1234567",
+          }),
+        ])
+      );
+    }
   });
 });

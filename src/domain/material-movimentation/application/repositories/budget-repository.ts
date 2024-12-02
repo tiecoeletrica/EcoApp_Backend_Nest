@@ -12,7 +12,9 @@ export abstract class BudgetRepository {
   ): Promise<BudgetWithDetails[]>;
   abstract findByProjectIds(
     projectids: string[],
-    contractId: string
+    contractId: string,
+    inicialDate?: Date,
+    endDate?: Date
   ): Promise<Budget[]>;
   abstract findByMaterialIds(
     materialids: string[],

@@ -49,9 +49,14 @@ export class FetchOnlyProjectsOfBudgetsUseCase {
 
     const projectIds = projects.map((project) => project.id.toString());
 
+    const maxProjectDate = this.maxProjectDate(projects);
+    const minProjectDate = this.minProjectDate(projects);
+
     const budgets = await this.budgetRepository.findByProjectIds(
       projectIds,
-      contractId
+      contractId,
+      minProjectDate,
+      maxProjectDate
     );
 
     if (!budgets.length)
@@ -89,5 +94,23 @@ export class FetchOnlyProjectsOfBudgetsUseCase {
     });
 
     return Object.values(uniqueFoundProjects);
+  }
+
+  private maxProjectDate(projects: Project[]): Date | undefined {
+    return projects
+      .filter((project) => project.lastBudgetRegister !== undefined)
+      .map((project) => project.lastBudgetRegister!)
+      .reduce((latest, current) => {
+        return !latest || current > latest ? current : latest;
+      }, undefined as Date | undefined);
+  }
+
+  private minProjectDate(projects: Project[]): Date | undefined {
+    return projects
+      .filter((project) => project.firstBudgetRegister !== undefined)
+      .map((project) => project.firstBudgetRegister!)
+      .reduce((earliest, current) => {
+        return !earliest || current < earliest ? current : earliest;
+      }, undefined as Date | undefined);
   }
 }

@@ -256,18 +256,40 @@ describe("Transfer Material", () => {
     expect(result.isRight()).toBe(true);
     if (result.isRight()) {
       expect(
-        inMemoryProjectRepository.items[0].firstMovimentationRegister
-      ).toEqual(startDate);
+        areDatesEqualIgnoringMilliseconds(
+          inMemoryProjectRepository.items[0].firstMovimentationRegister!,
+          startDate
+        )
+      ).toBeTruthy();
       expect(
-        inMemoryProjectRepository.items[0].lastMovimentationRegister
-      ).toEqual(inMemoryMovimentationRepository.items[0].createdAt);
-
+        areDatesEqualIgnoringMilliseconds(
+          inMemoryProjectRepository.items[0].lastMovimentationRegister!,
+          inMemoryMovimentationRepository.items[0].createdAt
+        )
+      ).toBeTruthy();
       expect(
-        inMemoryProjectRepository.items[1].firstMovimentationRegister
-      ).toEqual(inMemoryMovimentationRepository.items[1].createdAt);
+        areDatesEqualIgnoringMilliseconds(
+          inMemoryProjectRepository.items[1].firstMovimentationRegister!,
+          inMemoryMovimentationRepository.items[1].createdAt
+        )
+      ).toBeTruthy();
       expect(
-        inMemoryProjectRepository.items[1].lastMovimentationRegister
-      ).toEqual(inMemoryMovimentationRepository.items[1].createdAt);
+        areDatesEqualIgnoringMilliseconds(
+          inMemoryProjectRepository.items[1].lastMovimentationRegister!,
+          inMemoryMovimentationRepository.items[1].createdAt
+        )
+      ).toBeTruthy();
     }
   });
 });
+
+function areDatesEqualIgnoringMilliseconds(date1: Date, date2: Date): boolean {
+  return (
+    date1.getUTCFullYear() === date2.getUTCFullYear() &&
+    date1.getUTCMonth() === date2.getUTCMonth() &&
+    date1.getUTCDate() === date2.getUTCDate() &&
+    date1.getUTCHours() === date2.getUTCHours() &&
+    date1.getUTCMinutes() === date2.getUTCMinutes() &&
+    date1.getUTCSeconds() === date2.getUTCSeconds()
+  );
+}

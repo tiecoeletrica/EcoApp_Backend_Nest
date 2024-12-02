@@ -217,7 +217,27 @@ export class InMemoryMovimentationRepository
         });
       });
 
-    const total_count = this.items.length;
+    const total_count = this.items
+      .filter((movimentation) => movimentation.baseId.toString() === baseId)
+      .filter(
+        (movimentation) =>
+          !materialId || movimentation.materialId.toString() === materialId
+      )
+      .filter(
+        (movimentation) =>
+          !storekeeperIds ||
+          storekeeperIds.includes(movimentation.storekeeperId.toString())
+      )
+      .filter(
+        (movimentation) =>
+          !projectId || movimentation.projectId.toString() === projectId
+      )
+      .filter(
+        (movimentation) => !startDate || movimentation.createdAt >= startDate
+      )
+      .filter(
+        (movimentation) => !endDate || movimentation.createdAt <= endDate
+      ).length;
 
     const pagination: PaginationParamsResponse = {
       page,

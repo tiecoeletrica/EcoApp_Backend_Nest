@@ -44,7 +44,9 @@ export class FetchBudgetByProjectNameUseCase {
 
     let budgets = await this.budgetRepository.findByProjectWithDetails(
       project.id.toString(),
-      contractId
+      contractId,
+      project.firstBudgetRegister,
+      project.lastBudgetRegister
     );
 
     budgets = this.putZeroBudgetsAtTheEnd(budgets);

@@ -11,6 +11,20 @@ export class BqProjectMapper {
         description: raw.description,
         project_number: raw.project_number,
         type: raw.type,
+        firstMovimentationRegister:
+          raw.firstMovimentationRegister === null
+            ? undefined
+            : raw.firstMovimentationRegister,
+        lastMovimentationRegister:
+          raw.lastMovimentationRegister === null
+            ? undefined
+            : raw.lastMovimentationRegister,
+        firstBudgetRegister:
+          raw.firstBudgetRegister === null
+            ? undefined
+            : raw.firstBudgetRegister,
+        lastBudgetRegister:
+          raw.lastBudgetRegister === null ? undefined : raw.lastBudgetRegister,
       },
       new UniqueEntityID(raw.id)
     );
@@ -24,6 +38,10 @@ export class BqProjectMapper {
       description: project.description,
       type: project.type,
       project_number: project.project_number,
+      firstMovimentationRegister: project.firstMovimentationRegister,
+      lastMovimentationRegister: project.lastMovimentationRegister,
+      firstBudgetRegister: project.firstBudgetRegister,
+      lastBudgetRegister: project.lastBudgetRegister,
     };
   }
 }

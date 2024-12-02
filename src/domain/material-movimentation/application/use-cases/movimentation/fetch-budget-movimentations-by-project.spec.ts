@@ -282,7 +282,7 @@ describe("Fetch budgets and Movimentations by project", () => {
     const newProject = makeProject({
       project_number: "Obra-teste",
       baseId: base.id,
-      firstBudegtRegister: lastDate,
+      firstBudgetRegister: lastDate,
       firstMovimentationRegister: lastDate,
     });
     await inMemoryProjectRepository.create(newProject);

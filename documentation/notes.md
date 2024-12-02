@@ -1,39 +1,40 @@
 # ChangeLog
 
-|    Date    | Change                                                                           |
-| :--------: | :------------------------------------------------------------------------------- |
-| 30/10/2024 | filter by storekeeper name on movimentations history                             |
-| 30/10/2024 | review documentations                                                            |
-| 31/10/2024 | badges and summary on readme                                                     |
-| 31/10/2024 | sort data on fetch movimentation-budgets by material                             |
-| 01/11/2024 | split logic between Administrator and Storekeeper Leader                         |
-| 01/11/2024 | only Storekeepers Leaders and Administrators can create new accounts             |
-| 04/11/2024 | adjust success responses                                                         |
-| 04/11/2024 | create first login parameter on users entities                                   |
-| 04/11/2024 | projectId on fetch budget movimentation and fix date on insert by dev            |
-| 04/11/2024 | edit by array on BigqueryMethods -> saveBulk                                     |
-| 05/11/2024 | new presenter on movimentations-streaming to process less data                   |
-| 05/11/2024 | accept baseName on register project by array                                     |
-| 05/11/2024 | create controllers to register bulk of projects and materials                    |
-| 05/11/2024 | create Access Token Creator for e2e tests                                        |
-| 05/11/2024 | all user data on access token and fix edit password                              |
-| 06/11/2024 | fix edit user and register bulk of projects                                      |
-| 06/11/2024 | real data stream on movimentations-streaming                                     |
-| 07/11/2024 | don`t allow half numbers on EQUIPAMENTO materials                                |
-| 07/11/2024 | sort data on budgets by all non zero budgets then by code                        |
-| 07/11/2024 | created CPF generator and verification                                           |
-| 08/11/2024 | order desc the fetch physical documents                                          |
-| 08/11/2024 | update README badges                                                             |
-| 08/11/2024 | email with toLowerCase and project_number with toUpperCase                       |
-| 08/11/2024 | real data stream on fetch all existing budgetes                                  |
-| 13/11/2024 | fIx edit user by supervisor                                                      |
-| 14/11/2024 | fix filters on fetch movimentations and all movimentations                       |
-| 18/11/2024 | test bases only for 'Administradores'                                            |
-| 18/11/2024 | FetchProjectsBudgetsByMaterials return only projects with all searched materials |
-| 18/11/2024 | changed user case erros folder from domain to core                               |
-| 18/11/2024 | Estimator can register bulks of projects and materials                           |
-| 22/11/2024 | ignoreValidations on transfer materials                                          |
-| 27/11/2024 | physical document with kit project and meter project                             |
+|    Date    | Change                                                                                          |
+| :--------: | :---------------------------------------------------------------------------------------------- |
+| 30/10/2024 | filter by storekeeper name on movimentations history                                            |
+| 30/10/2024 | review documentations                                                                           |
+| 31/10/2024 | badges and summary on readme                                                                    |
+| 31/10/2024 | sort data on fetch movimentation-budgets by material                                            |
+| 01/11/2024 | split logic between Administrator and Storekeeper Leader                                        |
+| 01/11/2024 | only Storekeepers Leaders and Administrators can create new accounts                            |
+| 04/11/2024 | adjust success responses                                                                        |
+| 04/11/2024 | create first login parameter on users entities                                                  |
+| 04/11/2024 | projectId on fetch budget movimentation and fix date on insert by dev                           |
+| 04/11/2024 | edit by array on BigqueryMethods -> saveBulk                                                    |
+| 05/11/2024 | new presenter on movimentations-streaming to process less data                                  |
+| 05/11/2024 | accept baseName on register project by array                                                    |
+| 05/11/2024 | create controllers to register bulk of projects and materials                                   |
+| 05/11/2024 | create Access Token Creator for e2e tests                                                       |
+| 05/11/2024 | all user data on access token and fix edit password                                             |
+| 06/11/2024 | fix edit user and register bulk of projects                                                     |
+| 06/11/2024 | real data stream on movimentations-streaming                                                    |
+| 07/11/2024 | don`t allow half numbers on EQUIPAMENTO materials                                               |
+| 07/11/2024 | sort data on budgets by all non zero budgets then by code                                       |
+| 07/11/2024 | created CPF generator and verification                                                          |
+| 08/11/2024 | order desc the fetch physical documents                                                         |
+| 08/11/2024 | update README badges                                                                            |
+| 08/11/2024 | email with toLowerCase and project_number with toUpperCase                                      |
+| 08/11/2024 | real data stream on fetch all existing budgetes                                                 |
+| 13/11/2024 | fIx edit user by supervisor                                                                     |
+| 14/11/2024 | fix filters on fetch movimentations and all movimentations                                      |
+| 18/11/2024 | test bases only for 'Administradores'                                                           |
+| 18/11/2024 | FetchProjectsBudgetsByMaterials return only projects with all searched materials                |
+| 18/11/2024 | changed user case erros folder from domain to core                                              |
+| 18/11/2024 | Estimator can register bulks of projects and materials                                          |
+| 22/11/2024 | ignoreValidations on transfer materials                                                         |
+| 27/11/2024 | physical document with kit project and meter project                                            |
+| 01/12/2024 | refactor: project with new parameters and all budget and movimentation searches with data range |
 
 # Technical debt
 

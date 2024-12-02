@@ -19,6 +19,10 @@ export function makeProject(
       type: faker.helpers.arrayElement(types),
       baseId: new UniqueEntityID(),
       city: faker.location.city(),
+      firstBudgetRegister: undefined,
+      firstMovimentationRegister: undefined,
+      lastBudgetRegister: undefined,
+      lastMovimentationRegister: undefined,
       ...override,
     },
     id

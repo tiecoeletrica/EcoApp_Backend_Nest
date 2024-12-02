@@ -278,19 +278,23 @@ export class TransferMovimentationBetweenProjectsUseCase {
   ): Promise<void> {
     const updatedProjects = this.projects.map((project) => {
       const movimentationMaxDate = new Date(
-        Math.max(
-          ...movimentations
-            .filter((movimentation) => (movimentation.projectId = project.id))
-            .map((movimentation) => movimentation.createdAt.getTime())
-        )
+        new Date(
+          Math.max(
+            ...movimentations
+              .filter((movimentation) => (movimentation.projectId = project.id))
+              .map((movimentation) => movimentation.createdAt.getTime())
+          )
+        ).setMilliseconds(999)
       );
 
       const movimentationMinDate = new Date(
-        Math.min(
-          ...movimentations
-            .filter((movimentation) => (movimentation.projectId = project.id))
-            .map((movimentation) => movimentation.createdAt.getTime())
-        )
+        new Date(
+          Math.min(
+            ...movimentations
+              .filter((movimentation) => (movimentation.projectId = project.id))
+              .map((movimentation) => movimentation.createdAt.getTime())
+          )
+        ).setMilliseconds(0)
       );
 
       if (project.firstMovimentationRegister) {
