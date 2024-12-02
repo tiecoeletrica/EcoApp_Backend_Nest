@@ -6,6 +6,8 @@ export class PhysicalDocumentPresenter {
       id: physicaldocument.id.toString(),
       identifier: physicaldocument.identifier,
       projectId: physicaldocument.projectId.toString(),
+      projectKitId: physicaldocument.projectKitId?.toString(),
+      projectMeterId: physicaldocument.projectMeterId?.toString(),
       unitized: physicaldocument.unitized,
     };
   }

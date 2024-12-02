@@ -22,10 +22,14 @@ export class BqBudgetRepository implements BudgetRepository {
 
   async findByProjectWithDetails(
     projectId: string,
-    contractId: string
+    contractId: string,
+    inicialDate?: Date,
+    endDate?: Date
   ): Promise<BudgetWithDetails[]> {
     const budgets = await this.bigquery.budget.select({
       where: { projectId, contractId },
+      greaterOrEqualThan: { createdAt: inicialDate },
+      lessOrEqualThan: { createdAt: endDate },
       orderBy: { column: "material.code", direction: "ASC" },
       include: {
         project: {
@@ -73,12 +77,16 @@ export class BqBudgetRepository implements BudgetRepository {
 
   async findByProjectIds(
     projectids: string[],
-    contractId: string
+    contractId: string,
+    inicialDate?: Date,
+    endDate?: Date
   ): Promise<Budget[]> {
     const budgets = await this.bigquery.budget.select({
       distinct: true,
       whereIn: { projectId: projectids },
       where: { contractId },
+      greaterOrEqualThan: { createdAt: inicialDate },
+      lessOrEqualThan: { createdAt: endDate },
     });
 
     return budgets.map(BqBudgetMapper.toDomain);

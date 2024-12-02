@@ -284,7 +284,7 @@ describe("Fetch Movimentations History", () => {
     if (result.isRight()) expect(result.value.movimentations).toHaveLength(2);
   });
 
-  it("should be able to fetch movimentations history by storekeeper's email", async () => {
+  it("should be able to fetch movimentations history by storekeeper's name", async () => {
     // entity creation for details
     const contract = makeContract();
     inMemoryContractRepository.create(contract);
@@ -401,5 +401,63 @@ describe("Fetch Movimentations History", () => {
 
     expect(result.isRight()).toBeTruthy();
     if (result.isRight()) expect(result.value.movimentations).toHaveLength(2);
+  });
+
+  it("should be able to fetch movimentations history searching just recent movientations", async () => {
+    // entity creation for details
+    const contract = makeContract();
+    inMemoryContractRepository.create(contract);
+
+    const base = makeBase(
+      { contractId: contract.id },
+      new UniqueEntityID("base-1")
+    );
+    inMemoryBaseRepository.create(base);
+
+    const storekeeper = makeUser({ baseId: base.id });
+    inMemoryUserRepository.create(storekeeper);
+
+    const material = makeMaterial();
+    inMemoryMaterialRepository.create(material);
+
+    const project = makeProject();
+    inMemoryProjectRepository.create(project);
+
+    for (let i = 1; i <= 45; i++) {
+      await inMemoryMovimentationRepository.create([
+        makeMovimentation({
+          baseId: base.id,
+          materialId: material.id,
+          projectId: project.id,
+          storekeeperId: storekeeper.id,
+          createdAt: new Date(),
+        }),
+      ]);
+    }
+
+    for (let i = 1; i <= 45; i++) {
+      await inMemoryMovimentationRepository.create([
+        makeMovimentation({
+          baseId: base.id,
+          materialId: material.id,
+          projectId: project.id,
+          storekeeperId: storekeeper.id,
+          createdAt: new Date(2000, 5, 5),
+        }),
+      ]);
+    }
+
+    const result = await sut.execute({
+      page: 2,
+      baseId: "base-1",
+    });
+    if (result.isRight()) {
+      expect(result.value.movimentations).toHaveLength(5);
+      expect(result.value.pagination).toMatchObject({
+        page: 2,
+        pageCount: 40,
+        lastPage: 2,
+      });
+    }
   });
 });

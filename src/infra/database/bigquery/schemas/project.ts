@@ -10,6 +10,10 @@ export interface BqProjectProps {
   type: string;
   baseId: string;
   city: string;
+  firstMovimentationRegister?: Date;
+  lastMovimentationRegister?: Date;
+  firstBudgetRegister?: Date;
+  lastBudgetRegister?: Date;
 }
 
 @Injectable()

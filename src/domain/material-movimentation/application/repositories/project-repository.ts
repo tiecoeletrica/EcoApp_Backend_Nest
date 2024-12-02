@@ -22,4 +22,5 @@ export abstract class ProjectRepository {
   abstract findByID(id: string): Promise<Project | null>;
   abstract findByIds(ids: string[]): Promise<Project[]>;
   abstract create(project: Project | Project[]): Promise<void>;
+  abstract saveBulk(projects: Project[]): Promise<void>;
 }

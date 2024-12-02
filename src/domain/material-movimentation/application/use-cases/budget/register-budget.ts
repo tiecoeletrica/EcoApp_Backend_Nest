@@ -39,9 +39,13 @@ export class RegisterBudgetUseCase {
     private contractRepository: ContractRepository
   ) {}
 
+  private projects: Project[] = [];
+
   async execute(
     registerBudgetUseCaseRequest: RegisterBudgetUseCaseRequest[]
   ): Promise<RegisterBudgetResponse> {
+    this.projects = [];
+
     const { containsIdError, message } = await this.verifyResourcesId(
       registerBudgetUseCaseRequest
     );
@@ -60,6 +64,8 @@ export class RegisterBudgetUseCase {
     });
 
     await this.budgetRepository.create(budgets);
+
+    await this.registerDateOnProject(budgets);
 
     return right({ budgets });
   }
@@ -124,6 +130,7 @@ export class RegisterBudgetUseCase {
         break;
       case "projectId":
         result = await this.projectRepository.findByIds(uniqueValuesArray);
+        this.projects = result;
         break;
       case "contractId":
         result = await this.contractRepository.findByIds(uniqueValuesArray);
@@ -145,5 +152,38 @@ export class RegisterBudgetUseCase {
         registerBudgetUseCaseRequest.map((budget) => String(budget[key]))
       ),
     ];
+  }
+
+  private async registerDateOnProject(budgets: Budget[]): Promise<void> {
+    const updatedProjects = this.projects.map((project) => {
+      const budgetMaxDate = new Date(
+        new Date(
+          Math.max(
+            ...budgets
+              .filter((budget) => (budget.projectId = project.id))
+              .map((budget) => budget.createdAt.getTime())
+          )
+        ).setMilliseconds(999)
+      );
+
+      const budgetMinDate = new Date(
+        new Date(
+          Math.min(
+            ...budgets
+              .filter((budget) => (budget.projectId = project.id))
+              .map((budget) => budget.createdAt.getTime())
+          )
+        ).setMilliseconds(0)
+      );
+
+      if (project.firstBudgetRegister) {
+        project.lastBudgetRegister = budgetMaxDate;
+      } else {
+        project.firstBudgetRegister = budgetMinDate;
+        project.lastBudgetRegister = budgetMaxDate;
+      }
+      return project;
+    });
+    await this.projectRepository.saveBulk(updatedProjects);
   }
 }

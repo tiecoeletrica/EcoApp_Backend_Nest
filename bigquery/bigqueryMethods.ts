@@ -479,7 +479,9 @@ export class BigQueryMethods<T extends Record<string, any>> {
           const whereClause = this.buildWhereClause(null, update.where);
           const setValue = update.set[column as keyof T];
           let formattedValue;
-          if (this.isDate(setValue)) {
+          if (setValue === undefined) {
+            formattedValue = "NULL";
+          } else if (this.isDate(setValue)) {
             formattedValue = `'${(setValue as Date).toISOString()}'`;
           } else if (typeof setValue === "string") {
             formattedValue = `'${this.escapeString(setValue)}'`;

@@ -326,4 +326,67 @@ describe("Get Budget by project", () => {
       ]);
     }
   });
+
+  it("should be able to get an array of budgets by project not searching budgets out of project dates range", async () => {
+    const firstDate = new Date();
+    const sleep = (ms: number) =>
+      new Promise((resolve) => setTimeout(resolve, ms));
+
+    await sleep(100);
+
+    const lastDate = new Date();
+
+    const contract = makeContract();
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase({ contractId: contract.id });
+    await inMemoryBaseRepository.create(base);
+
+    const estimator = makeUser({ contractId: contract.id, baseId: base.id });
+    await inMemoryUserRepository.create(estimator);
+
+    const material = makeMaterial({ contractId: contract.id });
+    await inMemoryMaterialRepository.create(material);
+
+    const project = makeProject({
+      project_number: "B-10101010",
+      baseId: base.id,
+      firstBudgetRegister: lastDate,
+      firstMovimentationRegister: lastDate,
+    });
+    await inMemoryProjectRepository.create(project);
+
+    const newBudget1 = makeBudget({
+      projectId: project.id,
+      value: 5,
+      contractId: contract.id,
+      materialId: material.id,
+      estimatorId: estimator.id,
+      createdAt: lastDate,
+    });
+    const newBudget2 = makeBudget({
+      projectId: project.id,
+      contractId: contract.id,
+      materialId: material.id,
+      estimatorId: estimator.id,
+      createdAt: lastDate,
+    });
+    const newBudget3 = makeBudget({
+      projectId: project.id,
+      contractId: contract.id,
+      materialId: material.id,
+      estimatorId: estimator.id,
+      createdAt: firstDate,
+    });
+
+    await inMemoryBudgetRepository.create([newBudget1, newBudget2, newBudget3]);
+
+    const result = await sut.execute({
+      project_number: "B-10101010",
+      contractId: contract.id.toString(),
+    });
+
+    expect(result.isRight()).toBeTruthy();
+    if (result.isRight()) expect(result.value.budgets).toHaveLength(2);
+  });
 });

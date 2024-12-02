@@ -28,7 +28,15 @@ export class BqPhysicalDocumentRepository
     baseId: string
   ): Promise<PhysicalDocument[]> {
     const physicalDocuments = await this.bigquery.physicalDocument.select({
-      where: { OR: [{ identifier }, { projectId }], AND: { baseId } },
+      where: {
+        OR: [
+          { identifier },
+          { projectId },
+          { projectKitId: projectId },
+          { projectMeterId: projectId },
+        ],
+        AND: { baseId },
+      },
     });
 
     return physicalDocuments.map(BqPhysicalDocumentMapper.toDomain);
@@ -73,7 +81,9 @@ export class BqPhysicalDocumentRepository
     baseId: string,
     identifier?: number,
     projectId?: string,
-    unitized?: boolean
+    unitized?: boolean,
+    projectKitId?: string,
+    projectMeterId?: string
   ): Promise<{
     physicalDocuments: PhysicalDocumentWithProject[];
     pagination: PaginationParamsResponse;
@@ -82,7 +92,14 @@ export class BqPhysicalDocumentRepository
 
     const { results: physicalDocuments, total_count } =
       await this.bigquery.physicalDocument.select({
-        where: { projectId, identifier, unitized, baseId },
+        where: {
+          projectId,
+          projectKitId,
+          projectMeterId,
+          identifier,
+          unitized,
+          baseId,
+        },
         limit: pageCount,
         offset: pageCount * (page - 1),
         count_results: true,
@@ -92,6 +109,20 @@ export class BqPhysicalDocumentRepository
             join: {
               table: "project",
               on: "physical_document.projectId = project.id",
+            },
+            relationType: "one-to-one",
+          },
+          projectKit: {
+            join: {
+              table: "project",
+              on: "physical_document.projectKitId = project.id",
+            },
+            relationType: "one-to-one",
+          },
+          projectMeter: {
+            join: {
+              table: "project",
+              on: "physical_document.projectMeterId = project.id",
             },
             relationType: "one-to-one",
           },

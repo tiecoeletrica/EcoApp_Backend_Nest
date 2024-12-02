@@ -55,12 +55,17 @@ export class FetchBudgetMovimentationByProjectUseCase {
     const movimentations =
       await this.movimentationRepository.findByProjectWithDetails(
         project.id.toString(),
-        baseId
+        baseId,
+        undefined,
+        project.firstBudgetRegister,
+        project.lastBudgetRegister
       );
 
     const budgets = await this.budgetRepository.findByProjectWithDetails(
       project.id.toString(),
-      base.contractId.toString()
+      base.contractId.toString(),
+      project.firstBudgetRegister,
+      project.lastBudgetRegister
     );
 
     if (sendProjectId)

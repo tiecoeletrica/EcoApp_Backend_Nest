@@ -9,6 +9,9 @@ import { ResourceNotFoundError } from "../../../../../core/errors/errors/resourc
 import { InMemoryContractRepository } from "test/repositories/in-memory-contract-repository";
 import { InMemoryBaseRepository } from "test/repositories/in-memory-base-repository";
 import { makeBase } from "test/factories/make-base";
+import { makeContract } from "test/factories/make-contract";
+import { UniqueEntityID } from "src/core/entities/unique-entity-id";
+import { NotValidError } from "src/core/errors/errors/not-valid-error";
 
 let inMemoryContractRepository: InMemoryContractRepository;
 let inMemoryBaseRepository: InMemoryBaseRepository;
@@ -35,13 +38,24 @@ describe("attribute a identifier to a physical document", () => {
   });
 
   it("should be able to attribute a identifier to a physical document", async () => {
-    const project = makeProject({ project_number: "projeto-1" });
+    const contract = makeContract();
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase({ contractId: contract.id });
+    await inMemoryBaseRepository.create(base);
+
+    const project = makeProject({
+      project_number: "projeto-1",
+      baseId: base.id,
+      type: "OBRA",
+    });
     await inMemoryProjectRepository.create(project);
 
     const result = await sut.execute({
       project_number: "projeto-1",
       identifier: 123456,
       baseId: project.baseId.toString(),
+      contractId: contract.id.toString(),
     });
 
     expect(result.isRight()).toBeTruthy();
@@ -52,7 +66,20 @@ describe("attribute a identifier to a physical document", () => {
   });
 
   it("should be able to attribute a identifier to a physical document of the same project but diferent base", async () => {
-    const project = makeProject({ project_number: "projeto-1" });
+    const contract = makeContract();
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase({ contractId: contract.id });
+    await inMemoryBaseRepository.create(base);
+
+    const base2 = makeBase({ contractId: contract.id });
+    await inMemoryBaseRepository.create(base2);
+
+    const project = makeProject({
+      project_number: "projeto-1",
+      baseId: base.id,
+      type: "OBRA",
+    });
     await inMemoryProjectRepository.create(project);
 
     const physicalDocument = makePhysicalDocument({
@@ -65,7 +92,8 @@ describe("attribute a identifier to a physical document", () => {
     const result = await sut.execute({
       project_number: "projeto-1",
       identifier: 123456,
-      baseId: "another-base-id",
+      baseId: base2.id.toString(),
+      contractId: contract.id.toString(),
     });
 
     expect(result.isRight()).toBeTruthy();
@@ -76,13 +104,23 @@ describe("attribute a identifier to a physical document", () => {
   });
 
   it("should not be able to attribute a identifier to a physical document if identification is already in use", async () => {
-    const project = makeProject({ project_number: "projeto-1" });
+    const contract = makeContract();
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase({ contractId: contract.id });
+    await inMemoryBaseRepository.create(base);
+
+    const project = makeProject({
+      project_number: "projeto-1",
+      type: "OBRA",
+      baseId: base.id,
+    });
     await inMemoryProjectRepository.create(project);
 
     const physicalDocument = makePhysicalDocument({
       identifier: 123456,
       unitized: false,
-      baseId: project.baseId,
+      baseId: base.id,
     });
     await inMemoryPhysicalDocumentRepository.create(physicalDocument);
 
@@ -90,6 +128,7 @@ describe("attribute a identifier to a physical document", () => {
       project_number: "projeto-1",
       identifier: 123456,
       baseId: project.baseId.toString(),
+      contractId: contract.id.toString(),
     });
 
     expect(result.isLeft()).toBeTruthy();
@@ -97,16 +136,115 @@ describe("attribute a identifier to a physical document", () => {
   });
 
   it("should not be able to attribute a identifier to a physical document if project does not exist", async () => {
-    const base = makeBase();
+    const contract = makeContract();
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase({ contractId: contract.id });
     await inMemoryBaseRepository.create(base);
 
     const result = await sut.execute({
       project_number: "projeto-1-nao-criado",
       identifier: 123456,
       baseId: base.id.toString(),
+      contractId: contract.id.toString(),
     });
 
     expect(result.isLeft()).toBeTruthy();
     expect(result.value).toBeInstanceOf(ResourceNotFoundError);
+  });
+
+  it("should be able to attribute a 'KIT' or 'MEDIDOR' to a physical document", async () => {
+    const contract = makeContract();
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase({ contractId: contract.id });
+    await inMemoryBaseRepository.create(base);
+
+    const project = makeProject({
+      project_number: "projeto-1",
+      baseId: base.id,
+      type: "KIT",
+    });
+    await inMemoryProjectRepository.create(project);
+
+    const physicalDocument = makePhysicalDocument({
+      projectKitId: undefined,
+      projectMeterId: undefined,
+      identifier: 1,
+      unitized: false,
+      baseId: base.id,
+    });
+    await inMemoryPhysicalDocumentRepository.create(physicalDocument);
+
+    const result = await sut.execute({
+      project_number: "projeto-1",
+      identifier: 1,
+      baseId: project.baseId.toString(),
+      contractId: contract.id.toString(),
+    });
+
+    expect(result.isRight()).toBeTruthy();
+    expect(inMemoryPhysicalDocumentRepository.items[0].projectKitId).toEqual(
+      project.id
+    );
+  });
+
+  it("should not be able to attribute a 'KIT' or 'MEDIDOR' to a physical document that already has that parameter", async () => {
+    const contract = makeContract();
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase({ contractId: contract.id });
+    await inMemoryBaseRepository.create(base);
+
+    const project = makeProject({
+      project_number: "projeto-1",
+      baseId: base.id,
+      type: "KIT",
+    });
+    await inMemoryProjectRepository.create(project);
+
+    const physicalDocument = makePhysicalDocument({
+      projectKitId: new UniqueEntityID("another-kit-project-id"),
+      projectMeterId: undefined,
+      identifier: 1,
+      unitized: false,
+      baseId: base.id,
+    });
+    await inMemoryPhysicalDocumentRepository.create(physicalDocument);
+
+    const result = await sut.execute({
+      project_number: "projeto-1",
+      identifier: 1,
+      baseId: project.baseId.toString(),
+      contractId: contract.id.toString(),
+    });
+
+    expect(result.isLeft()).toBeTruthy();
+    expect(result.value).toBeInstanceOf(ResourceAlreadyRegisteredError);
+  });
+
+  it("should not be able to attribute a 'KIT' or 'MEDIDOR' to a physical document that don't have a 'OBRA' project", async () => {
+    const contract = makeContract();
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase({ contractId: contract.id });
+    await inMemoryBaseRepository.create(base);
+
+    const project = makeProject({
+      project_number: "projeto-1",
+      baseId: base.id,
+      type: "KIT",
+    });
+    await inMemoryProjectRepository.create(project);
+
+    const result = await sut.execute({
+      project_number: "projeto-1",
+      identifier: 1,
+      baseId: project.baseId.toString(),
+      contractId: contract.id.toString(),
+    });
+
+    expect(result.isLeft()).toBeTruthy();
+    expect(result.value).toBeInstanceOf(NotValidError);
   });
 });

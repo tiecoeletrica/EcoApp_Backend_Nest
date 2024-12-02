@@ -32,10 +32,14 @@ export class BqMovimentationRepository implements MovimentationRepository {
   async findByProjectWithDetails(
     projectId: string,
     baseId: string,
-    materialId?: string
+    materialId?: string,
+    inicialDate?: Date,
+    endDate?: Date
   ): Promise<MovimentationWithDetails[]> {
     const movimentations = await this.bigquery.movimentation.select({
       where: { projectId, baseId, materialId },
+      greaterOrEqualThan: { createdAt: inicialDate },
+      lessOrEqualThan: { createdAt: endDate },
       orderBy: { column: "material.code", direction: "ASC" },
       include: {
         project: {

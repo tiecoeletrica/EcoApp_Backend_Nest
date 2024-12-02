@@ -64,10 +64,7 @@ describe("Transfer Material between projects", () => {
     const base = makeBase({}, new UniqueEntityID("ID-BASE-VCA"));
     await inMemoryBaseRepository.create(base);
 
-    const storekeeper = makeUser(
-      { baseId: base.id },
-      new UniqueEntityID("5")
-    );
+    const storekeeper = makeUser({ baseId: base.id }, new UniqueEntityID("5"));
     await inMemoryUserRepository.create(storekeeper);
 
     const movimentation = makeMovimentation({
@@ -116,10 +113,7 @@ describe("Transfer Material between projects", () => {
     const base = makeBase({}, new UniqueEntityID("ID-BASE-VCA"));
     await inMemoryBaseRepository.create(base);
 
-    const storekeeper = makeUser(
-      { baseId: base.id },
-      new UniqueEntityID("5")
-    );
+    const storekeeper = makeUser({ baseId: base.id }, new UniqueEntityID("5"));
     await inMemoryUserRepository.create(storekeeper);
 
     const movimentation = makeMovimentation({
@@ -174,4 +168,93 @@ describe("Transfer Material between projects", () => {
     expect(result.isLeft()).toBeTruthy();
     expect(result.value).toBeInstanceOf(ResourceNotFoundError);
   });
+
+  it("should be able to transfer a material between projects", async () => {
+    const startDate = new Date();
+
+    // sleep for startDate to be different from createdAt
+    const sleep = (ms: number) =>
+      new Promise((resolve) => setTimeout(resolve, ms));
+
+    await sleep(100);
+
+    const projectOut = makeProject(
+      { firstMovimentationRegister: startDate },
+      new UniqueEntityID("Projeto-origem")
+    );
+    await inMemoryProjectRepository.create(projectOut);
+
+    const projectIn = makeProject({}, new UniqueEntityID("Projeto-destino"));
+    await inMemoryProjectRepository.create(projectIn);
+
+    const material = makeMaterial({}, new UniqueEntityID("Material-teste"));
+    await inMemoryMaterialRepository.create(material);
+
+    const base = makeBase({}, new UniqueEntityID("ID-BASE-VCA"));
+    await inMemoryBaseRepository.create(base);
+
+    const storekeeper = makeUser({ baseId: base.id }, new UniqueEntityID("5"));
+    await inMemoryUserRepository.create(storekeeper);
+
+    const movimentation = makeMovimentation({
+      projectId: projectOut.id,
+      materialId: material.id,
+      baseId: base.id,
+      storekeeperId: storekeeper.id,
+      value: 5,
+    });
+
+    await inMemoryMovimentationRepository.create([movimentation]);
+
+    const result = await sut.execute([
+      {
+        projectIdOut: "Projeto-origem",
+        projectIdIn: "Projeto-destino",
+        materialId: "Material-teste",
+        storekeeperId: "5",
+        observation: "transferencia para terminar obra prioritária",
+        baseId: "ID-BASE-VCA",
+        value: 4,
+      },
+    ]);
+
+    expect(result.isRight()).toBe(true);
+    if (result.isRight()) {
+      expect(
+        areDatesEqualIgnoringMilliseconds(
+          inMemoryProjectRepository.items[0].firstMovimentationRegister!,
+          startDate
+        )
+      ).toBeTruthy();
+      expect(
+        areDatesEqualIgnoringMilliseconds(
+          inMemoryProjectRepository.items[0].lastMovimentationRegister!,
+          inMemoryMovimentationRepository.items[1].createdAt
+        )
+      ).toBeTruthy();
+      expect(
+        areDatesEqualIgnoringMilliseconds(
+          inMemoryProjectRepository.items[1].firstMovimentationRegister!,
+          inMemoryMovimentationRepository.items[2].createdAt
+        )
+      ).toBeTruthy();
+      expect(
+        areDatesEqualIgnoringMilliseconds(
+          inMemoryProjectRepository.items[1].lastMovimentationRegister!,
+          inMemoryMovimentationRepository.items[2].createdAt
+        )
+      ).toBeTruthy();
+    }
+  });
 });
+
+function areDatesEqualIgnoringMilliseconds(date1: Date, date2: Date): boolean {
+  return (
+    date1.getUTCFullYear() === date2.getUTCFullYear() &&
+    date1.getUTCMonth() === date2.getUTCMonth() &&
+    date1.getUTCDate() === date2.getUTCDate() &&
+    date1.getUTCHours() === date2.getUTCHours() &&
+    date1.getUTCMinutes() === date2.getUTCMinutes() &&
+    date1.getUTCSeconds() === date2.getUTCSeconds()
+  );
+}

@@ -13,6 +13,7 @@ import { makeMaterial } from "test/factories/make-material";
 import { makeBase } from "test/factories/make-base";
 import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 import { NotValidError } from "../../../../../core/errors/errors/not-valid-error";
+import { makeContract } from "test/factories/make-contract";
 
 let inMemoryContractRepository: InMemoryContractRepository;
 let inMemoryBaseRepository: InMemoryBaseRepository;
@@ -193,4 +194,102 @@ describe("Transfer Material", () => {
 
     expect(result.isRight()).toBe(true);
   });
+
+  it("should be able to transfer a material and register on Project the modification date", async () => {
+    const startDate = new Date();
+
+    // sleep for startDate to be different from createdAt
+    const sleep = (ms: number) =>
+      new Promise((resolve) => setTimeout(resolve, ms));
+
+    await sleep(100);
+
+    const contract = makeContract({}, new UniqueEntityID("ID-CONTRACT-BA"));
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase(
+      { contractId: contract.id },
+      new UniqueEntityID("ID-BASE-VCA")
+    );
+    await inMemoryBaseRepository.create(base);
+
+    const project1 = makeProject(
+      { baseId: base.id, firstMovimentationRegister: startDate },
+      new UniqueEntityID("1")
+    );
+    await inMemoryProjectRepository.create(project1);
+
+    const project2 = makeProject({ baseId: base.id }, new UniqueEntityID("2"));
+    await inMemoryProjectRepository.create(project2);
+
+    const material = makeMaterial(
+      { contractId: contract.id },
+      new UniqueEntityID("4")
+    );
+    await inMemoryMaterialRepository.create(material);
+
+    const storekeeper = makeUser(
+      { baseId: base.id, contractId: contract.id },
+      new UniqueEntityID("5")
+    );
+    await inMemoryUserRepository.create(storekeeper);
+
+    const result = await sut.execute([
+      {
+        projectId: "1",
+        materialId: "4",
+        storekeeperId: "5",
+        observation: "Material Movimentado",
+        baseId: "ID-BASE-VCA",
+        value: 5,
+      },
+      {
+        projectId: "2",
+        materialId: "4",
+        storekeeperId: "5",
+        observation: "Material Movimentado",
+        baseId: "ID-BASE-VCA",
+        value: 5,
+      },
+    ]);
+
+    expect(result.isRight()).toBe(true);
+    if (result.isRight()) {
+      expect(
+        areDatesEqualIgnoringMilliseconds(
+          inMemoryProjectRepository.items[0].firstMovimentationRegister!,
+          startDate
+        )
+      ).toBeTruthy();
+      expect(
+        areDatesEqualIgnoringMilliseconds(
+          inMemoryProjectRepository.items[0].lastMovimentationRegister!,
+          inMemoryMovimentationRepository.items[0].createdAt
+        )
+      ).toBeTruthy();
+      expect(
+        areDatesEqualIgnoringMilliseconds(
+          inMemoryProjectRepository.items[1].firstMovimentationRegister!,
+          inMemoryMovimentationRepository.items[1].createdAt
+        )
+      ).toBeTruthy();
+      expect(
+        areDatesEqualIgnoringMilliseconds(
+          inMemoryProjectRepository.items[1].lastMovimentationRegister!,
+          inMemoryMovimentationRepository.items[1].createdAt
+        )
+      ).toBeTruthy();
+    }
+  });
 });
+
+function areDatesEqualIgnoringMilliseconds(date1: Date, date2: Date): boolean {
+  return (
+    date1.getUTCFullYear() === date2.getUTCFullYear() &&
+    date1.getUTCMonth() === date2.getUTCMonth() &&
+    date1.getUTCDate() === date2.getUTCDate() &&
+    date1.getUTCHours() === date2.getUTCHours() &&
+    date1.getUTCMinutes() === date2.getUTCMinutes() &&
+    date1.getUTCSeconds() === date2.getUTCSeconds()
+  );
+}

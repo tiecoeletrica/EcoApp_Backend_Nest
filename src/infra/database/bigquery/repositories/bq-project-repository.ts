@@ -111,4 +111,17 @@ export class BqProjectRepository implements ProjectRepository {
       await this.bigquery.project.create(data);
     }
   }
+
+  async saveBulk(projects: Project[]): Promise<void> {
+    const arrayToUpdate = projects.map((project) => {
+      return {
+        set: BqProjectMapper.toBigquery(project),
+        where: { id: project.id.toString() },
+      };
+    });
+
+    await this.bigquery.project.updateBulk({
+      updates: arrayToUpdate,
+    });
+  }
 }

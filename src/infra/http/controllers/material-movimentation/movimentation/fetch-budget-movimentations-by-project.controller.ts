@@ -77,6 +77,7 @@ export class FetchBudgetMovimentationByProjectController {
         page: 1,
         baseId: user.baseId,
         project_number,
+        contractId: user.contractId
       });
 
       if (resultPhysicalDocument.isLeft()) {

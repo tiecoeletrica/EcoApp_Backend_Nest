@@ -110,6 +110,26 @@ const allSchemas = {
         mode: "NULLABLE",
         defaultValueExpression: "GENERATE_UUID()",
       },
+      {
+        name: "firstMovimentationRegister",
+        type: "TIMESTAMP",
+        mode: "NULLABLE",
+      },
+      {
+        name: "lastMovimentationRegister",
+        type: "TIMESTAMP",
+        mode: "NULLABLE",
+      },
+      {
+        name: "firstBudgetRegister",
+        type: "TIMESTAMP",
+        mode: "NULLABLE",
+      },
+      {
+        name: "lastBudgetRegister",
+        type: "TIMESTAMP",
+        mode: "NULLABLE",
+      },
     ],
   },
   user: {

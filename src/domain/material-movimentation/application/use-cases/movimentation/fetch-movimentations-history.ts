@@ -46,9 +46,11 @@ export class FetchMovimentationHistoryUseCase {
     startDate,
     endDate,
   }: FetchMovimentationHistoryUseCaseRequest): Promise<FetchMovimentationHistoryUseCaseResponse> {
-    let storekeeperIds;
-    let projectId;
-    let materialId;
+    let storekeeperIds: string[] | undefined = undefined,
+      projectId: string | undefined = undefined,
+      materialId: string | undefined = undefined,
+      projectFirstDate: Date | undefined = undefined,
+      projectLastDate: Date | undefined = undefined;
 
     const base = await this.baseRepository.findById(baseId);
     if (!base)
@@ -77,6 +79,8 @@ export class FetchMovimentationHistoryUseCase {
             `Projeto "${project_number}" não cadastrado`
           )
         );
+      projectFirstDate = project.firstMovimentationRegister;
+      projectLastDate = project.lastMovimentationRegister;
       projectId = project.id.toString();
     }
 
@@ -94,6 +98,88 @@ export class FetchMovimentationHistoryUseCase {
       materialId = material.id.toString();
     }
 
+    if (!name && !project_number && !material_code && !startDate && !endDate && page <= 3) {
+      const result = await this.searchRecentHistory(page, baseId);
+      if (result.isLeft()) {
+        return await this.searchAllHistory(
+          page,
+          baseId,
+          storekeeperIds,
+          projectId,
+          materialId,
+          startDate,
+          endDate
+        );
+      }
+
+      return result;
+    } else {
+      return await this.searchAllHistory(
+        page,
+        baseId,
+        storekeeperIds,
+        projectId,
+        materialId,
+        startDate ?? projectFirstDate,
+        endDate ?? projectLastDate
+      );
+    }
+  }
+
+  private async searchRecentHistory(
+    page: number,
+    baseId: string
+  ): Promise<
+    Eihter<
+      ResourceNotFoundError,
+      {
+        movimentations: MovimentationWithDetails[];
+        pagination: PaginationParamsResponse;
+      }
+    >
+  > {
+    const lastMonth = new Date(new Date().setMonth(new Date().getMonth() - 1));
+
+    const { movimentations, pagination } =
+      await this.movimentationRepository.findManyHistoryWithDetails(
+        {
+          page,
+        },
+        baseId,
+        undefined,
+        undefined,
+        undefined,
+        lastMonth,
+        undefined
+      );
+
+    if (!movimentations.length)
+      return left(
+        new ResourceNotFoundError(
+          "Nenhuma movimentação encontrada com esses parâmetros"
+        )
+      );
+
+    return right({ movimentations, pagination });
+  }
+
+  private async searchAllHistory(
+    page: number,
+    baseId: string,
+    storekeeperIds?: string[],
+    projectId?: string,
+    materialId?: string,
+    startDate?: Date,
+    endDate?: Date
+  ): Promise<
+    Eihter<
+      ResourceNotFoundError,
+      {
+        movimentations: MovimentationWithDetails[];
+        pagination: PaginationParamsResponse;
+      }
+    >
+  > {
     const { movimentations, pagination } =
       await this.movimentationRepository.findManyHistoryWithDetails(
         {
