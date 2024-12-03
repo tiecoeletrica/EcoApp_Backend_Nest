@@ -25,7 +25,7 @@ Content-Type: application/json
 
 {
     "email": "rodrigo@ecoeletrica.com.br",
-    "password": "ECO@2012" 
+    "password": "Eco,91916407" 
 }
 
 ###
@@ -267,9 +267,9 @@ Authorization: Bearer {{authToken}}
 
 # @name fetch_movimentations_budgets
 GET {{baseURL}}/movimentations-budgets
-?project_number=B-TESTE
-&physicalDocument=true
-&sendProjectId=true
+?project_number=B-1132810
+# &physicalDocument=true
+# &sendProjectId=true
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
