@@ -221,7 +221,10 @@ export class TransferMaterialUseCase {
         new Date(
           Math.max(
             ...movimentations
-              .filter((movimentation) => (movimentation.projectId = project.id))
+              .filter(
+                (movimentation) =>
+                  movimentation.projectId.toString() === project.id.toString()
+              )
               .map((movimentation) => movimentation.createdAt.getTime())
           )
         ).setMilliseconds(999)
@@ -231,7 +234,10 @@ export class TransferMaterialUseCase {
         new Date(
           Math.min(
             ...movimentations
-              .filter((movimentation) => (movimentation.projectId = project.id))
+              .filter(
+                (movimentation) =>
+                  movimentation.projectId.toString() === project.id.toString()
+              )
               .map((movimentation) => movimentation.createdAt.getTime())
           )
         ).setMilliseconds(0)

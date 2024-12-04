@@ -8,6 +8,7 @@ import { MaterialRepository } from "../../repositories/material-repository";
 import { ProjectRepository } from "../../repositories/project-repository";
 import { ResourceNotFoundError } from "../../../../../core/errors/errors/resource-not-found-error";
 import { Material } from "src/domain/material-movimentation/enterprise/entities/material";
+import { Project } from "src/domain/material-movimentation/enterprise/entities/project";
 
 interface UpdatedBudget {
   budgetId: string;
@@ -44,11 +45,13 @@ export class EditBudgetUseCase {
   ) {}
 
   private toUpdateBudgets: Budget[] = [];
+  private project: Project | undefined;
 
   async execute(
     editBudgetUseCaseRequest: EditBudgetUseCaseRequest
   ): Promise<EditBudgetResponse> {
     this.toUpdateBudgets = [];
+    this.project = undefined;
 
     const { containsIdError, message, estimator } =
       await this.verifyResourcesId(editBudgetUseCaseRequest);
@@ -81,6 +84,8 @@ export class EditBudgetUseCase {
 
     await this.budgetRepository.saveBulk(updatedBudgets);
 
+    await this.registerDateOnProject(updatedBudgets.concat(newBudgets));
+
     return right({ newBudgets, updatedBudgets });
   }
 
@@ -105,6 +110,7 @@ export class EditBudgetUseCase {
       containsIdError = true;
       message = "Projeto não encontrado";
     }
+    this.project = project;
 
     if (
       editBudgetUseCaseRequest.newBudgets.length !== 0 &&
@@ -157,5 +163,45 @@ export class EditBudgetUseCase {
     key: keyof (UpdatedBudget & NewBudget)
   ): string[] {
     return [...new Set(editBudgetData.map((budget) => String(budget[key])))];
+  }
+
+  private async registerDateOnProject(budgets: Budget[]): Promise<void> {
+    if (!this.project)
+      throw new Error("Não há projetos para atualizar a data de edição");
+
+    const budgetMaxDate = new Date(
+      new Date(
+        Math.max(
+          ...budgets
+            .filter(
+              (budget) =>
+                budget.projectId.toString() === this.project!.id.toString()
+            )
+            .map((budget) => budget.createdAt.getTime())
+        )
+      ).setMilliseconds(999)
+    );
+
+    const budgetMinDate = new Date(
+      new Date(
+        Math.min(
+          ...budgets
+            .filter(
+              (budget) =>
+                budget.projectId.toString() === this.project!.id.toString()
+            )
+            .map((budget) => budget.createdAt.getTime())
+        )
+      ).setMilliseconds(0)
+    );
+
+    if (this.project.firstBudgetRegister) {
+      this.project.lastBudgetRegister = budgetMaxDate;
+    } else {
+      this.project.firstBudgetRegister = budgetMinDate;
+      this.project.lastBudgetRegister = budgetMaxDate;
+    }
+
+    await this.projectRepository.saveBulk([this.project]);
   }
 }

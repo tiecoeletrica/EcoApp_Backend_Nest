@@ -37,9 +37,13 @@ export class EditBudgetsByMaterialUseCase {
     private projectRepository: ProjectRepository
   ) {}
 
+  private projects: Project[] = [];
+
   async execute(
     request: EditBudgetsByMaterialUseCaseRequest
   ): Promise<EditBudgetsByMaterialResponse> {
+    this.projects = [];
+
     const { multiplier, contractId, codeFrom } = request;
 
     const {
@@ -74,6 +78,8 @@ export class EditBudgetsByMaterialUseCase {
       contractId
     );
 
+    await this.registerDateOnProject(budgets);
+    
     return right({ budgets, projects });
   }
 
@@ -100,6 +106,7 @@ export class EditBudgetsByMaterialUseCase {
       containsIdError = true;
       message = "Nenhum dos projetos foi encontrado";
     }
+    this.projects = projects;
 
     const materials = await this.materialRepository.findByCodes([
       {
@@ -194,5 +201,44 @@ export class EditBudgetsByMaterialUseCase {
     const budgets = newBudgets.concat(editedBudgets);
 
     return budgets;
+  }
+
+  private async registerDateOnProject(budgets: Budget[]): Promise<void> {
+    const updatedProjects = this.projects.map((project) => {
+      const budgetMaxDate = new Date(
+        new Date(
+          Math.max(
+            ...budgets
+              .filter(
+                (budget) =>
+                  budget.projectId.toString() === project.id.toString()
+              )
+              .map((budget) => budget.createdAt.getTime())
+          )
+        ).setMilliseconds(999)
+      );
+
+      const budgetMinDate = new Date(
+        new Date(
+          Math.min(
+            ...budgets
+              .filter(
+                (budget) =>
+                  budget.projectId.toString() === project.id.toString()
+              )
+              .map((budget) => budget.createdAt.getTime())
+          )
+        ).setMilliseconds(0)
+      );
+
+      if (project.firstBudgetRegister) {
+        project.lastBudgetRegister = budgetMaxDate;
+      } else {
+        project.firstBudgetRegister = budgetMinDate;
+        project.lastBudgetRegister = budgetMaxDate;
+      }
+      return project;
+    });
+    await this.projectRepository.saveBulk(updatedProjects);
   }
 }

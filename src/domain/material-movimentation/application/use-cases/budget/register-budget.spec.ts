@@ -125,7 +125,7 @@ describe("Register Budget", () => {
     await inMemoryBaseRepository.create(base);
 
     const project = makeProject(
-      { baseId: base.id, firstMovimentationRegister: startDate },
+      { baseId: base.id, firstBudgetRegister: startDate },
       new UniqueEntityID("1")
     );
     await inMemoryProjectRepository.create(project);
@@ -159,6 +159,10 @@ describe("Register Budget", () => {
       },
     ]);
 
+    console.log(
+      inMemoryProjectRepository.items[0].lastBudgetRegister!,
+      inMemoryBudgetRepository.items[0].createdAt
+    );
     expect(result.isRight()).toBe(true);
     if (result.isRight()) {
       expect(

@@ -160,7 +160,10 @@ export class RegisterBudgetUseCase {
         new Date(
           Math.max(
             ...budgets
-              .filter((budget) => (budget.projectId = project.id))
+              .filter(
+                (budget) =>
+                  budget.projectId.toString() === project.id.toString()
+              )
               .map((budget) => budget.createdAt.getTime())
           )
         ).setMilliseconds(999)
@@ -170,7 +173,10 @@ export class RegisterBudgetUseCase {
         new Date(
           Math.min(
             ...budgets
-              .filter((budget) => (budget.projectId = project.id))
+              .filter(
+                (budget) =>
+                  budget.projectId.toString() === project.id.toString()
+              )
               .map((budget) => budget.createdAt.getTime())
           )
         ).setMilliseconds(0)

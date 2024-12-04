@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.1](https://github.com/tiecoeletrica/EcoApp_Backend_Nest/compare/v1.3.0...v1.3.1) (2024-12-04)
+
+
+### Bug Fixes
+
+* edit budgets now register date on project ([8d0d89a](https://github.com/tiecoeletrica/EcoApp_Backend_Nest/commit/8d0d89a6aa964d599d24c26a12593c1e48476e48))
+* fetch budget movimentation by date ([ae946b4](https://github.com/tiecoeletrica/EcoApp_Backend_Nest/commit/ae946b431fff146aa321908c5f96e7b638dcfc32))
+
 ## [1.3.0](https://github.com/tiecoeletrica/EcoApp_Backend_Nest/compare/v1.2.0...v1.3.0) (2024-12-02)
 
 

@@ -267,4 +267,130 @@ describe("Edit Budgets by material", () => {
     expect(result.value).toBeInstanceOf(ResourceNotFoundError);
     expect(inMemoryBudgetRepository.items).toHaveLength(3);
   });
+
+  it("should be able to edit a list of budgets by material register on Project the modification date", async () => {
+    const startDate = new Date();
+
+    // sleep for startDate to be different from createdAt
+    const sleep = (ms: number) =>
+      new Promise((resolve) => setTimeout(resolve, ms));
+
+    await sleep(100);
+
+    const contract = makeContract({});
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase({ contractId: contract.id });
+    await inMemoryBaseRepository.create(base);
+
+    const project1 = makeProject({
+      project_number: "B-test",
+      baseId: base.id,
+      firstBudgetRegister: startDate,
+    });
+    await inMemoryProjectRepository.create(project1);
+
+    const project2 = makeProject({ baseId: base.id });
+    await inMemoryProjectRepository.create(project2);
+
+    const project3 = makeProject({ project_number: "Btest2", baseId: base.id });
+    await inMemoryProjectRepository.create(project3);
+
+    const material1 = makeMaterial({ contractId: contract.id, code: 123456 });
+    await inMemoryMaterialRepository.create(material1);
+
+    const material2 = makeMaterial({ contractId: contract.id, code: 654321 });
+    await inMemoryMaterialRepository.create(material2);
+
+    const user = makeUser({ contractId: contract.id, type: "Orçamentista" });
+    await inMemoryUserRepository.create(user);
+
+    const budgets = [
+      makeBudget({
+        contractId: contract.id,
+        estimatorId: user.id,
+        materialId: material1.id,
+        projectId: project1.id,
+        value: 5,
+        createdAt: new Date(),
+      }),
+      makeBudget({
+        contractId: contract.id,
+        estimatorId: user.id,
+        materialId: material1.id,
+        projectId: project2.id,
+        value: 2,
+      }),
+      makeBudget({
+        contractId: contract.id,
+        estimatorId: user.id,
+        materialId: material2.id,
+        projectId: project2.id,
+        value: 3,
+      }),
+      makeBudget({
+        contractId: contract.id,
+        estimatorId: user.id,
+        materialId: material1.id,
+        projectId: project3.id,
+        value: 5,
+      }),
+      makeBudget({
+        contractId: contract.id,
+        estimatorId: user.id,
+        materialId: material1.id,
+        projectId: project3.id,
+        value: 3,
+      }),
+      makeBudget({
+        contractId: contract.id,
+        estimatorId: user.id,
+        materialId: material2.id,
+        projectId: project3.id,
+        value: 5,
+      }),
+    ];
+    console.log(budgets[0].createdAt);
+    await inMemoryBudgetRepository.create(budgets);
+
+    const result = await sut.execute({
+      estimatorId: user.id.toString(),
+      project_numbers: ["B-test", "Btest2"],
+      codeFrom: 123456,
+      codeTo: 654321,
+      contractId: contract.id.toString(),
+      multiplier: 2,
+    });
+
+    console.log(
+      inMemoryProjectRepository.items[0].lastBudgetRegister!,
+      inMemoryBudgetRepository.items[0].createdAt
+    );
+    expect(result.isRight()).toBe(true);
+    if (result.isRight()) {
+      expect(
+        areDatesEqualIgnoringMilliseconds(
+          inMemoryProjectRepository.items[0].firstBudgetRegister!,
+          startDate
+        )
+      ).toBeTruthy();
+      expect(
+        areDatesEqualIgnoringMilliseconds(
+          inMemoryProjectRepository.items[0].lastBudgetRegister!,
+          inMemoryBudgetRepository.items[0].createdAt
+        )
+      ).toBeTruthy();
+    }
+  });
 });
+
+function areDatesEqualIgnoringMilliseconds(date1: Date, date2: Date): boolean {
+  return (
+    date1.getUTCFullYear() === date2.getUTCFullYear() &&
+    date1.getUTCMonth() === date2.getUTCMonth() &&
+    date1.getUTCDate() === date2.getUTCDate() &&
+    date1.getUTCHours() === date2.getUTCHours() &&
+    date1.getUTCMinutes() === date2.getUTCMinutes() &&
+    date1.getUTCSeconds() === date2.getUTCSeconds()
+  );
+}
