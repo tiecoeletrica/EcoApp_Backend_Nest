@@ -35,6 +35,7 @@
 | 22/11/2024 | ignoreValidations on transfer materials                                                         |
 | 27/11/2024 | physical document with kit project and meter project                                            |
 | 01/12/2024 | refactor: project with new parameters and all budget and movimentation searches with data range |
+| 04/12/2024 | fix: edit budgets now register date on project                                                  |
 
 # Technical debt
 

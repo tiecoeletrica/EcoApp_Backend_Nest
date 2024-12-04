@@ -148,7 +148,7 @@ describe("Edit Budget", () => {
     expect(inMemoryBudgetRepository.items).toHaveLength(2);
   });
 
-  it("should mpt be able to edit a budget if informed Ids are not found", async () => {
+  it("should not be able to edit a budget if informed Ids are not found", async () => {
     const result = await sut.execute({
       estimatorId: "estimator-id",
       projectId: "project-id",
@@ -159,4 +159,84 @@ describe("Edit Budget", () => {
     expect(result.isLeft()).toBe(true);
     expect(result.value).toBeInstanceOf(ResourceNotFoundError);
   });
+
+  it("should be able to edit a budget and register on Project the modification date", async () => {
+    const startDate = new Date();
+
+    // sleep for startDate to be different from createdAt
+    const sleep = (ms: number) =>
+      new Promise((resolve) => setTimeout(resolve, ms));
+
+    await sleep(100);
+
+    const contract = makeContract({}, new UniqueEntityID("ID-CONTRACT-BA"));
+    await inMemoryContractRepository.create(contract);
+
+    const base = makeBase(
+      { contractId: contract.id },
+      new UniqueEntityID("ID-BASE-VCA")
+    );
+    await inMemoryBaseRepository.create(base);
+
+    const project = makeProject(
+      { baseId: base.id, firstBudgetRegister: startDate },
+      new UniqueEntityID("1")
+    );
+    await inMemoryProjectRepository.create(project);
+
+    const material = makeMaterial(
+      { contractId: contract.id },
+      new UniqueEntityID("4")
+    );
+    await inMemoryMaterialRepository.create(material);
+
+    const user = makeUser({ contractId: contract.id }, new UniqueEntityID("5"));
+    await inMemoryUserRepository.create(user);
+
+    const budget = makeBudget({
+      contractId: contract.id,
+      estimatorId: user.id,
+      materialId: material.id,
+      projectId: project.id,
+      value: 3,
+    });
+    await inMemoryBudgetRepository.create([budget]);
+
+    const updatedBudgets = [{ budgetId: budget.id.toString(), value: 5 }];
+    const newBudgets = [];
+
+    const result = await sut.execute({
+      estimatorId: user.id.toString(),
+      projectId: project.id.toString(),
+      updatedBudgets,
+      newBudgets,
+    });
+
+    expect(result.isRight()).toBe(true);
+    if (result.isRight()) {
+      expect(
+        areDatesEqualIgnoringMilliseconds(
+          inMemoryProjectRepository.items[0].firstBudgetRegister!,
+          startDate
+        )
+      ).toBeTruthy();
+      expect(
+        areDatesEqualIgnoringMilliseconds(
+          inMemoryProjectRepository.items[0].lastBudgetRegister!,
+          inMemoryBudgetRepository.items[0].createdAt
+        )
+      ).toBeTruthy();
+    }
+  });
 });
+
+function areDatesEqualIgnoringMilliseconds(date1: Date, date2: Date): boolean {
+  return (
+    date1.getUTCFullYear() === date2.getUTCFullYear() &&
+    date1.getUTCMonth() === date2.getUTCMonth() &&
+    date1.getUTCDate() === date2.getUTCDate() &&
+    date1.getUTCHours() === date2.getUTCHours() &&
+    date1.getUTCMinutes() === date2.getUTCMinutes() &&
+    date1.getUTCSeconds() === date2.getUTCSeconds()
+  );
+}
