@@ -10,14 +10,20 @@ export class PhysicalDocumentWithProjectPresenter {
         id: physicaldocument.project.id.toString(),
         project_number: physicaldocument.project.project_number,
       },
-      projectKit: {
-        id: physicaldocument.projectKit?.id.toString(),
-        project_number: physicaldocument.projectKit?.project_number,
-      },
-      projectMeter: {
-        id: physicaldocument.projectMeter?.id.toString(),
-        project_number: physicaldocument.projectMeter?.project_number,
-      },
+      projectKit:
+        physicaldocument.projectKit === undefined
+          ? undefined
+          : {
+              id: physicaldocument.projectKit?.id.toString(),
+              project_number: physicaldocument.projectKit?.project_number,
+            },
+      projectMeter:
+        physicaldocument.projectMeter === undefined
+          ? undefined
+          : {
+              id: physicaldocument.projectMeter?.id.toString(),
+              project_number: physicaldocument.projectMeter?.project_number,
+            },
     };
   }
 }

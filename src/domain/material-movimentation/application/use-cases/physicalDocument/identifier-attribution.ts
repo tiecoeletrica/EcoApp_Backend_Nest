@@ -105,10 +105,7 @@ export class IdentifierAttributionUseCase {
     project: Project,
     physicaldocumentSearch: PhysicalDocument[],
     identifier: number
-  ): Eihter<
-    ResourceAlreadyRegisteredError | NotValidError,
-    null
-  > {
+  ): Eihter<ResourceAlreadyRegisteredError | NotValidError, null> {
     const isIdentifierUsed = physicaldocumentSearch.find(
       (item) => item.identifier === identifier && item.unitized === false
     );

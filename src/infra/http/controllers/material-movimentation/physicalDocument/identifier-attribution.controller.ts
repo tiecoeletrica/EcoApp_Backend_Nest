@@ -16,6 +16,7 @@ import { CurrentUser } from "src/infra/auth/current-user.decorator";
 import { IdentifierAttributionDecorator } from "src/infra/http/swagger dto and decorators/material-movimentation/physicalDocument/response decorators/identifier-attribution.decorator";
 import { UseCases } from "src/core/role-authorization/use-cases.enum";
 import { RoleAuth } from "src/infra/auth/role-auth.decorator";
+import { NotValidError } from "src/core/errors/errors/not-valid-error";
 
 const identifierAttributionBodySchema = z.object({
   project_number: z.string().toUpperCase(),
@@ -49,6 +50,8 @@ export class IdentifierAttributionController {
       const error = result.value;
 
       switch (error.constructor) {
+        case NotValidError:
+          throw new ConflictException(error.message);
         case ResourceAlreadyRegisteredError:
           throw new ConflictException(error.message);
         case ResourceNotFoundError:

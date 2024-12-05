@@ -54,7 +54,7 @@ export class BigQueryMethods<T extends Record<string, any>> {
   }
 
   async runQuery(query: string) {
-    // console.log(query);
+    console.log(query);
     const options = { query };
     const [rows] = await this.bigquery.query(options);
 
@@ -504,14 +504,18 @@ export class BigQueryMethods<T extends Record<string, any>> {
       WHERE ${allWhereConditions.join(" OR ")}
     `;
   }
+
   private buildSetClause(data: Partial<T>): string {
     return Object.entries(data)
       .map(([key, value]) => {
+        if (value === undefined) {
+          return `${key} = NULL`;
+        }
         if (this.isDate(value)) {
           return `${key} = '${value.toISOString()}'`;
         }
         if (typeof value === "string") {
-          return `${key} = '${value.replace(/'/g, "''")}'`;
+          return `${key} = '${this.escapeString(value)}'`;
         }
         return `${key} = ${value}`;
       })

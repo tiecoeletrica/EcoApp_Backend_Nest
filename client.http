@@ -150,8 +150,8 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-    "project_number": "B-TESTE",
-    "identifier": 1
+    "project_number": "PROJETO-KIT",
+    "identifier": 7
 }
 
 
