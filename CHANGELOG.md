@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.2](https://github.com/tiecoeletrica/EcoApp_Backend_Nest/compare/v1.3.1...v1.3.2) (2024-12-05)
+
+
+### Bug Fixes
+
+* project kit and meter didnt register and show on fetchs ([efd9246](https://github.com/tiecoeletrica/EcoApp_Backend_Nest/commit/efd92460581ba12c9a9cafda90e8a8ef50a79d04))
+
 ### [1.3.1](https://github.com/tiecoeletrica/EcoApp_Backend_Nest/compare/v1.3.0...v1.3.1) (2024-12-04)
 
 

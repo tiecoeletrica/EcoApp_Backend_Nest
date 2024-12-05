@@ -95,6 +95,8 @@ const allSchemas = {
       { name: "unitized", type: "BOOLEAN", mode: "NULLABLE" },
       { name: "identifier", type: "INTEGER", mode: "REQUIRED" },
       { name: "baseId", type: "STRING", mode: "NULLABLE" },
+      { name: "projectKitId", type: "STRING", mode: "REQUIRED" },
+      { name: "projectMeterId", type: "STRING", mode: "REQUIRED" },
     ],
   },
   project: {

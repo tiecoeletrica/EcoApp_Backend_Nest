@@ -4,11 +4,18 @@ import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 
 export class BqPhysicalDocumentMapper {
   static toDomain(raw: BqPhysicalDocumentProps): PhysicalDocument {
+    console.log(raw);
     return PhysicalDocument.create(
       {
         projectId: new UniqueEntityID(raw.projectId),
-        projectKitId: new UniqueEntityID(raw.projectKitId),
-        projectMeterId: new UniqueEntityID(raw.projectMeterId),
+        projectKitId:
+          raw.projectKitId === null
+            ? undefined
+            : new UniqueEntityID(raw.projectKitId),
+        projectMeterId:
+          raw.projectMeterId === null
+            ? undefined
+            : new UniqueEntityID(raw.projectMeterId),
         identifier: raw.identifier,
         unitized: raw.unitized,
         baseId: new UniqueEntityID(raw.baseId),
