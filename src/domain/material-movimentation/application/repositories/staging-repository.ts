@@ -7,10 +7,10 @@ import { Staging } from "../../enterprise/entities/staging";
 export abstract class StagingRepository {
   abstract create(Staging: Staging): Promise<void>;
   abstract findLastIdentifierByBaseId(baseId: string): Promise<number>;
+  abstract findByIds(stagingIds: string[]): Promise<Staging[]>;
   // abstract findByStagingName(stagingName: string): Promise<Staging | null>;
   // abstract findManyByContractId(contractId: string): Promise<Staging[]>;
   // abstract findById(stagingId: string): Promise<Staging | null>;
-  // abstract findByIds(stagingIds: string[]): Promise<Staging[]>;
   // abstract findMany(params: PaginationParams): Promise<Staging[]>;
   // abstract findManyWithContract(
   //   params: PaginationParams

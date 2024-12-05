@@ -40,7 +40,7 @@ export class BqMovimentationRepository implements MovimentationRepository {
       where: { projectId, baseId, materialId },
       greaterOrEqualThan: { createdAt: inicialDate },
       lessOrEqualThan: { createdAt: endDate },
-      orderBy: { column: "material.code", direction: "ASC" },
+      orderBy: [{ column: "material.code", direction: "ASC" }],
       include: {
         project: {
           join: {
@@ -97,7 +97,7 @@ export class BqMovimentationRepository implements MovimentationRepository {
       lessOrEqualThan: { createdAt: endDate },
       limit: pageCount,
       offset: pageCount * (page - 1),
-      orderBy: { column: "materialId", direction: "ASC" },
+      orderBy: [{ column: "materialId", direction: "ASC" }],
     });
 
     return movimentations.map(BqMovimentationMapper.toDomain);
@@ -126,7 +126,12 @@ export class BqMovimentationRepository implements MovimentationRepository {
         limit: pageCount,
         offset: pageCount * (page - 1),
         count_results: true,
-        orderBy: { column: "createdAt", direction: "DESC" },
+        orderBy: [
+          { column: "createdAt", direction: "DESC" },
+          { column: "projectId", direction: "DESC" },
+          { column: "materialId", direction: "DESC" },
+          { column: "value", direction: "DESC" },
+        ],
         include: {
           project: {
             join: {
@@ -192,7 +197,7 @@ export class BqMovimentationRepository implements MovimentationRepository {
         lessOrEqualThan: { createdAt: endDate },
         limit: pageCount,
         offset: pageCount * page,
-        orderBy: { column: "createdAt", direction: "DESC" },
+        orderBy: [{ column: "createdAt", direction: "DESC" }],
         include: {
           project: {
             join: {

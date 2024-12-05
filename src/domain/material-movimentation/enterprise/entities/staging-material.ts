@@ -1,11 +1,23 @@
 import { UniqueEntityID } from "src/core/entities/unique-entity-id";
-import { MaterialPerProjectProps } from "./material-per-project";
-import { Entity } from "src/core/entities/entity";
+import {
+  MaterialPerProject,
+  MaterialPerProjectProps,
+} from "./material-per-project";
 import { Optional } from "src/core/types/optional";
 
-export type StagingMaterialProps = MaterialPerProjectProps;
+export interface StagingMaterialProps extends MaterialPerProjectProps {
+  stagingId: UniqueEntityID;
+}
 
-export class StagingMaterial extends Entity<StagingMaterialProps> {
+export class StagingMaterial extends MaterialPerProject<StagingMaterialProps> {
+  get stagingId() {
+    return this.props.stagingId;
+  }
+
+  set stagingId(stagingId: UniqueEntityID) {
+    this.props.stagingId = stagingId;
+  }
+
   static create(
     props: Optional<StagingMaterialProps, "createdAt">,
     id?: UniqueEntityID

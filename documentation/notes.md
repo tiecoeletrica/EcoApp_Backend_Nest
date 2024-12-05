@@ -37,6 +37,7 @@
 | 01/12/2024 | refactor: project with new parameters and all budget and movimentation searches with data range |
 | 04/12/2024 | fix: edit budgets now register date on project                                                  |
 | 05/12/2024 | fix: project kit and meter didnt register and show on fetchs                                    |
+| 05/12/2024 | fix: added order by on movimentation history and staging entities                               |
 
 # Technical debt
 

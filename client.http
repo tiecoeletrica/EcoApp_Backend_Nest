@@ -245,9 +245,9 @@ Authorization: Bearer {{authToken}}
 
 # @name fetch_movimentations
 GET {{baseURL}}/movimentations
-?project_number=B-lalala
-&material_code=210422
-&page=1
+?page=55
+# ?project_number=B-lalala
+# &material_code=210422
 # ?material_code=110014
 Content-Type: application/json
 Authorization: Bearer {{authToken}}

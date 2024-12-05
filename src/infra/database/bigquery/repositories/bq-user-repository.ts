@@ -56,7 +56,7 @@ export class BqUserRepository implements UserRepository {
       limit: pageCount,
       offset: pageCount * (page - 1),
       count_results: true,
-      orderBy: { column: "cpf", direction: "ASC" },
+      orderBy: [{ column: "cpf", direction: "ASC" }],
       include: {
         base: {
           join: { table: "base", on: "user.baseId = base.id" },

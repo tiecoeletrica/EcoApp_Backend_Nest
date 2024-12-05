@@ -159,10 +159,6 @@ describe("Register Budget", () => {
       },
     ]);
 
-    console.log(
-      inMemoryProjectRepository.items[0].lastBudgetRegister!,
-      inMemoryBudgetRepository.items[0].createdAt
-    );
     expect(result.isRight()).toBe(true);
     if (result.isRight()) {
       expect(

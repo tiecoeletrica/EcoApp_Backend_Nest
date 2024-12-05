@@ -4,12 +4,11 @@ import {
 } from "../../src/core/repositories/pagination-params";
 import { StagingRepository } from "../../src/domain/material-movimentation/application/repositories/staging-repository";
 import { Staging } from "../../src/domain/material-movimentation/enterprise/entities/staging";
-import { InMemoryContractRepository } from "./in-memory-contract-repository";
 
 export class InMemoryStagingRepository implements StagingRepository {
   public items: Staging[] = [];
 
-  constructor(private contractRepository: InMemoryContractRepository) {}
+  constructor() {}
 
   async create(staging: Staging) {
     this.items.push(staging);
@@ -18,6 +17,14 @@ export class InMemoryStagingRepository implements StagingRepository {
   async findLastIdentifierByBaseId(baseId: string) {
     return this.items.filter((item) => item.baseId.toString() === baseId)
       .length;
+  }
+
+  async findByIds(stagingIds: string[]): Promise<Staging[]> {
+    const staging = this.items.filter((item) =>
+      stagingIds.includes(item.id.toString())
+    );
+
+    return staging;
   }
   //   async findByStagingName(stagingName: string): Promise<Staging | null> {
   //     const staging = this.items.find((item) => item.stagingName === stagingName);
@@ -39,14 +46,6 @@ export class InMemoryStagingRepository implements StagingRepository {
   //     const staging = this.items.find((item) => item.id.toString() === stagingId);
 
   //     if (!staging) return null;
-
-  //     return staging;
-  //   }
-
-  //   async findByIds(stagingIds: string[]): Promise<Staging[]> {
-  //     const staging = this.items.filter((item) =>
-  //       stagingIds.includes(item.id.toString())
-  //     );
 
   //     return staging;
   //   }

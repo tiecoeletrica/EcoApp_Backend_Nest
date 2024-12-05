@@ -81,7 +81,7 @@ export class BqMaterialRepository implements MaterialRepository {
         limit: pageCount,
         offset: pageCount * (page - 1),
         count_results: true,
-        orderBy: { column: "code", direction: "ASC" },
+        orderBy: [{ column: "code", direction: "ASC" }],
       });
 
     const pagination: PaginationParamsResponse = {
@@ -96,7 +96,7 @@ export class BqMaterialRepository implements MaterialRepository {
   async findManyAll(contractId: string, type?: string): Promise<Material[]> {
     const materials = await this.bigquery.material.select({
       where: { contractId, type },
-      orderBy: { column: "code", direction: "ASC" },
+      orderBy: [{ column: "code", direction: "ASC" }],
     });
 
     return materials.map(BqMaterialMapper.toDomain);

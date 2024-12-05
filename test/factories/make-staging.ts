@@ -6,6 +6,7 @@ import {
 } from "../../src/domain/material-movimentation/enterprise/entities/staging";
 import { faker } from "@faker-js/faker";
 import { Injectable } from "@nestjs/common";
+import { StageTypes } from "src/core/types/stage-type";
 // import { BqStagingMapper } from "src/infra/database/bigquery/mappers/bq-staging-mapper";
 
 export function makeStaging(
@@ -16,14 +17,28 @@ export function makeStaging(
     "FERRAGEM",
     "CONCRETO",
   ]);
+
   const transport: "CARRETA" | "SAQUE" = faker.helpers.arrayElement([
     "CARRETA",
     "SAQUE",
   ]);
+
   const delivery: "OBRA" | "REGIÃO" = faker.helpers.arrayElement([
     "OBRA",
     "REGIÃO",
   ]);
+
+  let stage: StageTypes;
+
+  switch (type + transport) {
+    case "CONCRETOSAQUE":
+      stage = "AGUARDANDO RETIRADA";
+    case "CONCRETOCARRETA":
+      stage = "AGUARDANDO PROGRAMAÇÃO";
+    default:
+      stage = "AGUARDANDO SEPARAÇÃO";
+  }
+
   const staging = Staging.create(
     {
       supervisorId: new UniqueEntityID(),
@@ -37,7 +52,7 @@ export function makeStaging(
       delivery: type !== "CONCRETO" ? undefined : delivery,
       createdAt: new Date(),
       identifier: faker.lorem.word(),
-      stage: ,
+      stage,
       ...override,
     },
     id
