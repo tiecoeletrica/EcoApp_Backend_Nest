@@ -62,7 +62,7 @@ export class BqBaseRepository implements BaseRepository {
     const bases = await this.bigquery.base.select({
       limit: pageCount,
       offset: pageCount * (page - 1),
-      orderBy: { column: "baseName", direction: "ASC" },
+      orderBy: [{ column: "baseName", direction: "ASC" }],
     });
 
     return bases.map(BqBaseMapper.toDomain);
@@ -78,7 +78,7 @@ export class BqBaseRepository implements BaseRepository {
       limit: pageCount,
       offset: pageCount * (page - 1),
       count_results: true,
-      orderBy: { column: "baseName", direction: "ASC" },
+      orderBy: [{ column: "baseName", direction: "ASC" }],
       include: {
         contract: {
           join: { table: "contract", on: "base.contractId = contract.id" },

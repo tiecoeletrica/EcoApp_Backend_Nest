@@ -57,7 +57,7 @@ export class BqContractRepository implements ContractRepository {
         limit: pageCount,
         offset: pageCount * (page - 1),
         count_results: true,
-        orderBy: { column: "contractName", direction: "ASC" },
+        orderBy: [{ column: "contractName", direction: "ASC" }],
       });
 
     const pagination: PaginationParamsResponse = {

@@ -37,7 +37,10 @@ describe("Identifier Attribution (E2E)", () => {
 
     const accessToken = accessTokenCreator.execute(user);
 
-    const project = await projectFactory.makeBqProject({ baseId: user.baseId });
+    const project = await projectFactory.makeBqProject({
+      baseId: user.baseId,
+      type: "OBRA"
+    });
 
     const response = await request(app.getHttpServer())
       .post("/physical-documents")

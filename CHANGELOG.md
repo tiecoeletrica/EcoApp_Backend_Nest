@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.3](https://github.com/tiecoeletrica/EcoApp_Backend_Nest/compare/v1.3.2...v1.3.3) (2024-12-05)
+
+
+### Bug Fixes
+
+* added order by on movimentation history and staging entities ([8ce4d76](https://github.com/tiecoeletrica/EcoApp_Backend_Nest/commit/8ce4d76bfe32c9a50d4c102660e057fe23487f46))
+
 ### [1.3.2](https://github.com/tiecoeletrica/EcoApp_Backend_Nest/compare/v1.3.1...v1.3.2) (2024-12-05)
 
 

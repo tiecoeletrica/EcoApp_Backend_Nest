@@ -350,7 +350,7 @@ describe("Edit Budgets by material", () => {
         value: 5,
       }),
     ];
-    console.log(budgets[0].createdAt);
+
     await inMemoryBudgetRepository.create(budgets);
 
     const result = await sut.execute({
@@ -362,10 +362,6 @@ describe("Edit Budgets by material", () => {
       multiplier: 2,
     });
 
-    console.log(
-      inMemoryProjectRepository.items[0].lastBudgetRegister!,
-      inMemoryBudgetRepository.items[0].createdAt
-    );
     expect(result.isRight()).toBe(true);
     if (result.isRight()) {
       expect(

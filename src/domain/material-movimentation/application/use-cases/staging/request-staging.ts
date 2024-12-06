@@ -9,7 +9,7 @@ import { ResourceNotFoundError } from "../../../../../core/errors/errors/resourc
 import { ProjectRepository } from "../../repositories/project-repository";
 import { UserRepository } from "../../repositories/user-repository";
 
-interface RegisterStagingUseCaseRequest {
+interface RequestStagingUseCaseRequest {
   supervisorId: string;
   baseId: string;
   type: "FERRAGEM" | "CONCRETO";
@@ -21,7 +21,7 @@ interface RegisterStagingUseCaseRequest {
   delivery?: "OBRA" | "REGIÃO";
 }
 
-type RegisterStagingResponse = Eihter<
+type RequestStagingResponse = Eihter<
   ResourceAlreadyRegisteredError | ResourceNotFoundError,
   {
     staging: Staging;
@@ -29,7 +29,7 @@ type RegisterStagingResponse = Eihter<
 >;
 
 @Injectable()
-export class RegisterStagingUseCase {
+export class RequestStagingUseCase {
   constructor(
     private stagingRepository: StagingRepository,
     private baseRepository: BaseRepository,
@@ -47,7 +47,7 @@ export class RegisterStagingUseCase {
     origin,
     transport,
     delivery,
-  }: RegisterStagingUseCaseRequest): Promise<RegisterStagingResponse> {
+  }: RequestStagingUseCaseRequest): Promise<RequestStagingResponse> {
     const base = await this.baseRepository.findById(baseId);
     if (!base) return left(new ResourceNotFoundError("baseId não encontrado"));
 
@@ -67,7 +67,7 @@ export class RegisterStagingUseCase {
     if (!user) return left(new ResourceNotFoundError("userId não encontrado"));
 
     const lastIdentifier =
-      await this.stagingRepository.findLastIdentifierByBaseId(baseId);
+      (await this.stagingRepository.findLastIdentifierByBaseId(baseId)) + 1;
 
     const staging = Staging.create({
       supervisorId: user.id,
@@ -79,9 +79,9 @@ export class RegisterStagingUseCase {
       origin,
       transport,
       delivery,
-      identifier: `${
-        lastIdentifier + (1).toString().padStart(6, "0")
-      }_${base.baseName.slice(0, 3)}`,
+      identifier: `${lastIdentifier
+        .toString()
+        .padStart(6, "0")}_${base.baseName.slice(0, 3)}`,
     });
 
     await this.stagingRepository.create(staging);

@@ -24,7 +24,7 @@ export interface SelectOptions<T> {
   like?: Partial<T>;
   join?: { table: string; on: string };
   distinct?: boolean;
-  orderBy?: { column: string; direction: "ASC" | "DESC" };
+  orderBy?: Array<{ column: string; direction: "ASC" | "DESC" }>;
   groupBy?: (keyof T)[];
   limit?: number;
   offset?: number;
@@ -54,7 +54,7 @@ export class BigQueryMethods<T extends Record<string, any>> {
   }
 
   async runQuery(query: string) {
-    console.log(query);
+    // console.log(query);
     const options = { query };
     const [rows] = await this.bigquery.query(options);
 
@@ -387,30 +387,33 @@ export class BigQueryMethods<T extends Record<string, any>> {
 
   private buildOrderByClause(
     tableAlias: string,
-    orderBy?: { column: string; direction: "ASC" | "DESC" },
+    orderBy?: Array<{ column: string; direction: "ASC" | "DESC" }>,
     include?: { [K in keyof T]?: IncludeOptions<T[K]> }
   ): string {
-    if (!orderBy) return "";
+    if (!orderBy || orderBy.length === 0) return "";
 
-    const { column, direction } = orderBy;
-    let orderByColumn = column;
+    const orderByStatements = orderBy.map(({ column, direction }) => {
+      let orderByColumn = column;
 
-    // Verifica se a coluna pertence a uma tabela incluída
-    if (include) {
-      for (const [alias, options] of Object.entries(include)) {
-        if (column.startsWith(`${alias}.`)) {
-          orderByColumn = column.replace(`${alias}.`, `${alias}_`);
-          break;
+      // Verifica se a coluna pertence a uma tabela incluída
+      if (include) {
+        for (const [alias, options] of Object.entries(include)) {
+          if (column.startsWith(`${alias}.`)) {
+            orderByColumn = column.replace(`${alias}.`, `${alias}_`);
+            break;
+          }
         }
       }
-    }
 
-    // Se não for uma coluna de uma tabela incluída, adiciona o alias da tabela principal
-    if (!orderByColumn.includes(".") && !orderByColumn.includes("_")) {
-      orderByColumn = `${tableAlias}.${orderByColumn}`;
-    }
+      // Se não for uma coluna de uma tabela incluída, adiciona o alias da tabela principal
+      if (!orderByColumn.includes(".") && !orderByColumn.includes("_")) {
+        orderByColumn = `${tableAlias}.${orderByColumn}`;
+      }
 
-    return `ORDER BY ${orderByColumn} ${direction}`;
+      return `${orderByColumn} ${direction}`;
+    });
+
+    return `ORDER BY ${orderByStatements.join(", ")}`;
   }
 
   private buildQueryWithIncludes(

@@ -4,7 +4,6 @@ import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 
 export class BqPhysicalDocumentMapper {
   static toDomain(raw: BqPhysicalDocumentProps): PhysicalDocument {
-    console.log(raw);
     return PhysicalDocument.create(
       {
         projectId: new UniqueEntityID(raw.projectId),
