@@ -32,7 +32,11 @@ describe("Create staging", () => {
       inMemoryBaseRepository,
       inMemoryContractRepository
     );
-    inMemoryStagingRepository = new InMemoryStagingRepository();
+    inMemoryStagingRepository = new InMemoryStagingRepository(
+      inMemoryUserRepository,
+      inMemoryProjectRepository,
+      inMemoryBaseRepository
+    );
     sut = new RequestStagingUseCase(
       inMemoryStagingRepository,
       inMemoryBaseRepository,

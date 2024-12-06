@@ -30,7 +30,11 @@ export class BqBudgetRepository implements BudgetRepository {
       where: { projectId, contractId },
       greaterOrEqualThan: { createdAt: inicialDate },
       lessOrEqualThan: { createdAt: endDate },
-      orderBy: [{ column: "material.code", direction: "ASC" }],
+      orderBy: [
+        { column: "material.code", direction: "ASC" },
+        { column: "budget.createdAt", direction: "ASC" },
+        { column: "budget.value", direction: "ASC" },
+      ],
       include: {
         project: {
           join: {

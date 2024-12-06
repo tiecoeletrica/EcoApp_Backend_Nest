@@ -20,6 +20,7 @@ let inMemoryStagingRepository: InMemoryStagingRepository;
 let inMemoryProjectRepository: InMemoryProjectRepository;
 let inMemoryMaterialRepository: InMemoryMaterialRepository;
 let inMemoryStagingMaterialRepository: InMemoryStagingMaterialRepository;
+let inMemoryUserRepository: InMemoryUserRepository;
 let sut: RegisterStagingMaterialsUseCase;
 
 describe("register Staging Materials", () => {
@@ -28,11 +29,19 @@ describe("register Staging Materials", () => {
     inMemoryBaseRepository = new InMemoryBaseRepository(
       inMemoryContractRepository
     );
+    inMemoryUserRepository = new InMemoryUserRepository(
+      inMemoryBaseRepository,
+      inMemoryContractRepository
+    );
     inMemoryProjectRepository = new InMemoryProjectRepository(
       inMemoryBaseRepository
     );
     inMemoryMaterialRepository = new InMemoryMaterialRepository();
-    inMemoryStagingRepository = new InMemoryStagingRepository();
+    inMemoryStagingRepository = new InMemoryStagingRepository(
+      inMemoryUserRepository,
+      inMemoryProjectRepository,
+      inMemoryBaseRepository
+    );
     inMemoryStagingMaterialRepository = new InMemoryStagingMaterialRepository();
     sut = new RegisterStagingMaterialsUseCase(
       inMemoryStagingMaterialRepository,
