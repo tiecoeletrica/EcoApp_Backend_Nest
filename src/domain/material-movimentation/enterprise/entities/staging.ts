@@ -37,6 +37,12 @@ export class Staging extends Entity<StagingProps> {
     "OK",
   ];
 
+  private endStages: Array<Partial<StageTypes>> = [
+    "OK",
+    "IMPROCEDENTE",
+    "CANCELADO",
+  ];
+
   get supervisorId() {
     return this.props.supervisorId;
   }
@@ -141,11 +147,12 @@ export class Staging extends Entity<StagingProps> {
         ...props,
         createdAt: props.createdAt ?? new Date(),
         stage:
-          props.stage ?? props.type === "FERRAGEM"
+          props.stage ??
+          (props.type === "FERRAGEM"
             ? "AGUARDANDO SEPARAÇÃO"
             : props.transport === "SAQUE"
             ? "AGUARDANDO RETIRADA"
-            : "AGUARDANDO PROGRAMAÇÃO",
+            : "AGUARDANDO PROGRAMAÇÃO"),
       },
       id
     );
@@ -159,18 +166,29 @@ export class Staging extends Entity<StagingProps> {
     switch (this.props.type + this.props.transport) {
       case "CONCRETOSAQUE":
         stages = this.concretoSaqueStages;
+        break;
       case "CONCRETOCARRETA":
         stages = this.concretoCarretaStages;
+        break;
       default:
         stages = this.ferragemStages;
+        break;
     }
 
     const index = stages.findIndex((stage) => this.props.stage === stage);
 
-    const currentStage = this.props.stage;
-    this.props.stage = stages[index + 1] ?? this.props.stage;
-    const nextStage = this.props.stage;
-    return { currentStage, nextStage };
+    if (!this.endStages.includes(this.props.stage)) {
+      const currentStage = this.props.stage;
+      this.props.stage = stages[index + 1] ?? this.props.stage;
+      const nextStage = this.props.stage;
+
+      return { currentStage, nextStage };
+    } else {
+      const currentStage = this.props.stage;
+      const nextStage = this.props.stage;
+
+      return { currentStage, nextStage };
+    }
   }
 
   previousStage(): { currentStage: StageTypes; nextStage: StageTypes } {
@@ -179,17 +197,27 @@ export class Staging extends Entity<StagingProps> {
     switch (this.props.type + this.props.transport) {
       case "CONCRETOSAQUE":
         stages = this.concretoSaqueStages;
+        break;
       case "CONCRETOCARRETA":
         stages = this.concretoCarretaStages;
+        break;
       default:
         stages = this.ferragemStages;
+        break;
     }
 
     const index = stages.findIndex((stage) => this.props.stage === stage);
+    if (!this.endStages.includes(this.props.stage)) {
+      const currentStage = this.props.stage;
+      this.props.stage = stages[index - 1] ?? this.props.stage;
+      const nextStage = this.props.stage;
 
-    const currentStage = this.props.stage;
-    this.props.stage = stages[index - 1] ?? this.props.stage;
-    const nextStage = this.props.stage;
-    return { currentStage, nextStage };
+      return { currentStage, nextStage };
+    } else {
+      const currentStage = this.props.stage;
+      const nextStage = this.props.stage;
+
+      return { currentStage, nextStage };
+    }
   }
 }

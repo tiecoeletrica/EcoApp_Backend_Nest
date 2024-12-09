@@ -4,7 +4,7 @@ import { Optional } from "src/core/types/optional";
 import { StageTypes } from "src/core/types/stage-type";
 
 export interface StagingTimestampProps {
-  storkeeperId: UniqueEntityID;
+  storekeeperId: UniqueEntityID;
   stagingId: UniqueEntityID;
   currentStage: StageTypes;
   nextStage: StageTypes;
@@ -13,12 +13,12 @@ export interface StagingTimestampProps {
 }
 
 export class StagingTimestamp extends Entity<StagingTimestampProps> {
-  get storkeeperId() {
-    return this.props.storkeeperId;
+  get storekeeperId() {
+    return this.props.storekeeperId;
   }
 
-  set storkeeperId(storkeeperId: UniqueEntityID) {
-    this.props.storkeeperId = storkeeperId;
+  set storekeeperId(storekeeperId: UniqueEntityID) {
+    this.props.storekeeperId = storekeeperId;
   }
 
   get stagingId() {

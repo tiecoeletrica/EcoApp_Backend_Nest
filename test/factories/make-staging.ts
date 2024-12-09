@@ -1,11 +1,9 @@
-import { BigQueryService } from "src/infra/database/bigquery/bigquery.service";
 import { UniqueEntityID } from "../../src/core/entities/unique-entity-id";
 import {
   Staging,
   StagingProps,
 } from "../../src/domain/material-movimentation/enterprise/entities/staging";
 import { faker } from "@faker-js/faker";
-import { Injectable } from "@nestjs/common";
 import { StageTypes } from "src/core/types/stage-type";
 // import { BqStagingMapper } from "src/infra/database/bigquery/mappers/bq-staging-mapper";
 
@@ -30,13 +28,16 @@ export function makeStaging(
 
   let stage: StageTypes;
 
-  switch (type + transport) {
+  switch ((override.type ?? type) + (override.transport ?? transport)) {
     case "CONCRETOSAQUE":
       stage = "AGUARDANDO RETIRADA";
+      break;
     case "CONCRETOCARRETA":
       stage = "AGUARDANDO PROGRAMAÇÃO";
+      break;
     default:
       stage = "AGUARDANDO SEPARAÇÃO";
+      break;
   }
 
   const staging = Staging.create(
@@ -57,6 +58,8 @@ export function makeStaging(
     },
     id
   );
+
+  console.log("staging.stage: ", staging.stage);
 
   return staging;
 }

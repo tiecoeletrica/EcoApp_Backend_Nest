@@ -340,7 +340,6 @@ describe("Fetch Staging by Details", () => {
       startDate: new Date(2024, 11, 7),
       endDate: new Date(2024, 11, 8),
     });
-    console.log(result);
 
     expect(result.isRight()).toBeTruthy();
     if (result.isRight()) expect(result.value.stagings).toHaveLength(2);
