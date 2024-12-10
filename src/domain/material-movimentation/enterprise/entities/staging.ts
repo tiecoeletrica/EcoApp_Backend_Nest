@@ -220,4 +220,43 @@ export class Staging extends Entity<StagingProps> {
       return { currentStage, nextStage };
     }
   }
+
+  cancel(cancelStage: string): { result: boolean; message?: string } {
+    const allStageTypes: StageTypes[] = [
+      "AGUARDANDO SEPARAÇÃO",
+      "EM SEPARAÇÃO",
+      "AGUARDANDO SAQUE",
+      "OK",
+      "CANCELADO",
+      "IMPROCEDENTE",
+      "AGUARDANDO RETIRADA",
+      "AGUARDANDO PROGRAMAÇÃO",
+    ];
+
+    if (!allStageTypes.includes(cancelStage as StageTypes)) {
+      return {
+        result: false,
+        message: `O estágio '${cancelStage}' não é um estágio válido`,
+      };
+    }
+
+    const cancelOptions: Array<StageTypes> = ["IMPROCEDENTE", "CANCELADO"];
+
+    if (!cancelOptions.includes(cancelStage as StageTypes)) {
+      return {
+        result: false,
+        message: `O estágio '${cancelStage}' não é de cancelamento`,
+      };
+    }
+
+    if (this.endStages.includes(this.props.stage)) {
+      return {
+        result: false,
+        message: `O estágio '${cancelStage}' não pode ser alterado`,
+      };
+    }
+
+    this.props.stage = cancelStage as StageTypes;
+    return { result: true };
+  }
 }

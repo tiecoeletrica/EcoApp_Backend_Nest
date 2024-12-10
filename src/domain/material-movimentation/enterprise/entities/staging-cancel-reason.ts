@@ -3,6 +3,7 @@ import { UniqueEntityID } from "src/core/entities/unique-entity-id";
 
 export interface StagingCancelReasonProps {
   stagingId: UniqueEntityID;
+  storekeeperId: UniqueEntityID;
   reason: string;
   observation: string;
 }
@@ -14,6 +15,14 @@ export class StagingCancelReason extends Entity<StagingCancelReasonProps> {
 
   set stagingId(stagingId: UniqueEntityID) {
     this.props.stagingId = stagingId;
+  }
+
+  get storekeeperId() {
+    return this.props.storekeeperId;
+  }
+
+  set storekeeperId(storekeeperId: UniqueEntityID) {
+    this.props.storekeeperId = storekeeperId;
   }
 
   get reason() {

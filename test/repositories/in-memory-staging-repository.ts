@@ -115,6 +115,12 @@ export class InMemoryStagingRepository implements StagingRepository {
 
     return { stagings, pagination };
   }
+
+  async save(staging: Staging) {
+    const itemIndex = this.items.findIndex((item) => item.id === staging.id);
+
+    this.items[itemIndex] = staging;
+  }
   //   async findByStagingName(stagingName: string): Promise<Staging | null> {
   //     const staging = this.items.find((item) => item.stagingName === stagingName);
 

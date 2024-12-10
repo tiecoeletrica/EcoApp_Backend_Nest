@@ -33,11 +33,11 @@ export class AdvanceStagingStageUseCase {
     comment,
   }: AdvanceStagingStageUseCaseRequest): Promise<AdvanceStagingStageResponse> {
     const [user] = await this.userRepository.findByIds([storekeeperId]);
-    if (!user) return left(new ResourceNotFoundError("userId não encontrado"));
+    if (!user) return left(new ResourceNotFoundError("Usuário não encontrado"));
 
     const [staging] = await this.stagingRepository.findByIds([stagingId]);
     if (!staging)
-      return left(new ResourceNotFoundError("stagingId não encontrado"));
+      return left(new ResourceNotFoundError("Separação não encontrada"));
 
     const resultAdvance = staging.nextStage();
 
@@ -57,6 +57,7 @@ export class AdvanceStagingStageUseCase {
     });
 
     await this.stagingTimestampRepository.create(stagingTimestamp);
+    await this.stagingRepository.save(staging);
 
     return right(null);
   }
