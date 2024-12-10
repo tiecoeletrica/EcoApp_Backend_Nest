@@ -59,8 +59,6 @@ export function makeStaging(
     id
   );
 
-  console.log("staging.stage: ", staging.stage);
-
   return staging;
 }
 
