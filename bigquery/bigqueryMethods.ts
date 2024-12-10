@@ -54,7 +54,6 @@ export class BigQueryMethods<T extends Record<string, any>> {
   }
 
   async runQuery(query: string) {
-    // console.log(query);
     const options = { query };
     const [rows] = await this.bigquery.query(options);
 
@@ -68,6 +67,7 @@ export class BigQueryMethods<T extends Record<string, any>> {
     const query = this.buildInsertQuery(data);
     return this.runQuery(query);
   }
+
   //overloads
   select(
     options: SelectOptions<T> & { count_results: true }
@@ -132,14 +132,29 @@ export class BigQueryMethods<T extends Record<string, any>> {
           "(" +
           Object.entries(row)
             .filter(([_, value]) => value !== undefined)
-            .map(([_, value]) => this.formatValue(value))
+            .map(([key, value]) => this.formatValue(value, key as keyof T))
             .join(", ") +
           ")"
       )
       .join(", ");
   }
 
-  private formatValue(value: any): string {
+  private formatValue(value: any, fieldName?: keyof T): string {
+    const schema = BigqueryShemas.getSchema(this.datasetId.split(".")[1]);
+    const isBytesField =
+      fieldName &&
+      schema &&
+      schema.fields.find((item) => item.name === fieldName).type === "BYTES";
+
+    if (isBytesField) {
+      if (typeof value === "string") {
+        return `FROM_BASE64("${Buffer.from(value, "utf8").toString(
+          "base64"
+        )}")`;
+      }
+    }
+
+    if (value === undefined) return "NULL";
     if (typeof value === "string") return `'${this.escapeString(value)}'`;
     if (value instanceof Date) {
       const utcDate = new Date(
@@ -298,6 +313,20 @@ export class BigQueryMethods<T extends Record<string, any>> {
           ? `${tableAlias}.${String(key)}`
           : String(key);
 
+        const schema = BigqueryShemas.getSchema(this.datasetId.split(".")[1]);
+        const isBytesField = schema?.fields.some(
+          (field) => field.name === key && field.type === "BYTES"
+        );
+
+        if (isBytesField) {
+          if (typeof value === "string") {
+            return `${columnName} = FROM_BASE64("${Buffer.from(
+              value,
+              "utf8"
+            ).toString("base64")}")`;
+          }
+        }
+
         if (this.isDate(value)) {
           return `${columnName} = '${value.toISOString()}'`;
         }
@@ -325,10 +354,24 @@ export class BigQueryMethods<T extends Record<string, any>> {
     return Object.keys(whereIn)
       .filter((key) => whereIn[key] && whereIn[key]!.length > 0)
       .map((key) => {
-        const values = whereIn[key]!.map((value) =>
-          typeof value === "string" ? `'${value}'` : value
-        ).join(", ");
-        return `${tableAlias}.${String(key)} IN (${values})`;
+        const values = whereIn[key];
+        const columnName = `${tableAlias}.${String(key)}`;
+
+        const schema = BigqueryShemas.getSchema(this.datasetId.split(".")[1]);
+        const isBytesField = schema?.fields.some(
+          (field) => field.name === key && field.type === "BYTES"
+        );
+
+        const formattedValues = isBytesField
+          ? values!.map(
+              (v) =>
+                `FROM_BASE64("${Buffer.from(v, "utf8").toString("base64")}")`
+            )
+          : values!.map((v) =>
+              typeof v === "string" ? `'${this.escapeString(v)}'` : v
+            );
+
+        return `${columnName} IN (${formattedValues.join(", ")})`;
       })
       .join(" AND ");
   }
@@ -395,7 +438,6 @@ export class BigQueryMethods<T extends Record<string, any>> {
     const orderByStatements = orderBy.map(({ column, direction }) => {
       let orderByColumn = column;
 
-      // Verifica se a coluna pertence a uma tabela incluída
       if (include) {
         for (const [alias, options] of Object.entries(include)) {
           if (column.startsWith(`${alias}.`)) {
@@ -405,7 +447,6 @@ export class BigQueryMethods<T extends Record<string, any>> {
         }
       }
 
-      // Se não for uma coluna de uma tabela incluída, adiciona o alias da tabela principal
       if (!orderByColumn.includes(".") && !orderByColumn.includes("_")) {
         orderByColumn = `${tableAlias}.${orderByColumn}`;
       }
@@ -481,16 +522,7 @@ export class BigQueryMethods<T extends Record<string, any>> {
         .map((update) => {
           const whereClause = this.buildWhereClause(null, update.where);
           const setValue = update.set[column as keyof T];
-          let formattedValue;
-          if (setValue === undefined) {
-            formattedValue = "NULL";
-          } else if (this.isDate(setValue)) {
-            formattedValue = `'${(setValue as Date).toISOString()}'`;
-          } else if (typeof setValue === "string") {
-            formattedValue = `'${this.escapeString(setValue)}'`;
-          } else {
-            formattedValue = setValue;
-          }
+          const formattedValue = this.formatValue(setValue, column as keyof T);
           return `WHEN ${whereClause} THEN ${formattedValue}`;
         })
         .join(" ");
@@ -511,16 +543,8 @@ export class BigQueryMethods<T extends Record<string, any>> {
   private buildSetClause(data: Partial<T>): string {
     return Object.entries(data)
       .map(([key, value]) => {
-        if (value === undefined) {
-          return `${key} = NULL`;
-        }
-        if (this.isDate(value)) {
-          return `${key} = '${value.toISOString()}'`;
-        }
-        if (typeof value === "string") {
-          return `${key} = '${this.escapeString(value)}'`;
-        }
-        return `${key} = ${value}`;
+        const formattedValue = this.formatValue(value, key as keyof T);
+        return `${key} = ${formattedValue}`;
       })
       .join(", ");
   }
@@ -636,6 +660,8 @@ export class BigQueryMethods<T extends Record<string, any>> {
         return localDate;
       case "BOOLEAN":
         return Boolean(value);
+      case "BYTES":
+        return Buffer.from(value).toString();
       default:
         return value;
     }
